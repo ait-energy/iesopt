@@ -1,0 +1,49 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "iesopt-py"
+version = "1.0.0"
+description = "Low-overhead Python interface to the IESopt framework."
+keywords = ["integrated energy systems", "optimization", "energy model", "modelling"]
+authors = [
+    "Stefan Strömer <8915976+sstroemer@users.noreply.github.com>",
+]
+maintainers = [
+    "Stefan Strömer <8915976+sstroemer@users.noreply.github.com>",
+]
+readme = "README.md"
+license = "MIT"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+homepage = "https://github.com/ait-energy/IESopt.jl"
+documentation = "https://ait-energy.github.io/IESopt.jl"
+repository = "https://github.com/ait-energy/iesopt-py"
+
+[tool.poetry.urls]
+"Issues" = "https://github.com/ait-energy/iesopt-py/issues"
+"Changelog" = "https://github.com/ait-energy/iesopt-py/blob/main/CHANGELOG.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.4.7"
+black = "^24.4.2"
+codespell = "^2.3.0"
+
+[tool.black]
+line-length = 120
+target-version = ["py310", "py311", "py312"]
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["*.jl"]
+target-version = "py310"

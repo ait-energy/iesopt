@@ -3,14 +3,33 @@ on:
   push:
     tags:
       - "v*.*.*"
+
+permissions:
+  contents: read
+  id-token: write
+        
 jobs:
-  build:
+  # Build it.
+  build-package:
+    name: Build & inspect package
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Build and publish to pypi
-        uses: JRubics/poetry-publish@v2.0
-        with:
-          pypi_token: ${{ secrets.PYPI_TOKEN }}
-          allow_poetry_pre_release: "yes"
-          poetry_publish_options: "--build"
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+        - uses: hynek/build-and-inspect-python-package@v2
+  
+  # Publish to PyPI.
+  pypi-publish:
+    needs: build-package
+    name: Upload release to PyPI
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+        - name: Download packages built by build-and-inspect-python-package
+          uses: actions/download-artifact@v4
+          with:
+            name: Packages
+            path: dist
+        - name: Publish package distributions to PyPI
+          uses: pypa/gh-action-pypi-publish@release/v1

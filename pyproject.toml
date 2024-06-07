@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "iesopt-py"
-version = "1.0.0a0"
+version = "1.0.0a1"
 packages = [{include = "iesopt"}]
 description = "Low-overhead Python interface to the IESopt framework."
 keywords = ["integrated energy systems", "optimization", "energy model", "modelling"]

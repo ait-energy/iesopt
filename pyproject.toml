@@ -3,10 +3,10 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "iesopt-py"
-version = "1.0.0a1"
+name = "iesopt"
+version = "1.0.0a2"
 packages = [{include = "iesopt"}]
-description = "Low-overhead Python interface to the IESopt framework."
+description = "IESopt -- an Integrated Energy System Optimization framework."
 keywords = ["integrated energy systems", "optimization", "energy model", "modelling"]
 authors = [
     "Stefan Strömer <8915976+sstroemer@users.noreply.github.com>",
@@ -24,13 +24,13 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-homepage = "https://github.com/ait-energy/IESopt.jl"
-documentation = "https://ait-energy.github.io/IESopt.jl"
-repository = "https://github.com/ait-energy/iesopt-py"
+homepage = "https://github.com/ait-energy/iesopt"
+documentation = "https://ait-energy.github.io/iesopt"
+repository = "https://github.com/ait-energy/iesopt"
 
 [tool.poetry.urls]
-"Issues" = "https://github.com/ait-energy/iesopt-py/issues"
-"Changelog" = "https://github.com/ait-energy/iesopt-py/blob/main/CHANGELOG.md"
+"Issues" = "https://github.com/ait-energy/iesopt/issues"
+"Changelog" = "https://github.com/ait-energy/iesopt/blob/main/CHANGELOG.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"

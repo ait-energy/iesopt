@@ -15,21 +15,13 @@ os.environ["IESOPT_DOCS_NOEXEC"] = "true"
 project = "IESopt"
 copyright = "AIT Austrian Institute of Technology GmbH"
 author = "S. Strömer (@sstroemer), D. Schwabeneder (@daschw)"
-version = "1.0.0"   # TODO: get from iesopt.__version__
+version = "1.0.0"  # TODO: get from iesopt.__version__
 
-extensions = [
-    "myst_parser",
-    "sphinx.ext.autodoc",
-    "sphinx.ext.intersphinx",
-    "sphinx.ext.githubpages",
-    "julia_domain"
-]
+extensions = ["myst_parser", "sphinx.ext.autodoc", "sphinx.ext.intersphinx", "sphinx.ext.githubpages", "julia_domain"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 source_suffix = [".md"]
 
-intersphinx_mapping = {
-    "IESopt": ("https://ait-energy.github.io/IESopt.jl/dev", None)
-}
+intersphinx_mapping = {"IESopt": ("https://ait-energy.github.io/IESopt.jl/dev", None)}
 intersphinx_disabled_reftypes = [""]
 
 # -- Options for HTML output -------------------------------------------------

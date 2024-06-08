@@ -33,16 +33,24 @@ repository = "https://github.com/ait-energy/iesopt"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pathlib = "^1.0.1"
+pathlib = "^1.0.0"
+juliacall = "^0.9.20"
+pandas = "^2.0.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.7"
 black = "^24.4.2"
 codespell = "^2.3.0"
-sphinx = "^7.3.7"
+
+[tool.poetry.group.docs.dependencies]
 myst-parser = "^3.0.1"
+sphinx = "^7.3.7"
 sphinxawesome-theme = "^5.2.0"
 sphinx-togglebutton = "^0.3.2"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.2"
+pytest-cov = "^5.0.0"
 
 [tool.black]
 line-length = 120

@@ -35,6 +35,6 @@ def setup_julia():
 
 
 def import_modules():
-    jl_import("IESopt")
     jl_import("IESoptLib")
+    jl_import("IESopt")
     jl_import("JuMP")

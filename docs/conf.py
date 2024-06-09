@@ -11,6 +11,7 @@ sys.path.insert(0, str((DOCS / ".." / "src").resolve()))
 sys.path.insert(0, str((DOCS / "..").resolve()))
 os.environ["IESOPT_DOCS_NOEXEC"] = "true"
 print(sys.path)
+print("DOCS (conf.py path):", DOCS)
 
 # -- General -----------------------------------------------------------------
 

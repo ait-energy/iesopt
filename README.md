@@ -6,6 +6,11 @@
 **IESopt** (_Integrated Energy System Optimization_) is a modeling and optimization framework for integrated energy
 systems.
 
+> Note: We are currently moving from our internal version control to GitHub. Missing contents will be added during the
+> upcoming days ...
+
+> ATTENTION: Code is currently not functional, since dependencies and internal imports are being cleaned up.
+
 It is developed and maintained at the **Center for Energy** at
 [AIT Austrian Institute of Technology GmbH](https://www.ait.ac.at/). The framework is designed to support the
 optimization of energy systems that are characterized by a high degree of integration between different energy carriers

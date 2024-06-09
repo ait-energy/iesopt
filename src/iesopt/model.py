@@ -1,4 +1,5 @@
 from enum import Enum
+from pathlib import Path
 
 from .util import logger, get_iesopt_module_attr
 from .julia.util import jl_symbol
@@ -22,7 +23,7 @@ class ModelStatus(Enum):
 class Model:
     """An IESopt model, based on an :jl:module:`IESopt.jl <IESopt.IESopt>` core model."""
 
-    def __init__(self, filename: str, **kwargs) -> None:
+    def __init__(self, filename: str | Path, **kwargs) -> None:
         self._filename = filename
         self._kwargs = kwargs
 
@@ -36,9 +37,7 @@ class Model:
 
         self._IESopt = get_iesopt_module_attr("IESopt")
         self._JuMP = get_iesopt_module_attr("JuMP")
-        self._jump_value = get_iesopt_module_attr(
-            "jump_value",
-        )
+        self._jump_value = get_iesopt_module_attr("jump_value")
         self._jump_dual = get_iesopt_module_attr("jump_dual")
 
     def __repr__(self) -> str:
@@ -88,7 +87,7 @@ class Model:
     def generate(self) -> None:
         """Generate a IESopt model from the attached top-level YAML config."""
         try:
-            self._model = self._IESopt.generate_b(self._filename, **self._kwargs)
+            self._model = self._IESopt.generate_b(str(self._filename), **self._kwargs)
             self._status = ModelStatus.GENERATED
         except Exception as e:
             self._status = ModelStatus.FAILED_GENERATE

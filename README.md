@@ -20,8 +20,8 @@ understanding of mathematical modeling or proficiency in any coding-language.
 Run the following to locally check the code:
 
 ```bash
-ruff check .
-black .
-codespell .
+ruff check src/ tests/ docs/conf.py
+black src/ tests/ docs/conf.py
+codespell src/ tests/
 ```
 -->

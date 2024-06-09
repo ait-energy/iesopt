@@ -1,0 +1,196 @@
+from enum import Enum
+
+from .util.logging import logger
+# from .general import IESopt, JuMP, Symbol, jl, _jump_values, _jump_duals
+from .results import Results
+
+
+class ModelStatus(Enum):
+    """Status of an IESopt model."""
+
+    EMPTY = "empty"
+    GENERATED = "generated"
+    FAILED_GENERATE = "failed_generate"
+    FAILED_OPTIMIZE = "failed_optimize"
+    OPTIMAL = "optimal"
+    OPTIMAL_LOCALLY = "local_optimum"
+    INFEASIBLE = "infeasible"
+    INFEASIBLE_OR_UNBOUNDED = "infeasible_unbounded"
+    OTHER = "other"
+
+
+class Model:
+    """An IESopt model, based on an `IESopt.jl` core model."""
+
+    def __init__(self, filename: str, **kwargs) -> None:
+        self._filename = filename
+        self._kwargs = kwargs
+
+        self._model = None
+        self._verbosity = kwargs.get("verbosity", True)
+
+        self._status = ModelStatus.EMPTY
+        self._status_details = None
+
+        self._results = None
+
+    def __repr__(self) -> str:
+        if self._model is None:
+            return "An IESopt model (not yet generated)"
+
+        n_var = JuMP.num_variables(self.core)
+        n_con = JuMP.num_constraints(self.core, count_variable_in_set_constraints=False)
+        solver = JuMP.solver_name(self.core)
+        termination_status = JuMP.termination_status(self.core)
+
+        return (
+            f"An IESopt model:"
+            f"\n\tname: {self.data.input.config.names.model}"
+            f"\n\tsolver: {solver}"
+            f"\n\t"
+            f"\n\t{n_var} variables, {n_con} constraints"
+            f"\n\tstatus: {termination_status}"
+        )
+
+    @property
+    def core(self):
+        """Access the core `JuMP` model that is used internally."""
+        if self._model is None:
+            raise Exception("Model was not properly set up; call `generate` first")
+        return self._model
+
+    @property
+    def data(self):
+        """Access the IESopt data object of the model."""
+        return self.core.ext[Symbol("iesopt")]
+
+    @property
+    def status(self) -> ModelStatus:
+        """Get the current status of this model. See `ModelStatus` for possible values."""
+        return self._status
+
+    @property
+    def objective_value(self) -> float:
+        """Get the objective value of the model. Only available if the model was solved beforehand."""
+        if self._status == ModelStatus.OPTIMAL_LOCALLY:
+            logger.warning("Model is only locally optimal; objective value may not be accurate")
+        elif self._status != ModelStatus.OPTIMAL:
+            raise Exception("Model is not optimal; no objective value available")
+        return JuMP.objective_value(self.core)
+
+    def generate(self) -> None:
+        """Generate a IESopt model from the attached top-level YAML config."""
+        try:
+            self._model = IESopt.generate_b(self._filename, **self._kwargs)
+            self._status = ModelStatus.GENERATED
+        except Exception as e:
+            self._status = ModelStatus.FAILED_GENERATE
+            logger.error(f"Exception during `generate`: {e}")
+            try:
+                logger.error(f"Current debugging info: {self.data.debug}")
+            except:
+                logger.error(f"Failed to extract debugging info")
+
+    def optimize(self) -> None:
+        """Optimize the model."""
+        try:
+            IESopt.optimize_b(self.core)
+
+            if JuMP.is_solved_and_feasible(self.core, allow_local=False):
+                self._status = ModelStatus.OPTIMAL
+                self._results = Results(model=self)
+            elif JuMP.is_solved_and_feasible(self.core, allow_local=True):
+                self._status = ModelStatus.OPTIMAL_LOCALLY
+                self._results = Results(model=self)
+            else:
+                _term_status = JuMP.termination_status(self.core)
+                if str(_term_status) == "INFEASIBLE":
+                    self._status = ModelStatus.INFEASIBLE
+                elif str(_term_status) == "INFEASIBLE_OR_UNBOUNDED":
+                    self._status = ModelStatus.INFEASIBLE_OR_UNBOUNDED
+                else:
+                    self._status = ModelStatus.OTHER
+                    self._status_details = _term_status
+        except Exception as e:
+            self._status = ModelStatus.FAILED_OPTIMIZE
+            logger.error(f"Exception during `optimize`: {e}")
+            try:
+                logger.error(f"Current debugging info: {self.data.debug}")
+            except:
+                logger.error(f"Failed to extract debugging info")
+
+    @property
+    def results(self) -> Results:
+        """Get the results of the model."""
+        if self._results is None:
+            raise Exception("No results available; have you successfully called `optimize`?")
+        return self._results
+
+    def extract_result(self, component: str, field: str, mode: str = "value"):
+        """Manually extract a specific result from the model."""
+        try:
+            c = IESopt.component(self.core, "node2")
+        except:
+            raise Exception(f"Exception during `extract_result({component}, {field}, mode={mode})`")
+
+        f = None
+        for fieldtype in ["var", "exp", "con", "obj"]:
+            try:
+                t = getattr(component, fieldtype)
+                f = getattr(t, field)
+                break
+            except:
+                pass
+
+        if f is None:
+            raise Exception(f"Field `{field}` not found in component `{component}`")
+
+        try:
+            if mode == "value":
+                return _jump_values(f)
+            elif mode == "dual":
+                return _jump_duals(f)
+            else:
+                raise Exception(f"Mode `{mode}` not supported, use `value` or `dual`")
+        except:
+            raise Exception(f"Error during extraction of result `{field}` from component `{component}`")
+
+    def get_component(self, component: str):
+        """Get a core component based on its full name."""
+        try:
+            return IESopt.component(self.core, component)
+        except:
+            raise Exception(f"Error while retrieving component `{component}` from model")
+
+    def get_variable(self, component: str, variable: str):
+        """Get a specific variable from a core component."""
+        raise DeprecationWarning(
+            f"`get_variable(...)` is deprecated; you can instead access the variable directly using "
+            f"`model.get_component('{component}').var.{variable}`. Conversion to Python lists, if not done "
+            f"automatically, can be done using `list(...)`."
+        )
+
+    def get_constraint(self, component: str, constraint: str):
+        """Get a specific constraint from a core component."""
+        raise DeprecationWarning(
+            f"`get_constraint(...)` is deprecated; you can instead access the constraint directly using "
+            f"`model.get_component('{component}').con.{constraint}`. Conversion to Python lists, if not done "
+            f"automatically, can be done using `list(...)`."
+        )
+
+    def nvar(self, var: str):
+        """Extract a named variable, from `model`.
+
+        If your variable is called `:myvar`, and you would access it in Julia using `model[:myvar]`, you can call
+        `model.nvar("myvar")`.
+        """
+        try:
+            return self.core[Symbol(var)]
+        except:
+            raise Exception(f"Error while retrieving variable `{var}` from model")
+
+    @staticmethod
+    def _to_pylist(obj):
+        if isinstance(obj, jl.VectorValue):
+            return jl.PythonCall.pylist(obj)
+        return obj

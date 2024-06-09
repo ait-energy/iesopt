@@ -11,7 +11,7 @@
         },
         "IESopt": {
             "uuid": "ed3f0a38-8ad9-4cf8-877e-929e8d190fe9",
-            "version": "=1.0.0"
+            "version": "=1.0.2"
         },
         "IESoptLib": {
             "uuid": "b98f706d-40ec-4ce6-a66c-1c6e71d3cef6",

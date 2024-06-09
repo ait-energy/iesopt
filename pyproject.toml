@@ -55,9 +55,9 @@ pytest-cov = "^5.0.0"
 
 [tool.black]
 line-length = 120
-target-version = ["py310", "py311", "py312"]
+target-version = ["py311", "py312"]
 
 [tool.ruff]
 line-length = 120
 extend-exclude = ["*.jl"]
-target-version = "py310"
+target-version = "py311"

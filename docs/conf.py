@@ -18,7 +18,14 @@ copyright = "AIT Austrian Institute of Technology GmbH"
 author = "S. Strömer (@sstroemer), D. Schwabeneder (@daschw)"
 version = "1.0.0"  # TODO: get from iesopt.__version__
 
-extensions = ["myst_parser", "sphinx.ext.autodoc", "sphinx.ext.intersphinx", "sphinx.ext.githubpages", "julia_domain", "sphinx.ext.napoleon"]
+extensions = [
+    "myst_parser",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.githubpages",
+    "julia_domain",
+    "sphinx.ext.napoleon",
+]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 source_suffix = [".md", ".rst"]
 
@@ -31,14 +38,15 @@ html_theme = "sphinxawesome_theme"
 html_static_path = ["_static"]
 
 from sphinxawesome_theme.postprocess import Icons
+
 html_permalinks_icon = Icons.permalinks_icon
 
 pygments_style = "default"
 pygments_style_dark = "lightbulb"
 
 html_theme_options = {
-   "show_breadcrumbs": True,
-   "show_scrolltop": True,
+    "show_breadcrumbs": True,
+    "show_scrolltop": True,
 }
 
 # -- MyST & autodoc configuration --------------------------------------------

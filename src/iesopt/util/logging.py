@@ -2,8 +2,9 @@ import logging
 
 
 def setup_logger():
+    logging.basicConfig()
     logger = logging.getLogger("iesopt")
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
     return logger
 
 

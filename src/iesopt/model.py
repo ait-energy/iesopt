@@ -1,12 +1,12 @@
 from enum import Enum
 
-from .util.logging import logger
-# from .general import IESopt, JuMP, Symbol, jl, _jump_values, _jump_duals
+from .util import logger, get_iesopt_module_attr
+from .julia.util import jl_symbol
 from .results import Results
 
 
 class ModelStatus(Enum):
-    """Status of an IESopt model."""
+    """Status of an :py:class:`iesopt.Model`."""
 
     EMPTY = "empty"
     GENERATED = "generated"
@@ -20,7 +20,7 @@ class ModelStatus(Enum):
 
 
 class Model:
-    """An IESopt model, based on an `IESopt.jl` core model."""
+    """An IESopt model, based on an :jl:module:`IESopt.jl <IESopt.IESopt>` core model."""
 
     def __init__(self, filename: str, **kwargs) -> None:
         self._filename = filename
@@ -34,14 +34,21 @@ class Model:
 
         self._results = None
 
+        self._IESopt = get_iesopt_module_attr("IESopt")
+        self._JuMP = get_iesopt_module_attr("JuMP")
+        self._jump_value = get_iesopt_module_attr(
+            "jump_value",
+        )
+        self._jump_dual = get_iesopt_module_attr("jump_dual")
+
     def __repr__(self) -> str:
         if self._model is None:
             return "An IESopt model (not yet generated)"
 
-        n_var = JuMP.num_variables(self.core)
-        n_con = JuMP.num_constraints(self.core, count_variable_in_set_constraints=False)
-        solver = JuMP.solver_name(self.core)
-        termination_status = JuMP.termination_status(self.core)
+        n_var = self._JuMP.num_variables(self.core)
+        n_con = self._JuMP.num_constraints(self.core, count_variable_in_set_constraints=False)
+        solver = self._JuMP.solver_name(self.core)
+        termination_status = self._JuMP.termination_status(self.core)
 
         return (
             f"An IESopt model:"
@@ -62,7 +69,7 @@ class Model:
     @property
     def data(self):
         """Access the IESopt data object of the model."""
-        return self.core.ext[Symbol("iesopt")]
+        return self.core.ext[jl_symbol("iesopt")]
 
     @property
     def status(self) -> ModelStatus:
@@ -76,12 +83,12 @@ class Model:
             logger.warning("Model is only locally optimal; objective value may not be accurate")
         elif self._status != ModelStatus.OPTIMAL:
             raise Exception("Model is not optimal; no objective value available")
-        return JuMP.objective_value(self.core)
+        return self._JuMP.objective_value(self.core)
 
     def generate(self) -> None:
         """Generate a IESopt model from the attached top-level YAML config."""
         try:
-            self._model = IESopt.generate_b(self._filename, **self._kwargs)
+            self._model = self._IESopt.generate_b(self._filename, **self._kwargs)
             self._status = ModelStatus.GENERATED
         except Exception as e:
             self._status = ModelStatus.FAILED_GENERATE
@@ -89,21 +96,21 @@ class Model:
             try:
                 logger.error(f"Current debugging info: {self.data.debug}")
             except:
-                logger.error(f"Failed to extract debugging info")
+                logger.error("Failed to extract debugging info")
 
     def optimize(self) -> None:
         """Optimize the model."""
         try:
-            IESopt.optimize_b(self.core)
+            self._IESopt.optimize_b(self.core)
 
-            if JuMP.is_solved_and_feasible(self.core, allow_local=False):
+            if self._JuMP.is_solved_and_feasible(self.core, allow_local=False):
                 self._status = ModelStatus.OPTIMAL
                 self._results = Results(model=self)
-            elif JuMP.is_solved_and_feasible(self.core, allow_local=True):
+            elif self._JuMP.is_solved_and_feasible(self.core, allow_local=True):
                 self._status = ModelStatus.OPTIMAL_LOCALLY
                 self._results = Results(model=self)
             else:
-                _term_status = JuMP.termination_status(self.core)
+                _term_status = self._JuMP.termination_status(self.core)
                 if str(_term_status) == "INFEASIBLE":
                     self._status = ModelStatus.INFEASIBLE
                 elif str(_term_status) == "INFEASIBLE_OR_UNBOUNDED":
@@ -117,7 +124,7 @@ class Model:
             try:
                 logger.error(f"Current debugging info: {self.data.debug}")
             except:
-                logger.error(f"Failed to extract debugging info")
+                logger.error("Failed to extract debugging info")
 
     @property
     def results(self) -> Results:
@@ -129,7 +136,7 @@ class Model:
     def extract_result(self, component: str, field: str, mode: str = "value"):
         """Manually extract a specific result from the model."""
         try:
-            c = IESopt.component(self.core, "node2")
+            c = self._IESopt.component(self.core, "node2")
         except:
             raise Exception(f"Exception during `extract_result({component}, {field}, mode={mode})`")
 
@@ -147,9 +154,9 @@ class Model:
 
         try:
             if mode == "value":
-                return _jump_values(f)
+                return self._jump_values(f)
             elif mode == "dual":
-                return _jump_duals(f)
+                return self._jump_duals(f)
             else:
                 raise Exception(f"Mode `{mode}` not supported, use `value` or `dual`")
         except:
@@ -158,7 +165,7 @@ class Model:
     def get_component(self, component: str):
         """Get a core component based on its full name."""
         try:
-            return IESopt.component(self.core, component)
+            return self._IESopt.component(self.core, component)
         except:
             raise Exception(f"Error while retrieving component `{component}` from model")
 
@@ -185,12 +192,12 @@ class Model:
         `model.nvar("myvar")`.
         """
         try:
-            return self.core[Symbol(var)]
+            return self.core[jl_symbol(var)]
         except:
             raise Exception(f"Error while retrieving variable `{var}` from model")
 
     @staticmethod
     def _to_pylist(obj):
-        if isinstance(obj, jl.VectorValue):
-            return jl.PythonCall.pylist(obj)
+        # if isinstance(obj, jl.VectorValue):
+        #    return jl.PythonCall.pylist(obj)
         return obj

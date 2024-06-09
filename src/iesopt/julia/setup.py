@@ -1,13 +1,11 @@
 import os
 import ssl
 
-from ..util.constants import JULIA_STATE, julia
-from ..util.logging import logger
+from ..util import logger
+from .util import jl_import
 
 
 def setup_julia():
-    """asdastgetwertfgdssd"""
-    global JULIA_STATE, julia
     logger.info("Setting up Julia ...")
 
     # Check for local SSL certificate file, that can interfere with Julia setup.
@@ -21,17 +19,18 @@ def setup_julia():
 
     # Setup Julia (checking if it "looks" valid).
     import juliapkg
+
     if juliapkg.resolve() != True:
-        JULIA_STATE = "invalid"
         raise Exception("Julia setup is not valid")
 
     import juliacall
-    julia = juliacall.Main
-    JULIA_STATE = "success"
+
+    logger.info("Julia setup successful")
+
+    return juliacall.Main
 
 
-if not os.getenv("IESOPT_DOCS_NOEXEC"):
-    setup_julia()
-else:
-    logger.warn("Detected docs environment (env. var. `IESOPT_DOCS_NOEXEC` is set), skip loading Julia.")
-    JULIA_STATE = "skipped"
+def import_modules():
+    jl_import("IESopt")
+    jl_import("IESoptLib")
+    jl_import("JuMP")

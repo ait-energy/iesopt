@@ -1,7 +1,15 @@
 import warnings
 import pandas as pd
 
-# from .general import jl, IESopt, ddict
+from .util import get_iesopt_module_attr
+
+
+class ddict(dict):
+    """Wrapper to enable dot.notation access to dictionary attributes."""
+
+    __getattr__ = dict.get
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
 
 
 class Results:
@@ -14,7 +22,7 @@ class Results:
 
         :param file: Path to the results file to load, by default None
         :param model: IESopt model to extract results from, by default None
-        
+
         :type file: str, optional
         :type model: IESopt.Model, optional
         """
@@ -37,9 +45,12 @@ class Results:
             self._from_file(file)
         elif model is not None:
             self._from_model(model)
-        
+
         # Allow dot access to attributes of "model" results, to align with access to the models structure.
         self._model = ddict(self._model)
+
+        self._IESopt = get_iesopt_module_attr("IESopt")
+        self._julia = get_iesopt_module_attr("julia")
 
     def entries(self, field: str = None):
         """
@@ -79,7 +90,7 @@ class Results:
             for c in self.model["components"].keys():
                 for t in field_types:
                     container = getattr(self.model["components"][c], t)
-                    for f in [str(it) for it in jl.Main.keys(container)]:
+                    for f in [str(it) for it in self._julia.Main.keys(container)]:
                         if (filter is None) or filter(c, t, f):
                             entries[(c, t, f)] = Results._safe_convert(getattr(container, f))
         else:
@@ -156,7 +167,7 @@ class Results:
         raise ValueError(f"`orientation` can be 'wide' or 'long', got '{orientation}'.")
 
     def __getattr__(self, attr: str):
-        if not attr in Results._valid_attrs:
+        if attr not in Results._valid_attrs:
             raise Exception(f"Attribute '{attr}' is not accessible, pick one of {Results._valid_attrs}")
         if not hasattr(self, f"_{attr}"):
             raise Exception(f"`Results` object has no attribute '{attr}'")
@@ -169,7 +180,7 @@ class Results:
             self._cache = self.to_dict(build_cache=False)
 
     def _from_file(self, file: str):
-        results = IESopt.load_results(file)
+        results = self._IESopt.load_results(file)
 
         result_entries = ddict({})
         for key in results.keys():
@@ -209,27 +220,27 @@ class Results:
     def __repr__(self) -> str:
         _sep = "', '"
         return (
-            f"An IESopt result object:"
+            "An IESopt result object:"
             + f"\n\tsource: {self._source}"
-            + f"\n\tattributes: "
+            + "\n\tattributes: "
             + (
                 f"'{self.entries('attributes')[0]}', ..., '{self.entries('attributes')[-1]}'"
                 if self._attributes is not None
                 else "none"
             )
             + f"\n\tmodel results: {'yes' if self._model is not None else 'no'}"
-            + f"\n\tcustom results: "
+            + "\n\tcustom results: "
             + (f"{len(self._custom)}" if self._custom is not None and len(self._custom) > 0 else "no")
-            + f"\n\tinput fields: "
+            + "\n\tinput fields: "
             + (f"'{_sep.join(self._input)}'" if self._input is not None else "none")
-            + f"\n\tinfo fields: "
+            + "\n\tinfo fields: "
             + (f"'{_sep.join(self._info)}'" if self._info is not None else "none")
         )
 
     @classmethod
     def _safe_convert(cls, value):
-        if isinstance(value, jl.VectorValue):
-            return jl.PythonCall.pylist(value)
-        if isinstance(value, jl.DictValue):
-            return {str(k): cls._safe_convert(v) for (k, v) in value.items()}
+        # if isinstance(value, self._julia.VectorValue):
+        #     return self._julia.PythonCall.pylist(value)
+        # if isinstance(value, self._julia.DictValue):
+        #     return {str(k): cls._safe_convert(v) for (k, v) in value.items()}
         return value

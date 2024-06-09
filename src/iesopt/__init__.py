@@ -57,7 +57,7 @@ julia = _initialize_everything()
 # Export everything.
 from iesopt.model import Model
 from iesopt.results import Results
-from iesopt.iesopt import run
+from iesopt.iesopt import run, examples, make_example
 
 from .julia.util import jl_symbol
 

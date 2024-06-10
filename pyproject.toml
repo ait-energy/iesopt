@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "iesopt"
-version = "1.0.0a3"
+version = "1.0.0a4"
 description = "IESopt -- an Integrated Energy System Optimization framework."
 keywords = ["integrated energy systems", "optimization", "energy model", "modelling"]
 authors = [

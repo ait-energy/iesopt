@@ -2,7 +2,7 @@ from pathlib import Path
 
 from .util import logger, get_iesopt_module_attr
 from .julia.util import jl_symbol
-from .model import Model
+from .model import Model, ModelStatus
 
 
 def run(filename: str | Path, verbosity: bool | str = True, **kwargs) -> Model:
@@ -31,8 +31,14 @@ def run(filename: str | Path, verbosity: bool | str = True, **kwargs) -> Model:
             import iesopt
             iesopt.run("opt/config.iesopt.yaml")
     """
-    julia = get_iesopt_module_attr("julia")
-    model = julia.IESopt.run(str(filename), verbosity=verbosity, **kwargs)
+    model = Model(filename, verbosity=verbosity, **kwargs)
+    model.generate()
+
+    if model.status == ModelStatus.GENERATED:
+        model.optimize()
+    else:
+        logger.error("Model could not be generated; skipping optimization.")
+
     return model
 
 def examples() -> list[str]:

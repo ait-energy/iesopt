@@ -37,6 +37,9 @@ class Results:
 
         self._cache = None
 
+        self._IESopt = get_iesopt_module_attr("IESopt")
+        self._julia = get_iesopt_module_attr("julia")
+
         if (int(file is None) + int(model is None)) != 1:
             raise Exception("Either file or model must be set, not both and not none of them.")
         elif file is not None:
@@ -48,9 +51,6 @@ class Results:
 
         # Allow dot access to attributes of "model" results, to align with access to the models structure.
         self._model = ddict(self._model)
-
-        self._IESopt = get_iesopt_module_attr("IESopt")
-        self._julia = get_iesopt_module_attr("julia")
 
     def entries(self, field: str = None):
         """

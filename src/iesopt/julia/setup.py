@@ -24,6 +24,7 @@ def setup_julia():
         raise Exception("Julia setup is not valid")
 
     import juliacall
+
     logger.info("Julia setup successful")
 
     # # Restoring potential SSL certificate.

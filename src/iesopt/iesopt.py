@@ -41,6 +41,7 @@ def run(filename: str | Path, verbosity: bool | str = True, **kwargs) -> Model:
 
     return model
 
+
 def examples() -> list[str]:
     """
     Return a list of all available examples.
@@ -50,9 +51,11 @@ def examples() -> list[str]:
             e.g., `"some_example"` instead of `"some_example.iesopt.yaml"`)
     """
     import os
+
     julia = get_iesopt_module_attr("julia")
     folder = Path(julia.IESoptLib.get_path(jl_symbol("examples")))
     return sorted([fn.split(".iesopt.yaml")[0] for fn in os.listdir(folder) if fn.endswith(".iesopt.yaml")])
+
 
 def make_example(example: str, dst_dir: str | Path = "./", dst_name: str | None = None) -> Path:
     """
@@ -65,13 +68,14 @@ def make_example(example: str, dst_dir: str | Path = "./", dst_name: str | None 
         dst_dir (str, optional): Directory to generate the example in, defaults to `"./"`.
         dst_name (str, optional): Name of the generated example file (without the ".iesopt.yaml" extension), e.g.,
             `"config"`, will create `dst_dir/config.iesopt.yaml`. Will default to the original name of the example.
-    
+
     Returns:
         Path: Path to the generated example file.
     """
     import shutil
     import os
     import stat
+
     julia = get_iesopt_module_attr("julia")
     folder = Path(julia.IESoptLib.get_path(jl_symbol("examples")))
 
@@ -85,19 +89,21 @@ def make_example(example: str, dst_dir: str | Path = "./", dst_name: str | None 
         logger.info("Data folder for examples does not exist; creating it, and copying contents")
         shutil.copytree(datafolder, target_datafolder)
     else:
-        logger.info(f"Data folder for examples already exists; NOT copying ANY contents")
+        logger.info("Data folder for examples already exists; NOT copying ANY contents")
 
     # Copy the config file.
     logger.info("Creating example ('%s') at: '%s'" % (example, target_filename))
     shutil.copy(filename, target_filename)
 
     # Make everything editable.
-    logger.info("Set write permissions for example ('%s'), and data folder ('%s')" % (target_filename, target_datafolder))
+    logger.info(
+        "Set write permissions for example ('%s'), and data folder ('%s')" % (target_filename, target_datafolder)
+    )
     os.chmod(target_filename, os.stat(target_filename).st_mode & ~stat.S_IWRITE | stat.S_IWUSR)
     for dirpath, _, filenames in os.walk(target_datafolder):
         os.chmod(dirpath, os.stat(dirpath).st_mode & ~stat.S_IWRITE | stat.S_IWUSR)
         for filename in filenames:
             filepath = os.path.join(dirpath, filename)
             os.chmod(filepath, os.stat(filepath).st_mode & ~stat.S_IWRITE | stat.S_IWUSR)
-    
+
     return target_filename

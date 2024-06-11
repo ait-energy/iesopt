@@ -2,6 +2,8 @@ import os
 import sys
 from pathlib import Path
 
+from sphinxawesome_theme.postprocess import Icons
+
 
 # -- Setup -------------------------------------------------------------------
 
@@ -36,8 +38,6 @@ intersphinx_disabled_reftypes = [""]
 
 html_theme = "sphinxawesome_theme"
 html_static_path = ["_static"]
-
-from sphinxawesome_theme.postprocess import Icons
 
 html_permalinks_icon = Icons.permalinks_icon
 

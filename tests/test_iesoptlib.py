@@ -24,6 +24,6 @@ class TestIESoptLib:
     def test_run_example(self, tmp_path):
         config_file = iesopt.make_example("01_basic_single_node", dst_dir=tmp_path, dst_name="config")
         model = iesopt.run(config_file, verbosity=False)
-        # assert model is not None
+        assert model is not None
         # assert model.status == "Optimal"
         # assert model.objective_value is not None

@@ -1,3 +1,2 @@
-from .general import initialize
-
-from .util import jl_safe_seval, jl_import
+from .general import initialize as initialize
+from .util import jl_import as jl_import

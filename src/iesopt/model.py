@@ -94,7 +94,7 @@ class Model:
             logger.error(f"Exception during `generate`: {e}")
             try:
                 logger.error(f"Current debugging info: {self.data.debug}")
-            except:
+            except Exception as e:
                 logger.error("Failed to extract debugging info")
 
     def optimize(self) -> None:
@@ -122,7 +122,7 @@ class Model:
             logger.error(f"Exception during `optimize`: {e}")
             try:
                 logger.error(f"Current debugging info: {self.data.debug}")
-            except:
+            except Exception as e:
                 logger.error("Failed to extract debugging info")
 
     @property
@@ -136,16 +136,16 @@ class Model:
         """Manually extract a specific result from the model."""
         try:
             c = self._IESopt.component(self.core, "node2")
-        except:
+        except Exception:
             raise Exception(f"Exception during `extract_result({component}, {field}, mode={mode})`")
 
         f = None
         for fieldtype in ["var", "exp", "con", "obj"]:
             try:
-                t = getattr(component, fieldtype)
+                t = getattr(c, fieldtype)
                 f = getattr(t, field)
                 break
-            except:
+            except Exception:
                 pass
 
         if f is None:
@@ -158,14 +158,14 @@ class Model:
                 return self._jump_duals(f)
             else:
                 raise Exception(f"Mode `{mode}` not supported, use `value` or `dual`")
-        except:
+        except Exception:
             raise Exception(f"Error during extraction of result `{field}` from component `{component}`")
 
     def get_component(self, component: str):
         """Get a core component based on its full name."""
         try:
             return self._IESopt.component(self.core, component)
-        except:
+        except Exception:
             raise Exception(f"Error while retrieving component `{component}` from model")
 
     def get_variable(self, component: str, variable: str):
@@ -192,7 +192,7 @@ class Model:
         """
         try:
             return self.core[jl_symbol(var)]
-        except:
+        except Exception:
             raise Exception(f"Error while retrieving variable `{var}` from model")
 
     @staticmethod

@@ -20,7 +20,7 @@ def setup_julia():
     # Setup Julia (checking if it "looks" valid).
     import juliapkg
 
-    if juliapkg.resolve() != True:
+    if not juliapkg.resolve():
         raise Exception("Julia setup is not valid")
 
     import juliacall

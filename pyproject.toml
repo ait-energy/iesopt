@@ -37,6 +37,7 @@ pathlib = "^1.0.0"
 juliacall = "^0.9.20"
 pandas = "^2.0.0"
 juliapkg = "^0.1.13"
+pytest-ruff = "^0.3.2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.7"
@@ -63,4 +64,11 @@ extend-exclude = ["*.jl"]
 target-version = "py311"
 
 [tool.pytest.ini_options]
-addopts = ["--import-mode=importlib"]
+addopts = [
+    "--import-mode=importlib",
+    "--ruff",
+    "--ruff-format",
+    "--cov-report=term",
+    "--cov-report=xml:coverage.xml",
+    "--cov=iesopt",
+]

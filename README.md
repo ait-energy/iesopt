@@ -1,8 +1,8 @@
 # IESopt: Integrated Energy System Optimization
 
 [![PyPI - Version](https://img.shields.io/pypi/v/iesopt)](https://pypi.org/project/iesopt/)
-[![Docs](https://img.shields.io/badge/docs-stable-blue.svg)](https://ait-energy.github.io/iesopt-py/)
-[![License](https://img.shields.io/github/license/ait-energy/IESopt.jl)](LICENSE)
+[![Docs](https://img.shields.io/badge/docs-stable-blue.svg)](https://ait-energy.github.io/iesopt/)
+[![License](https://img.shields.io/github/license/ait-energy/iesopt)](LICENSE)
 
 [![Build Status](https://github.com/ait-energy/iesopt/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/ait-energy/iesopt/actions/workflows/pytest.yml?query=branch%3Amain)
 [![codecov](https://codecov.io/gh/ait-energy/iesopt/graph/badge.svg?token=MC2IN9URZY)](https://codecov.io/gh/ait-energy/iesopt)
@@ -13,8 +13,6 @@ systems.
 
 > Note: We are currently moving from our internal version control to GitHub. Missing contents will be added during the
 > upcoming days ...
-
-> ATTENTION: Code is currently not functional, since dependencies and internal imports are being cleaned up.
 
 It is developed and maintained at the **Center for Energy** at
 [AIT Austrian Institute of Technology GmbH](https://www.ait.ac.at/). The framework is designed to support the

@@ -23,6 +23,11 @@ This is my note
 
 It is developed and maintained at the Center for Energy at AIT Austrian Institute of Technology GmbH. The framework is designed to support the optimization of energy systems that are characterized by a high degree of integration between different energy carriers and sectors. It focuses on offering a modular and adaptable tool for modelers, that does not compromise on performance, while still being user-friendly. This is enabled by reducing energy system assets to abstract building blocks, that are supported by specialized implementation, and can be combined into complex systems without the need of a detailed understanding of mathematical modeling or proficiency in any coding-language.
 
+:::{caution}
+The documentation is currently being put together based on cleaned parts of the internal docs. Until this is finished, this documentation only contains some placeholders.
+:::
+
+<!---
 :::{toctree}
 :maxdepth: 1
 :caption: Contents:
@@ -35,3 +40,4 @@ pages/util.md
 ```{eval-rst}
 .. autofunction:: iesopt.run
 ```
+--->

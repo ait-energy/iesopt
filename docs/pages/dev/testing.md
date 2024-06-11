@@ -1,9 +1,20 @@
-# Testing
+# Tests & Code Quality
+
+## Format and lint
+
+Use
+
+```bash
+black .
+ruff .
+```
+
+Commit pure formatting changes using `chore: formatting`.
 
 ## Running tests
 
 ```bash
-pytest --cov-report term --cov-report xml:coverage.xml --cov=iesopt
+pytest
 ```
 
 This will print a coverage report, which looks like
@@ -21,3 +32,4 @@ TOTAL                            417    172    59%
 ```
 
 and tells you roughly how good each file is covered by automated tests. Further it creates a `coverage.xml` file in the project root folder, that you can use. In `VSCode`, the extension [Coverage Gutters](https://marketplace.visualstudio.com/items?itemName=ryanluker.vscode-coverage-gutters) allows inspecting test coverage directly in your code editor. If you have it installed and loaded, simply hit `Ctrl + Shift + 8` (if you are using default keybinds) to enable watching the coverage.
+

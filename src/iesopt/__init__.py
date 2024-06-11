@@ -49,17 +49,17 @@ def jump_shadow_price(item):
 # =======================================================================
 
 # Setup Julia.
-from .julia import initialize as _initialize_everything
-from .util import get_iesopt_module_attr as _get_iesopt_module_attr
+from .julia import initialize as _initialize_everything  # noqa: E402
+from .util import get_iesopt_module_attr as _get_iesopt_module_attr  # noqa: E402
 
 julia = _initialize_everything()
 
 # Export everything.
-from iesopt.model import Model
-from iesopt.results import Results
-from iesopt.iesopt import run, examples, make_example
+from iesopt.model import Model as Model  # noqa: E402
+from iesopt.results import Results as Results  # noqa: E402
+from iesopt.iesopt import run as run, examples as examples, make_example as make_example  # noqa: E402
 
-from .julia.util import jl_symbol
+from .julia.util import jl_symbol  # noqa: E402
 
 Symbol = jl_symbol
 

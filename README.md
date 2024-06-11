@@ -1,7 +1,12 @@
 # IESopt: Integrated Energy System Optimization
 
-[![License](https://img.shields.io/github/license/ait-energy/IESopt.jl)](LICENSE)
+[![PyPI - Version](https://img.shields.io/pypi/v/iesopt)](https://pypi.org/project/iesopt/)
 [![Docs](https://img.shields.io/badge/docs-stable-blue.svg)](https://ait-energy.github.io/iesopt-py/)
+[![License](https://img.shields.io/github/license/ait-energy/IESopt.jl)](LICENSE)
+
+[![Build Status](https://github.com/ait-energy/iesopt/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/ait-energy/iesopt/actions/workflows/pytest.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/ait-energy/iesopt/graph/badge.svg?token=MC2IN9URZY)](https://codecov.io/gh/ait-energy/iesopt)
+[![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 **IESopt** (_Integrated Energy System Optimization_) is a modeling and optimization framework for integrated energy
 systems.
@@ -18,15 +23,3 @@ and sectors. It focuses on offering a modular and adaptable tool for modelers, t
 while still being user-friendly. This is enabled by reducing energy system assets to abstract building blocks, that are
 supported by specialized implementation, and can be combined into complex systems without the need of a detailed
 understanding of mathematical modeling or proficiency in any coding-language.
-
-<!--
-## Development
-
-Run the following to locally check the code:
-
-```bash
-ruff check src/ tests/ docs/conf.py
-black src/ tests/ docs/conf.py
-codespell src/ tests/
-```
--->

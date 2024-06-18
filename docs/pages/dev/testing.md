@@ -5,8 +5,9 @@
 Use
 
 ```bash
-black .
-ruff .
+black src/ docs/conf.py
+black docs/notebooks
+ruff check .
 ```
 
 Commit pure formatting changes using `chore: formatting`.

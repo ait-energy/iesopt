@@ -1,4 +1,4 @@
-from ..util import logger, get_iesopt_module_attr, set_iesopt_module_attr
+from ..util import logger, get_iesopt_module_attr
 
 
 def jl_safe_seval(code: str):
@@ -44,4 +44,16 @@ def jl_symbol(string: str):
     return get_iesopt_module_attr("julia").Symbol(string)
 
 
-set_iesopt_module_attr("Symbol", jl_symbol)
+def jl_isa(obj, julia_type: str):
+    julia = get_iesopt_module_attr("julia")
+
+    if julia_type == "AbstractVector":
+        return julia.isa(obj, julia.AbstractVector)
+
+    if julia_type == "AbstractSet":
+        return julia.isa(obj, julia.AbstractSet)
+
+    if julia_type == "AbstractDict":
+        return julia.isa(obj, julia.AbstractDict)
+
+    return julia.seval(f"(x) -> (x isa {julia_type})")(obj)

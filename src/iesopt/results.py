@@ -39,7 +39,8 @@ class JuliaCallPyConvertReadWrapper:
 class Results:
     _valid_attrs = ["attributes", "model", "custom", "input", "info", "snapshots", "components"]
 
-    def __init__(self, file: str = None, model=None):
+    @validate_call
+    def __init__(self, *, file: str = None, model=None):
         """
         Create a new `Results` object, either from a file or from an IESopt model. Make sure to pass either a file or a
         model explicitly using a keyword argument.

@@ -16,7 +16,7 @@ jobs:
             python-version: "3.11"
       - name: Install dependencies
         run: |
-          pip install sphinx myst_parser sphinxawesome-theme sphinx-togglebutton
+          pip install sphinx myst_parser myst-nb sphinxawesome-theme sphinx-togglebutton
       - name: Install local package
         run: |
           pip install -e .

@@ -1,7 +1,10 @@
 import warnings
 import pandas as pd
+import numpy as np
+from pydantic import validate_call
 
 from .util import get_iesopt_module_attr
+from .julia import jl_isa
 
 
 class ddict(dict):
@@ -12,10 +15,32 @@ class ddict(dict):
     __delattr__ = dict.__delitem__
 
 
+class JuliaCallPyConvertReadWrapper:
+    def __init__(self, obj):
+        import juliacall
+
+        self._juliacall = juliacall
+        self._obj = obj
+
+    def _rewrap_return(self, value):
+        if isinstance(value, self._juliacall.ArrayValue):
+            return value.to_numpy(copy=False)
+        if isinstance(value, self._juliacall.DictValue):
+            return JuliaCallPyConvertReadWrapper(value)
+        return JuliaCallPyConvertReadWrapper(value)
+
+    def __getattr__(self, name: str):
+        return self._rewrap_return(getattr(self._obj, name))
+
+    def __getitem__(self, key):
+        return self._rewrap_return(self._obj.get(key))
+
+
 class Results:
     _valid_attrs = ["attributes", "model", "custom", "input", "info", "snapshots", "components"]
 
-    def __init__(self, file: str = None, model=None):
+    @validate_call
+    def __init__(self, *, file: str = None, model=None):
         """
         Create a new `Results` object, either from a file or from an IESopt model. Make sure to pass either a file or a
         model explicitly using a keyword argument.
@@ -52,6 +77,53 @@ class Results:
         # Allow dot access to attributes of "model" results, to align with access to the models structure.
         self._model = ddict(self._model)
 
+    @property
+    def components(self):
+        return JuliaCallPyConvertReadWrapper(self._model["components"])
+
+    @property
+    def objectives(self):
+        return JuliaCallPyConvertReadWrapper(self._model["objectives"])
+
+    @property
+    def customs(self):
+        return JuliaCallPyConvertReadWrapper(self._model["customs"])
+
+    @validate_call
+    def get(
+        self,
+        result: str,
+        component: str,
+        fieldtype: str,
+        field: str,
+        *,
+        mode: str = "primal",
+        build_cache: bool = False,
+    ):
+        if result not in ["component", "objective", "custom"]:
+            raise ValueError(f"`result` must be 'component', 'objective', or 'custom', got '{result}'")
+
+        if result in ["objective", "custom"]:
+            # TODO: Implement and remove this
+            raise NotImplementedError("Accessing objectives and custom results is not yet supported using `get(...)`")
+
+        if mode == "dual":
+            field = field + "__dual"
+        elif mode != "primal":
+            raise ValueError(f"`mode` must be 'primal' or 'dual', got '{mode}'")
+
+        if build_cache:
+            self._build_cache()
+
+        if self._has_cache():
+            t = (component, fieldtype, field)
+            if t in self._cache:
+                return self._cache[t]
+            raise ValueError(f"Failed to access result '{fieldtype}.{field}' in component '{component}'")
+
+        return self._get_safe(component, fieldtype, field, mode)
+
+    @validate_call
     def entries(self, field: str = None):
         """
         Get all available entries for a specific field, or all fields if `field` is `None`.
@@ -65,6 +137,7 @@ class Results:
             return [it for it in Results._valid_attrs if getattr(self, f"_{it}") is not None]
         return sorted(getattr(self, field).keys())
 
+    @validate_call
     def to_dict(self, filter=None, field_types=None, build_cache: bool = True):
         """
         Extract results from the `Results` object and return them as a dictionary.
@@ -83,13 +156,13 @@ class Results:
             self._build_cache()
 
         if field_types is None:
-            field_types = ["var", "exp", "con", "obj"]
+            field_types = ["var", "exp", "con", "obj", "res"]
 
         entries = {}
         if self._cache is None:
-            for c in self.model["components"].keys():
+            for c in self._model["components"].keys():
                 for t in field_types:
-                    container = getattr(self.model["components"][c], t)
+                    container = getattr(self._model["components"][c], t)
                     for f in [str(it) for it in self._julia.Main.keys(container)]:
                         if (filter is None) or filter(c, t, f):
                             entries[(c, t, f)] = Results._safe_convert(getattr(container, f))
@@ -100,6 +173,7 @@ class Results:
 
         return entries
 
+    @validate_call
     def to_pandas(self, filter=None, field_types=None, orientation: str = "long", build_cache: bool = True):
         """
         Extract results from the `Results` object and return them as `pd.DataFrame` or `pd.Series` (depending on the
@@ -119,15 +193,29 @@ class Results:
         """
         _dict = self.to_dict(filter, field_types, build_cache)
 
+        # Check if we can cast to `pd.Series` (no matter the orientation).
+        _result_types = set(type(it) for it in _dict.values())
+        if len(_result_types) == 1:
+            _rt = _result_types.pop()
+            if _rt in [int, float]:
+                return pd.Series(_dict)
+
+            if _rt == np.ndarray:
+                if len(_dict) == 1:
+                    k, v = next(iter(_dict.items()))
+
+                    if isinstance(v, int | float):
+                        return pd.Series(v, index=k)
+
+                    value_shape = v.shape
+                    if len(value_shape) == 1:
+                        if value_shape[0] == len(self._snapshots):
+                            return pd.Series(v, index=self._snapshots, name=k)
+
+            if orientation == "wide":
+                return pd.DataFrame(_dict, index=self._snapshots)
+
         if orientation == "wide":
-            _result_types = set(type(it) for it in _dict.values())
-
-            if len(_result_types) == 1:
-                if _result_types.pop() in [int, float]:
-                    return pd.Series(_dict)
-
-                return pd.DataFrame(_dict)
-
             warnings.warn(
                 "Results must be of the same shape (= length) to create a DataFrame, with `orientation='wide'`. "
                 "Falling back to `orientation='long'`. This warning can be prevented by calling `results.to_pandas("
@@ -135,6 +223,7 @@ class Results:
                 "select results of the same shape (example: objectives are always scalars, while most variables - "
                 "except Decisions - are vector valued, indexed over all snapshots)."
             )
+            warnings.warn(f"Got the following result types: {_result_types}")
             orientation = "long"
 
         if orientation == "long":
@@ -166,18 +255,44 @@ class Results:
 
         raise ValueError(f"`orientation` can be 'wide' or 'long', got '{orientation}'.")
 
-    def __getattr__(self, attr: str):
-        if attr not in Results._valid_attrs:
-            raise Exception(f"Attribute '{attr}' is not accessible, pick one of {Results._valid_attrs}")
-        if not hasattr(self, f"_{attr}"):
-            raise Exception(f"`Results` object has no attribute '{attr}'")
-        if getattr(self, f"_{attr}") is None:
-            raise Exception(f"Attribute '{attr}' not properly loaded, consider checking `results.entries()` first")
-        return getattr(self, f"_{attr}")
+    # def __getattr__(self, attr: str):
+    #     if attr not in Results._valid_attrs:
+    #         raise Exception(f"Attribute '{attr}' is not accessible, pick one of {Results._valid_attrs}")
+    #     if not hasattr(self, f"_{attr}"):
+    #         raise Exception(f"`Results` object has no attribute '{attr}'")
+    #     if getattr(self, f"_{attr}") is None:
+    #         raise Exception(f"Attribute '{attr}' not properly loaded, consider checking `results.entries()` first")
+    #     return getattr(self, f"_{attr}")
 
     def _build_cache(self):
         if self._cache is None:
             self._cache = self.to_dict(build_cache=False)
+
+    def _has_cache(self):
+        return self._cache is not None
+
+    def _get_safe(self, component: str, fieldtype: str, field: str, mode: str = "primal"):
+        if mode not in ["primal", "dual"]:
+            raise ValueError(f"`mode` must be 'primal' or 'dual', got '{mode}'.")
+
+        try:
+            components = self._model["components"]
+        except Exception:
+            raise ValueError("Failed to access `components` in model results")
+        try:
+            all_results = components[component]
+        except Exception:
+            raise ValueError(f"Failed to access component '{component}' in model results")
+        try:
+            container = getattr(all_results, fieldtype)
+        except Exception:
+            raise ValueError(f"Failed to access results for `fieldtype` '{fieldtype}' in component '{component}'")
+        try:
+            result = getattr(container, field)
+        except Exception:
+            raise ValueError(f"Failed to access result '{field}' in component '{component}'")
+
+        return Results._safe_convert(result)
 
     def _from_file(self, file: str):
         results = self._IESopt.load_results(file)
@@ -239,8 +354,11 @@ class Results:
 
     @classmethod
     def _safe_convert(cls, value):
-        # if isinstance(value, self._julia.VectorValue):
-        #     return self._julia.PythonCall.pylist(value)
-        # if isinstance(value, self._julia.DictValue):
-        #     return {str(k): cls._safe_convert(v) for (k, v) in value.items()}
+        # TODO: ensure recursive conversion of all multi-element types
+        if jl_isa(value, "AbstractVector"):
+            return value.to_numpy(copy=False)
+        if jl_isa(value, "AbstractDict"):
+            return dict(value)
+        if jl_isa(value, "AbstractSet"):
+            return set(value)
         return value

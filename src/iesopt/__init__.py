@@ -55,11 +55,12 @@ from .util import get_iesopt_module_attr as _get_iesopt_module_attr  # noqa: E40
 julia = _initialize_everything()
 
 # Export everything.
-from iesopt.model import Model as Model  # noqa: E402
+from iesopt.model import Model as Model, ModelStatus as ModelStatus  # noqa: E402
 from iesopt.results import Results as Results  # noqa: E402
 from iesopt.iesopt import run as run, examples as examples, make_example as make_example  # noqa: E402
 
 from .julia.util import jl_symbol  # noqa: E402
+from .julia import jl_isa as jl_isa  # noqa: E402
 
 Symbol = jl_symbol
 

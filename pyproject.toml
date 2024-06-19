@@ -38,17 +38,21 @@ juliacall = "^0.9.20"
 pandas = "^2.0.0"
 juliapkg = "^0.1.13"
 pytest-ruff = "^0.3.2"
+pydantic = "^2.7.4"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.7"
-black = "^24.4.2"
+black = {extras = ["jupyter"], version = "^24.4.2"}
 codespell = "^2.3.0"
+myst-nb = "^1.1.0"
 
 [tool.poetry.group.docs.dependencies]
 myst-parser = "^3.0.1"
 sphinx = "^7.3.7"
 sphinxawesome-theme = "^5.2.0"
 sphinx-togglebutton = "^0.3.2"
+ipywidgets = "^8.1.3"
+myst-nb = "^1.1.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.2.2"

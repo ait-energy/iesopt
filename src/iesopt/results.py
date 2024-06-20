@@ -22,11 +22,26 @@ class JuliaCallPyConvertReadWrapper:
         self._juliacall = juliacall
         self._obj = obj
 
+    def keys(self):
+        if isinstance(self._obj, dict | self._juliacall.DictValue):
+            return dict(self._obj).keys()
+        raise TypeError(f"Object of type '{type(self._obj)}' inside JuliaCallPyConvertReadWrapper has no keys")
+
+    def __len__(self):
+        if isinstance(self._obj, dict | list | tuple | self._juliacall.DictValue | self._juliacall.VectorValue):
+            return len(self._obj)
+        raise TypeError(f"Object of type '{type(self._obj)}' inside JuliaCallPyConvertReadWrapper has no length")
+
     def _rewrap_return(self, value):
         if isinstance(value, self._juliacall.ArrayValue):
             return value.to_numpy(copy=False)
+        if isinstance(value, float | int | str | bool | type(None)):
+            return value
+
         if isinstance(value, self._juliacall.DictValue):
             return JuliaCallPyConvertReadWrapper(value)
+
+        # Some other/unknown type, rewrap it.
         return JuliaCallPyConvertReadWrapper(value)
 
     def __getattr__(self, name: str):

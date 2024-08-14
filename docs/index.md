@@ -63,15 +63,15 @@ index.md
 
 notebooks/first_model.ipynb
 notebooks/custom_results.ipynb
-<!--- notebooks/mga_basic.ipynb --->
 :::
+<!--- notebooks/mga_basic.ipynb --->
 
 :::{toctree}
 :hidden:
 :caption: User guides
 
-pages/user_guides/best_practice.md
 pages/user_guides/index.md
+pages/user_guides/best_practice.md
 :::
 
 :::{toctree}
@@ -86,8 +86,8 @@ pages/reference/python/index.md
 :hidden:
 :caption: Developer documentation
 
-pages/dev/testing.md
-pages/dev/docs.md
+pages/dev/general.md
+pages/dev/core.md
 :::
 
 <!--- TABLE OF CONTENTS STRUCTURE --->

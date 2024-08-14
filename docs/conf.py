@@ -64,7 +64,7 @@ html_theme_options = {
     "awesome_headerlinks": True,
     "show_prev_next": False,
     "main_nav_links": {
-        "Home": "/index",
+        "Home": "index",
         "GitHub": "https://github.com/ait-energy/iesopt",
         "IESopt.jl": "https://github.com/ait-energy/IESopt.jl",
     },

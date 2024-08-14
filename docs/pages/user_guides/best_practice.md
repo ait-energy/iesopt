@@ -23,11 +23,16 @@ Imagine a system where a heat pump is used to produce _heat_ for both heating an
 > requirements, so it is up to the user to decide how to name the energy carriers. However, it is recommended to keep
 > the energy carriers as separate as reasonable.
 
-!!! tip "Definition"
-    According to ISO 13600, an energy carrier is either a substance or a phenomenon that can be used to produce
-    mechanical work or heat or to operate chemical or physical processes. _This may be seen as motivation why, in this
-    case, the argument "both are heat" may not be valid: In the end, the actual "carrier" is most likely water, and not
-    "heat" (even if that is most commonly used as "carrier"). However, no one would argue to actually use "water" in
-    this example, which shows that the choice of `heat` would already be "not 100% exact"; therefore, the separation
-    into different two carriers does not "mis-represent" reality, but instead just makes our "abstraction" (= not using
-    `water` as carrier) more explicit._
+:::{admonition} Definition: Energy carrier
+:class: tip
+
+_According to ISO 13600, an energy carrier is either a substance or a phenomenon that can be used to produce
+mechanical work or heat or to operate chemical or physical processes._
+
+This may be seen as motivation why, in this
+case, the argument "both are heat" may not be valid: In the end, the actual "carrier" is most likely `water`, and not
+`heat` (even if that is most commonly used as "carrier"). However, no one would argue to actually use `water` in
+this example, which shows that the choice of `heat` would already be "not 100% exact"; therefore, the separation
+into different two carriers does not "mis-represent" reality, but instead just makes our "abstraction" (= not using
+`water` as carrier) more explicit.
+:::

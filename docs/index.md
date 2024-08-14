@@ -63,12 +63,14 @@ index.md
 
 notebooks/first_model.ipynb
 notebooks/custom_results.ipynb
+<!--- notebooks/mga_basic.ipynb --->
 :::
 
 :::{toctree}
 :hidden:
 :caption: User guides
 
+pages/user_guides/best_practice.md
 pages/user_guides/index.md
 :::
 
@@ -181,7 +183,7 @@ the Poetry documentation.
 
 ### Installing `iesopt`
 
-This assumes that you have a working environment, that has Poetry installed. It should howver work similarly using
+This assumes that you have a working environment, that has Poetry installed. It should however work similarly using
 `conda install` or `pip install` instead.
 
 You can install `iesopt` by executing

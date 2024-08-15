@@ -30,6 +30,7 @@ extensions = [
     "sphinx.ext.viewcode",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.napoleon",
+    "sphinx_togglebutton",
     "julia_domain",
     "sphinx.ext.mathjax",
 ]

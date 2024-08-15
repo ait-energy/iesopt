@@ -8,14 +8,14 @@ Imagine a system where a heat pump is used to produce _heat_ for both heating an
 
 **Why?**
 
-1. Clarity: It is easier to understand the system when energy carriers are clearly separated.
-2. Flexibility: It is easier to change the system later on. For example, if one wants to replace the heat pump with
+1. **Clarity:** It is easier to understand the system when energy carriers are clearly separated.
+2. **Flexibility:** It is easier to change the system later on. For example, if one wants to replace the heat pump with
    a gas boiler - but just for hot water - it is easier to do so when the energy carriers are separated.
-3. Consistency: It is easier to compare different systems when the energy carriers are consistently named.
-4. Error prevention**: It is less likely to make mistakes when the energy carriers are clearly separated. Mistkenly
+3. **Consistency:** It is easier to compare different systems when the energy carriers are consistently named.
+4. **Error prevention:** It is less likely to make mistakes when the energy carriers are clearly separated. Mistkenly
    connecting two `Node`s with `heat`, that in reality could not be connected since they are part of two different
    systems, cannot happen when the energy carriers are separated.
-5. Plotting: It is easier to plot the system when the energy carriers are separated. For example, one can plot the
+5. **Plotting:** It is easier to plot the system when the energy carriers are separated. For example, one can plot the
    heat demand for heating and hot water separately, or immediately see how much energy is being spent to supply the
    different demands.
 

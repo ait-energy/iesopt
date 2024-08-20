@@ -16,6 +16,21 @@ parameters:
   heat_out: null
   co2_out: null
 
+components:
+  power:
+    type: Unit
+    inputs: {<fuel>: <fuel_in>}
+    outputs: {electricity: <power_out>, co2: <co2_out>}
+    conversion: 1 <fuel> -> <efficiency> electricity + <fuel_co2_emission_factor> co2
+    capacity: <p_max> out:electricity
+
+  heat:
+    type: Unit
+    inputs: {<fuel>: <fuel_in>}
+    outputs: {heat: <heat_out>, co2: <co2_out>}
+    conversion: 1 <fuel> -> <efficiency>/<power_loss_ratio> heat + <fuel_co2_emission_factor> co2
+    capacity: <h_max> out:heat
+
 functions:
   finalize: |
     # Parameters.
@@ -31,21 +46,6 @@ functions:
     # Add constraints.
     @constraint(MODEL.model, cm .* out_heat .<= out_elec)
     @constraint(MODEL.model, out_elec .<= p_max .- cv .* out_heat)
-
-components:
-  power:
-    type: Unit
-    inputs: {<fuel>: <fuel_in>}
-    outputs: {electricity: <power_out>, co2: <co2_out>}
-    conversion: 1 <fuel> -> <efficiency> electricity + <fuel_co2_emission_factor> co2
-    capacity: <p_max> out:electricity
-
-  heat:
-    type: Unit
-    inputs: {<fuel>: <fuel_in>}
-    outputs: {heat: <heat_out>, co2: <co2_out>}
-    conversion: 1 <fuel> -> <efficiency>/<power_loss_ratio> heat + <fuel_co2_emission_factor> co2
-    capacity: <h_max> out:heat
 ```
 
 This makes use of the `finalize(...)` function to link the `power` and `heat` components. Using an addon can be complicated, because the components do not inherently know about each other. The `finalize(...)` function however is attached to the template itself, can access both components, and is called after both are fully constructed, which means it can freely access their variables and expressions.

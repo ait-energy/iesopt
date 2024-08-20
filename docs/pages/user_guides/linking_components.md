@@ -34,7 +34,6 @@ components:
 functions:
   finalize: |
     # Parameters.
-    T = MODEL.model.ext[:iesopt].model.T
     cm = get("power_ratio")
     cv = get("power_loss_ratio")
     p_max = get("p_max")

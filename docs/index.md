@@ -70,10 +70,11 @@ notebooks/custom_results.ipynb
 :hidden:
 :caption: User guides
 
-pages/user_guides/index.md
 pages/user_guides/best_practice.md
 pages/user_guides/linking_components.md
 :::
+
+<!--- pages/user_guides/index.md --->
 
 :::{toctree}
 :hidden:

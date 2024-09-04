@@ -72,6 +72,7 @@ notebooks/custom_results.ipynb
 
 pages/user_guides/best_practice.md
 pages/user_guides/linking_components.md
+pages/user_guides/solvers.md
 :::
 
 <!--- pages/user_guides/index.md --->

@@ -63,6 +63,8 @@ index.md
 
 notebooks/first_model.ipynb
 notebooks/custom_results.ipynb
+pages/tutorials/templates_1.md
+pages/tutorials/templates_2.md
 :::
 <!--- notebooks/mga_basic.ipynb --->
 

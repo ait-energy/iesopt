@@ -1,4 +1,5 @@
 import warnings
+import re
 import pandas as pd
 import numpy as np
 from pydantic import validate_call
@@ -139,6 +140,38 @@ class Results:
         return self._get_safe(component, fieldtype, field, mode)
 
     @validate_call
+    def query_available_results(self, component: str, mode: str = "both"):
+        """
+        Query the available results for a specific component, optionally filtered by `mode`.
+
+        Parameters
+        ----------
+        component : str
+            Component to query results for
+        mode : str, optional
+            Mode to query results for, either "both", "primal", or "dual", by default "both"
+        """
+        regex = re.compile(component)
+
+        if not self._has_cache():
+            self._build_cache()
+
+        if mode == "both":
+            return [
+                (it[1], (x := it[2].split("__"))[0], "primal" if len(x) == 1 else "dual")
+                for it in self._cache
+                if re.search(regex, it[0])
+            ]
+        elif mode == "primal":
+            return [(it[1], it[2]) for it in self._cache if re.search(regex, it[0]) and "__dual" not in it[2]]
+        elif mode == "dual":
+            return [
+                (it[1], it[2].split("__")[0]) for it in self._cache if re.search(regex, it[0]) and "__dual" in it[2]
+            ]
+        else:
+            raise ValueError("Invalid mode, must be either 'both', 'primal', or 'dual'")
+
+    @validate_call
     def entries(self, field: str = None):
         """
         Get all available entries for a specific field, or all fields if `field` is `None`.
@@ -269,6 +302,42 @@ class Results:
             return pd.DataFrame(_data)
 
         raise ValueError(f"`orientation` can be 'wide' or 'long', got '{orientation}'.")
+
+    @validate_call
+    def overview(self, component: str, *, temporal: bool, mode: str = "both"):
+        regex = re.compile(component)
+
+        if not self._has_cache():
+            self._build_cache()
+
+        if mode == "both":
+            ret = {
+                (k[0], k[1], (x := k[2].split("__"))[0], "primal" if len(x) == 1 else "dual"): v
+                for (k, v) in self._cache.items()
+                if re.search(regex, k[0]) and isinstance(v, int | float) != temporal
+            }
+        elif mode == "primal":
+            ret = {
+                (k[0], k[1], k[2], "primal"): v
+                for (k, v) in self._cache.items()
+                if re.search(regex, k[0]) and "__dual" not in k[2] and isinstance(v, int | float) != temporal
+            }
+        elif mode == "dual":
+            ret = {
+                (k[0], k[1], k[2].split("__")[0], "dual"): v
+                for (k, v) in self._cache.items()
+                if re.search(regex, k[0]) and "__dual" in k[2] and isinstance(v, int | float) != temporal
+            }
+        else:
+            raise ValueError("Invalid mode, must be either 'both', 'primal', or 'dual'")
+
+        if len(ret) == 0:
+            return None
+
+        if temporal:
+            return pd.DataFrame(ret, index=self._snapshots).sort_index(axis=1)
+        else:
+            return pd.Series(ret)
 
     # def __getattr__(self, attr: str):
     #     if attr not in Results._valid_attrs:

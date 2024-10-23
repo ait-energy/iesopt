@@ -23,6 +23,7 @@ Getting started <pages/index>
 
 pages/user_guides/best_practice.md
 pages/user_guides/linking_components.md
+pages/user_guides/common_errors.md
 pages/user_guides/solvers.md
 :::
 

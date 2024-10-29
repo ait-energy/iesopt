@@ -52,7 +52,7 @@ unit_pool_2:
 But ...
 
 - This might be an over complicated way to represent stuff like actual cost-power curve dynamics.
-- This might add too many Units, making the model hart to understand or analyse.
+- This might add too many Units, making the model hard to understand or analyse.
 - If there is any reason that the model might save costs by not running the "lower price" Unit it will do so! This means the "higher price" part of your asset could be used with out running the "lower price", which in reality is not possible (where it's one asset).
 
 Note that the last point most likely will not occur for your model, but ... it's something to keep in mind.

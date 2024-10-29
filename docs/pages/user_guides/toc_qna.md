@@ -1,6 +1,6 @@
 # Q & A
 
-These are based on previous questions that users had and discussions that occured to clarify. They can be used to point users to for any questions that repeatedly occur.
+These are based on previous questions that users had and discussions that occurred to clarify. They can be used to point users to for any questions that repeatedly occur.
 
 ## Contents
 
@@ -30,7 +30,7 @@ The exchange below in triple quotes is the chat that you can use:
 """
 ```
 
-Make sure to read over the returned text and properly check it for various commonly occuring issues. Proceed with caution ...
+Make sure to read over the returned text and properly check it for various commonly occurring issues. Proceed with caution ...
 
 ## Format & Structure
 

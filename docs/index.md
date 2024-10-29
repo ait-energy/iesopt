@@ -20,19 +20,11 @@ Getting started <pages/index>
 :::{toctree}
 :hidden:
 :caption: User guides
+
 pages/user_guides/index.md
-
-pages/user_guides/best_practice.md
-pages/user_guides/linking_components.md
-pages/user_guides/common_errors.md
-pages/user_guides/solvers.md
-
-pages/user_guides/qna/snapshot_duration.md
-pages/user_guides/qna/profiles_sign.md
-pages/user_guides/qna/dynamic_marginal_costs.md
+pages/user_guides/toc_general.md
+pages/user_guides/toc_qna.md
 :::
-
-<!--- pages/user_guides/index.md --->
 
 :::{toctree}
 :hidden:

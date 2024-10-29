@@ -29,6 +29,7 @@ pages/user_guides/solvers.md
 
 pages/user_guides/qna/snapshot_duration.md
 pages/user_guides/qna/profiles_sign.md
+pages/user_guides/qna/dynamic_marginal_costs.md
 :::
 
 <!--- pages/user_guides/index.md --->

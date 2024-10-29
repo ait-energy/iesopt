@@ -5,7 +5,7 @@ Crafted user guides covering a specific topic. These are mostly used to explain 
 ## Contents
 
 :::{toctree}
-:maxdepth: 2
+:maxdepth: 1
 
 general/best_practice.md
 general/linking_components.md

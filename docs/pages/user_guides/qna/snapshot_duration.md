@@ -2,10 +2,10 @@
 
 ## Intro
 
-> **Question:**  
+**Question:**  
 > I'm moving from hourly to daily time steps in my IESopt model. How should I adjust my input data, especially capacities and costs, to ensure accurate results? Should I express capacities as energy per time step (e.g., kWh/day) instead of power (kW)?
 
-> **Answer:**  
+**Answer:**  
 > When working with IESopt models, it's crucial to understand how the model interprets units of power and energy, especially when changing the duration of your time steps (snapshots). Here's how to approach this:
 
 ## Details

@@ -1,11 +1,11 @@
-# General
+# Q & A
 
 These are based on previous questions that users had and discussions that occured to clarify. They can be used to point users to for any questions that repeatedly occur.
 
 ## Contents
 
 :::{toctree}
-:maxdepth: 2
+:maxdepth: 1
 
 qna/snapshot_duration.md
 qna/profiles_sign.md

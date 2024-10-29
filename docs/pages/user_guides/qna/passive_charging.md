@@ -2,10 +2,10 @@
 
 ## Intro
 
-> **Question:**  
+**Question:**  
 > How can I represent passive charging in a borehole heat storage within my energy system optimization model?
 
-> **Answer:**  
+**Answer:**  
 > It's complicated ... But the only generally applicable answer is: A custom addon. The underlying idea is to separate the passive charging from the storage, into a separate "artificial" Profile, that can then accurately depict the passive behavior.
 
 ## The problem

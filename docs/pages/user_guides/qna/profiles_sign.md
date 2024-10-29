@@ -2,10 +2,10 @@
 
 ## Intro
 
-> **Question:**  
+**Question:**  
 > How does IESopt interpret positive and negative values in a Profile connected using `node_from`?
 
-> **Answer:**  
+**Answer:**  
 > When modeling energy systems in IESopt, you might have a fixed Profile representing both energy demand and supply — the proper sign of generation / consumption then depends on the way it is configured and connects to other components. Understanding how to correctly connect this Profile to a Node is crucial for accurate results.
 
 ## Details

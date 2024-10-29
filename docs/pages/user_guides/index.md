@@ -11,6 +11,6 @@ These user guides cover a wide range of topics, going into detail on specifics, 
 :hidden:
 :caption: User guides
 
-pages/user_guides/toc_general.md
-pages/user_guides/toc_qna.md
+toc_general.md
+toc_qna.md
 :::

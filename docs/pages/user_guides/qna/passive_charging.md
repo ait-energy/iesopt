@@ -1,4 +1,4 @@
-# Passive charging of a borehole heat storage
+# Passive charging of an underground heat storage
 
 ## Intro
 

@@ -1,4 +1,4 @@
-# Sign Convention for Time Series
+# Sign convention for time series
 
 ## Intro
 
@@ -24,7 +24,7 @@ If you connect your fixed Profile (`mode: fixed`, which is the default) to a Nod
 - **Positive Values:** The Profile draws energy from the Node (consumption).
 - **Negative Values:** The Profile effectively injects energy into the Node (generation).
 
-### Why Does This Happen?
+### Why does this happen?
 
 In IESopt, drawing a negative amount of energy from a Node (`-x kWh`) is mathematically equivalent to injecting a positive amount of energy (`+x kWh`) into it. This means, the following are equal:
 
@@ -33,7 +33,7 @@ In IESopt, drawing a negative amount of energy from a Node (`-x kWh`) is mathema
 - Injecting `x > 0` units of energy into a Node
 - Withdrawing a negative amount of energy from a Node
 
-## Practical Example
+## Practical example
 
 Suppose you have a fixed Profile connected to a heating grid Node:
 
@@ -49,7 +49,7 @@ myprofile:
 - **At time step 2:** The profile injects with a power of 50 kW into the node (generation).
 - **And so on.**
 
-### Alternative Approach with `node_to`
+### Alternative approach with `node_to`
 
 If you prefer to handle injections explicitly, you can use `node_to`:
 

@@ -1,4 +1,4 @@
-# Output-Dependent Marginal Costs
+# Output-dependent marginal costs
 
 > **Question:**  
 > How can I model a Unit where the marginal cost changes based on the level of energy output? For example, the cost is 5 €/MWh for outputs below 5 MW of power and 10 €/MWh for outputs above 5 MW of power.
@@ -10,12 +10,12 @@
 
 ### Explanation
 
-1. **Low-Output Unit:**
+1. **Low-output unit:**
    - Represents the output up to 5 MW.
    - Has a marginal cost of 5 €/MWh.
    - Capacity is limited to 5 MW.
 
-2. **High-Output Unit:**
+2. **High-output unit:**
    - Represents any output above 5 MW.
    - Has a marginal cost of 10 €/MWh.
    - No specific capacity limit unless there's an overall maximum output.

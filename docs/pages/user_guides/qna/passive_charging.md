@@ -1,0 +1,74 @@
+# Passive charging of a borehole heat storage
+
+## Intro
+
+> **Question:**  
+> How can I represent passive charging in a borehole heat storage within my energy system optimization model?
+
+> **Answer:**  
+> It's complicated ... But the only generally applicable answer is: A custom addon. The underlying idea is to separate the passive charging from the storage, into a separate "artificial" Profile, that can then accurately depict the passive behavior.
+
+## The problem
+
+When modeling a borehole heat storage - a deep underground heat storage surrounded by warm soil - it's important to account for passive charging from the surrounding soil. This guide explains how to represent this passive energy input in your model.
+
+### Common misconception
+
+You might consider using the `state_percentage_loss` parameter with a negative value to simulate passive charging:
+
+```yaml
+state_percentage_loss: -0.01  # Attempting to charge 1% per timestep
+```
+
+However, `state_percentage_loss` is designed for losses based on the **current storage level**. Using a negative value would incorrectly charge the storage by a percentage of its **existing energy content**, not the energy it lacks.
+
+Therefore, while `-0.01` might be an allowed or in other cases even reasonable choice, it's not made for what is needed here.
+
+## Recommended solution
+
+Instead, model passive charging as an additional input that depends on how much energy the storage lacks. Here's how:
+
+### Naive static charging
+
+Create a new component using a ranged Profile:
+
+```yaml
+passive_charging:
+  type: Profile
+  mode: ranged
+  lb: 0
+  ub: MAX_PASSIVE_POWER  # Use any estimation of maximum passive charging power
+```
+
+### Custom constraint
+
+Use an addon to add a constraint limiting the passive charging based on the storage's unfilled capacity. Assuming that `heat_storage` is the name of the stateful Node that represents the underground storage, then:
+
+```julia
+# ... other stuff in your addon ...
+
+function add_passive_charging(model::JuMP.Model)
+    c_passive_charging = IESopt.get_component(model, "passive_charging")
+    c_storage = IESopt.get_component(model, "heat_storage")
+
+    IESopt.@constraint(model, [t in T], c_passive_charging.exp.value[t] <= 0.01 * (c_storage.state_ub - c_storage.var.state[t]))
+end
+
+# ... other stuff in your addon ...
+```
+
+This ensures the passive charging at time `t` doesn't exceed 1% of the storage's remaining capacity.
+
+## Summary
+
+### Steps to implement
+
+1. **Create the storage component**: Define your underground storage Node without using `state_percentage_loss` for passive charging.
+2. **Add the Passive Charging Input**: Introduce a Profile to represent the passive energy inflow.
+3. **Set Profile Bounds**: Use the mode `ranged` for the Profile with appropriate lower (`lb`) and upper (`ub`) bounds.
+4. **Add the Constraint**: Implement the constraint to tie the passive charging rate to the storage's unfilled capacity.
+5. **Refine as Needed**: Adjust the constraint for more complex behaviors if necessary. There might be a lot (!) that you might want to specialize.
+
+### Conclusion
+
+By modeling passive charging as a constrained input energy flow based on the storage's remaining capacity, you accurately represent the thermal interactions of an underground heat storage with its environment.

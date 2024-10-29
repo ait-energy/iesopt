@@ -1,4 +1,4 @@
-# Time Resolution: Power vs. Energy
+# Time resolution & power vs. energy
 
 ## Intro
 
@@ -10,30 +10,30 @@
 
 ## Details
 
-### Keep Capacities in Power Units
+### Keep capacities in power units
 
 - **Unit Capacities:** Always express capacities in power units (e.g., kW), regardless of the time step duration.
 - **Profiles and Connections:** Similarly, profiles (e.g., time series data) and connection bounds should remain in power units.
 
-### Costs Are Per Unit of Energy
+### Costs are per unit of energy
 
 - **Variable Costs:** Input costs as monetary units per unit of energy (e.g., €/kWh).
 - **Consistency:** This approach ensures that cost calculations remain accurate, as the model internally accounts for time step durations.
 
-### Time Step Duration Is Handled Internally
+### Time step duration is handled internally
 
-- **Internal Calculations:** IESopt multiplies power by the duration of each time step to calculate energy.
-- **Cost Formula:** The total cost is calculated using the formula:
+- **Internal calculations:** IESopt multiplies power by the duration of each time step to calculate energy.
+- **Cost formula:** The total cost is calculated using the formula:
   
   $$
   \text{Cost (€)} = \text{Power (kW)} \times \text{Duration (h)} \times \text{Cost per Energy Unit (€/kWh)}
   $$
   
-- **No Manual Adjustments Needed:** You don't need to convert capacities to energy units per time step; the model does this for you.
+- **No manual adjustments deeded:** You don't need to convert capacities to energy units per time step; the model does this for you.
 
-### Specify Time Step Duration in the Configuration
+### Specify time step duration in the configuration
 
-- **Snapshots Configuration:** Define the duration of each time step using the `weights` parameter in your `snapshots` configuration.
+- **Snapshots configuration:** Define the duration of each time step using the `weights` parameter in your `snapshots` configuration.
   
   ```yaml
   snapshots:
@@ -43,27 +43,27 @@
 
 - **Example:** If each time step represents one day, setting `weights: 24` tells the model that each snapshot spans 24 hours.
 
-### Storage Units Are in Energy Units
+### Storage units are in energy units
 
-- **Exception for Storage:** Capacities for storage units are specified in energy units (e.g., kWh) because they represent stored energy, not power output.
+- **Exception for storage:** Capacities for storage units are specified in energy units (e.g., kWh) because they represent stored energy, not power output.
 
-### Practical Example
+### Practical example
 
 Suppose you have a generator with:
 
 - **Capacity:** 100 kW
-- **Marginal Cost:** 0.10 €/kWh
-- **Time Step Duration:** 24 hours (daily)
+- **Marginal cost:** 0.10 €/kWh
+- **Time step duration:** 24 hours (daily)
 
 The model calculates the energy produced and the cost as follows:
 
-- **Energy Produced per Time Step:**
+- **Energy produced per time step:**
   
   $$
   \text{Energy (kWh)} = \text{Power (kW)} \times \text{Duration (h)} = 100 \times 24 = 2,400 \text{ kWh}
   $$
   
-- **Total Cost per Time Step:**
+- **Total cost per time step:**
   
   $$
   \text{Cost (€)} = \text{Energy (kWh)} \times \text{Cost per Energy Unit (€/kWh)} = 2,400 \times 0.10 = 240 \text{ €}
@@ -71,12 +71,12 @@ The model calculates the energy produced and the cost as follows:
 
 ## Summary
 
-### Key Takeaways
+### Key takeaways
 
-- **No Need to Adjust Units:** Keep capacities in power units; do not convert them to energy per time step.
-- **Costs Remain per Energy Unit:** Continue to provide costs in €/kWh or similar units.
-- **Model Handles Duration:** The model uses the `weights` parameter to account for the duration of each time step in calculations.
-- **Consistency Is Crucial:** By keeping units consistent, you ensure accurate modeling results without additional adjustments.
+- **No need to adjust units:** Keep capacities in power units; do not convert them to energy per time step.
+- **Costs remain per energy unit:** Continue to provide costs in €/kWh or similar units.
+- **Model handles duration:** The model uses the `weights` parameter to account for the duration of each time step in calculations.
+- **Consistency is crucial:** By keeping units consistent, you ensure accurate modeling results without additional adjustments.
 
 ### Conclusion
 

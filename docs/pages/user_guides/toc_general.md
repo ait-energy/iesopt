@@ -5,13 +5,12 @@ Crafted user guides covering a specific topic. These are mostly used to explain 
 ## Contents
 
 :::{toctree}
-:maxdepth: 1
+:maxdepth: 0
 
 general/best_practice.md
 general/linking_components.md
 general/common_errors.md
 general/solvers.md
-
 :::
 
 ## Format & Structure

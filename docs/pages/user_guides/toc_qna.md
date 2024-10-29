@@ -5,7 +5,7 @@ These are based on previous questions that users had and discussions that occure
 ## Contents
 
 :::{toctree}
-:maxdepth: 1
+:maxdepth: 0
 
 qna/snapshot_duration.md
 qna/profiles_sign.md

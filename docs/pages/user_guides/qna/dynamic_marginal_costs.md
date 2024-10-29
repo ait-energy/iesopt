@@ -1,12 +1,12 @@
 # Output-dependent marginal costs
 
-> **Question:**  
+**Question:**  
 > How can I model a Unit where the marginal cost changes based on the level of energy output? For example, the cost is 5 €/MWh for outputs below 5 MW of power and 10 €/MWh for outputs above 5 MW of power.
 
-> **Answer:**  
+**Answer:**  
 > To model changing marginal costs based on output levels in IESopt, you can split the Unit into two separate Units:
 
-## Insights
+## Details
 
 ### Explanation
 

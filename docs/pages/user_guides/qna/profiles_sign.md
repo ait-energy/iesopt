@@ -35,7 +35,7 @@ In IESopt, drawing a negative amount of energy from a Node (`-x kWh`) is mathema
 
 ## Practical example
 
-Suppose you have a fixed Profile connected to a heating grid Node:
+Suppose you have a fixed Profile connected to an electricity grid Node:
 
 ```yaml
 myprofile:

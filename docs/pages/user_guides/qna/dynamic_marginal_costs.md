@@ -18,7 +18,7 @@
 2. **High-output unit:**
    - Represents any output above 5 MW.
    - Has a marginal cost of 10 €/MWh.
-   - No specific capacity limit unless there's an overall maximum output.
+   - The capacity is given as total capacity of the "real" Unit, reduced by 5 MW.
 
 By doing this, the model will prioritize the low-cost Unit up to its capacity before utilizing the high-cost Unit for additional demand.
 
@@ -27,17 +27,18 @@ By doing this, the model will prioritize the low-cost Unit up to its capacity be
 ```yaml
 unit_pool_1:
   type: Unit
-  inputs: {}              # fill this with the original configuration
-  outputs: {}             # fill this with the original configuration
-  conversion: foo -> bar  # fill this with the original configuration
+  inputs: {}                    # fill this with the original configuration
+  outputs: {}                   # fill this with the original configuration
+  conversion: foo -> bar        # fill this with the original configuration
   capacity: 5 out:electricity
   marginal_cost: 5 per out:electricity
 
 unit_pool_2:
   type: Unit
-  inputs: {}              # fill this with the original configuration
-  outputs: {}             # fill this with the original configuration
-  conversion: foo -> bar  # fill this with the original configuration
+  inputs: {}                    # fill this with the original configuration
+  outputs: {}                   # fill this with the original configuration
+  conversion: foo -> bar        # fill this with the original configuration
+  capacity: 95 out:electricity  # `100 - 5` MW, assuming 100 MW is the max.
   marginal_cost: 10 per out:electricity
 ```
 

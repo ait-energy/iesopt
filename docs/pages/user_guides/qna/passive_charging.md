@@ -40,6 +40,8 @@ passive_charging:
   ub: MAX_PASSIVE_POWER  # Use any estimation of maximum passive charging power
 ```
 
+The mode setting `ranged` transforms a basic Profile (with default `mode: fixed`), that cannot change it's value, to a more advanced one that can freely pick it's value from the interval `[0, MAX_PASSIVE_POWER]` - independently for each snapshot. This means, charging `0` is a feasible choice, resulting in no charge happening when the storage is already full. If the storage is not full, it will charge how much is economically optimal: Most of the time it will fully use it's passive charging power, but if - for any reason - getting rid of excess heat might not be possible, or very costly, it can choose to not use the passive charging (which in reality would not be possible).
+
 ### Custom constraint
 
 Use an addon to add a constraint limiting the passive charging based on the storage's unfilled capacity. Assuming that `heat_storage` is the name of the stateful Node that represents the underground storage, then:
@@ -58,6 +60,8 @@ end
 ```
 
 This ensures the passive charging at time `t` doesn't exceed 1% of the storage's remaining capacity.
+
+> Earlier we discussed the possibility of the model foregoing available passive charging, if economically beneficial. If that is something that you explicitly want to prevent, you can also use `=` in the above constraint, which will force the Profile to the exact value, without the possibility to charge less!
 
 ## Summary
 

@@ -92,7 +92,7 @@ html_theme_options = {
 
 # -- MyST & autodoc configuration --------------------------------------------
 
-myst_enable_extensions = ["dollarmath", "amsmath", "colon_fence"]
+myst_enable_extensions = ["dollarmath", "amsmath", "colon_fence", "fieldlist"]
 myst_heading_anchors = 3
 autodoc_packages = ["../src/iesopt"]
 suppress_warnings = ["autosectionlabel.*"]

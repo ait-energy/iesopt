@@ -6,7 +6,7 @@
 
 [![Build Status](https://github.com/ait-energy/iesopt/actions/workflows/pytest.yml/badge.svg?branch=main)](https://github.com/ait-energy/iesopt/actions/workflows/pytest.yml?query=branch%3Amain)
 [![codecov](https://codecov.io/gh/ait-energy/iesopt/graph/badge.svg?token=MC2IN9URZY)](https://codecov.io/gh/ait-energy/iesopt)
-[![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 **IESopt** (_Integrated Energy System Optimization_) is a modeling and optimization framework for integrated energy
 systems.

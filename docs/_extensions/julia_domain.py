@@ -36,6 +36,9 @@ class JuliaDomain(Domain):
         "obj": XRefRole(),
     }
 
+    def resolve_any_xref(self, *args):
+        return []
+
 
 def setup(app):
     app.add_domain(JuliaDomain)

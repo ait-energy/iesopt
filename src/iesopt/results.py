@@ -61,11 +61,11 @@ class Results:
         Create a new `Results` object, either from a file or from an IESopt model. Make sure to pass either a file or a
         model explicitly using a keyword argument.
 
-        :param file: Path to the results file to load, by default None
-        :param model: IESopt model to extract results from, by default None
-
-        :type file: str, optional
-        :type model: IESopt.Model, optional
+        Keyword Arguments
+            file : Optional[str]
+                Path to the results file to load, by default None
+            model : Optional[IESopt.Model]
+                IESopt model to extract results from, by default None
         """
         self._attributes = None
         self._model = None
@@ -144,12 +144,11 @@ class Results:
         """
         Query the available results for a specific component, optionally filtered by `mode`.
 
-        Parameters
-        ----------
-        component : str
-            Component to query results for
-        mode : str, optional
-            Mode to query results for, either "both", "primal", or "dual", by default "both"
+        Arguments:
+            component : str
+                Component to query results for
+            mode : Optional[str]
+                Mode to query results for, either "both", "primal", or "dual", by default "both"
         """
         regex = re.compile(component)
 
@@ -176,29 +175,30 @@ class Results:
         """
         Get all available entries for a specific field, or all fields if `field` is `None`.
 
-        Parameters
-        ----------
-        field : str, optional
-            Field to get entries for, by default None which returns all fields
+        Arguments:
+            field : Optional[str]
+                Field to get entries for, by default None which returns all fields
         """
         if field is None:
             return [it for it in Results._valid_attrs if getattr(self, f"_{it}") is not None]
         return sorted(getattr(self, field).keys())
 
     @validate_call
-    def to_dict(self, filter=None, field_types=None, build_cache: bool = True):
+    def to_dict(self, filter=None, field_types=None, build_cache: bool = True) -> dict:
         """
         Extract results from the `Results` object and return them as a dictionary.
 
-        Parameters
-        ----------
-        filter : callable, optional
-            Filter function to apply to the results, by default None, must take three arguments: (c, t, f) where `c` is
-            the component's name, `t` is the field type ("var", "exp", "con", or "obj"), and `f` is the field name
-        field_types : list[str], optional
-            Field types to extract, by default None, which extracts all field types
-        build_cache : bool, optional
-            Whether to build a cache of the results, by default True
+        Arguments:
+            filter : Optional[Callable]
+                Filter function to apply to the results, by default None, must take three arguments: (c, t, f) where `c` is
+                the component's name, `t` is the field type ("var", "exp", "con", or "obj"), and `f` is the field name.
+            field_types : Optional[list[str]]
+                Field types to extract, by default None, which extracts all field types.
+            build_cache : Optional[bool]
+                Whether to build a cache of the results, by default True.
+
+        Returns:
+            Dictionary of results, with keys as tuples of (component, fieldtype, field) and values as the result.
         """
         if build_cache:
             self._build_cache()
@@ -224,20 +224,22 @@ class Results:
     @validate_call
     def to_pandas(self, filter=None, field_types=None, orientation: str = "long", build_cache: bool = True):
         """
-        Extract results from the `Results` object and return them as `pd.DataFrame` or `pd.Series` (depending on the
+        Extract results from the `Results` object and return them as :py:class:`pandas.DataFrame` or :py:class:`pandas.Series` (depending on the
         shape of the included results).
 
-        Parameters
-        ----------
-        filter : callable, optional
-            Filter function to apply to the results, by default None, must take three arguments: (c, t, f) where `c` is
-            the component's name, `t` is the field type ("var", "exp", "con", or "obj"), and `f` is the field name
-        field_types : list[str], optional
-            Field types to extract, by default None, which extracts all field types
-        orientation : str, optional
-            Orientation of the resulting DataFrame, either "wide" or "long", by default "long"
-        build_cache : bool, optional
-            Whether to build a cache of the results, by default True
+        Arguments:
+            filter : Optional[Callable]
+                Filter function to apply to the results, by default None, must take three arguments: (c, t, f) where `c` is
+                the component's name, `t` is the field type ("var", "exp", "con", or "obj"), and `f` is the field name
+            field_types : Optional[list[str]]
+                Field types to extract, by default None, which extracts all field types
+            orientation : Optional[str]
+                Orientation of the resulting DataFrame, either "wide" or "long", by default "long"
+            build_cache : Optional[bool]
+                Whether to build a cache of the results, by default True.
+
+        Returns:
+            DataFrame or Series of results, depending on the orientation and shape of the results.
         """
         _dict = self.to_dict(filter, field_types, build_cache)
 

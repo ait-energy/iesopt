@@ -64,7 +64,7 @@ from iesopt.model import Model as Model, ModelStatus as ModelStatus  # noqa: E40
 from iesopt.results import Results as Results  # noqa: E402
 from iesopt.iesopt import run as run, examples as examples, make_example as make_example  # noqa: E402
 
-from .julia.util import jl_symbol, jl_docs  # noqa: E402
+from .julia.util import jl_symbol as jl_symbol, jl_docs  # noqa: E402
 from .julia import jl_isa as jl_isa  # noqa: E402
 
 Symbol = jl_symbol

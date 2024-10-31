@@ -57,7 +57,11 @@ nb_custom_formats = {
     ".md": ["jupytext.reads", {"fmt": "myst"}],
 }
 
-intersphinx_mapping = {"IESopt": ("https://ait-energy.github.io/IESopt.jl/dev", None)}
+intersphinx_mapping = {
+    "IESopt": ("https://ait-energy.github.io/IESopt.jl/dev", None),
+    "python": ("https://docs.python.org/3", None),
+    "pandas": ("http://pandas.pydata.org/pandas-docs/dev", None),
+}
 intersphinx_disabled_reftypes = [""]
 
 nb_execution_mode = "off"
@@ -91,3 +95,4 @@ html_theme_options = {
 myst_enable_extensions = ["dollarmath", "amsmath", "colon_fence"]
 myst_heading_anchors = 3
 autodoc_packages = ["../src/iesopt"]
+suppress_warnings = ["autosectionlabel.*"]

@@ -1,9 +1,33 @@
 # YAML
 
+Most configuration settings for the IESopt optimization model are stored in YAML files. This section provides a reference for the YAML syntax and the specific settings used in IESopt.
+
+## Yet another markup language?
+
+YAML - which actually stands for _YAML Ain't Markup Language_ - is a human-readable data serialization language. It is often used for configuration files and data exchange between languages. YAML is a superset of JSON, meaning that any valid JSON file is also a valid YAML file.
+
+You can find more information at:
+
+- [The official YAML website](https://yaml.org/)
+- [The `YAML.jl` Julia package](https://github.com/JuliaData/YAML.jl)
+- Various good Python oriented sources, such as this [realpython tutorial](https://realpython.com/python-yaml/) or the [PyYAML package](https://github.com/yaml/pyyaml)
+
+## Good to know
+
+The following points offer hints, notes, or recommendations for working with YAML files in IESopt:
+
+- **Indentation**: YAML files make use of indentation: The recommended indentation is two spaces.
+- **Comments**: Comments in YAML files are preceded by a `#` character.
+- **Dictionaries**: YAML files are often used to define dictionaries. In Python (and Julia), dictionaries are/were unordered[^order], and the order of (dictionary) entries are therefore not considered to have any specific order. However, the order given in the documentation is recommended for readability.
+
+## Contents
+
 See the documentation of the built-in YAML here:
 
-- <a href="https://ait-energy.github.io/IESopt.jl/dev/pages/manual___reference/core_components/#IESopt.Connection" target="_blank">Connection</a>: A `Connection` is used to model arbitrary flows of energy between Nodes. It allows for limits, costs, delays, ...
-- <a href="https://ait-energy.github.io/IESopt.jl/dev/pages/manual___reference/core_components/#IESopt.Decision" target="_blank">Decision</a>: A `Decision` represents a basic decision variable in the model that can be used as input for various other core component's settings, as well as have associated costs.
-- <a href="https://ait-energy.github.io/IESopt.jl/dev/pages/manual___reference/core_components/#IESopt.Node" target="_blank">Node</a>: A `Node` represents a basic intersection/hub for energy flows. This can for example be some sort of bus (for electrical systems). It enforces a nodal balance equation (= "energy that flows into it must flow out") for every Snapshot. Enabling the internal state of the `Node` allows it to act as energy storage, modifying the nodal balance equation. This allows using `Node`s for various storage tasks (like batteries, hydro reservoirs, heat storages, ...). 
-- <a href="https://ait-energy.github.io/IESopt.jl/dev/pages/manual___reference/core_components/#IESopt.Profile" target="_blank">Profile</a>: A `Profile` allows representing "model boundaries" - parts of initial problem that are not endogenously modelled - with a support for time series data. Examples are hydro reservoir inflows, electricity demand, importing gas, and so on. Besides modelling fixed profiles, they also allow different ways to modify the value endogenously.
-- <a href="https://ait-energy.github.io/IESopt.jl/dev/pages/manual___reference/core_components/#IESopt.Unit" target="_blank">Unit</a>: A `Unit` allows transforming one (or many) forms of energy into another one (or many), given some constraints and costs.
+:::{toctree}
+top_level.md
+core_components.md
+global_parameters.md
+:::
+
+[^order]: While `dict`s are standardized to be ordered starting with Python 3.7, and options like `OrderedCollections.jl` in Julia exist, the existence of these options is not guaranteed in all environments, and considering all potential parsers.

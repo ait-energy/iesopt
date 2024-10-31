@@ -12,8 +12,10 @@ def run(filename: str | Path, verbosity: bool | str = True, **kwargs) -> Model:
     Results can be accessed (after a successful optimization) using `model.results`.
 
     Arguments:
-        filename (str): Path to the IESopt model file to load.
-        verbosity (bool or str, optional): Verbosity level for the IESopt model, defaults to `True`. If `True`, the core
+        filename : str
+            Path to the IESopt model file to load.
+        verbosity : Optional[bool | str]
+            Verbosity level for the IESopt model, defaults to `True`. If `True`, the core
             model will be run in verbose mode, `"warning"` will show warnings (and errors), setting it to `False` will
             only show errors. If `verbosity_solve` is not set in the top-level YAML config, `verbosity = True` will
             enable solver verbose mode, otherwise the solver will be run in silent mode.
@@ -22,7 +24,7 @@ def run(filename: str | Path, verbosity: bool | str = True, **kwargs) -> Model:
         **kwargs: Additional keyword arguments to pass to the `Model` constructor.
 
     Returns:
-        Model: The generated and optimized IESopt model.
+        The generated and optimized IESopt model.
 
     Example:
         ..  code-block:: python
@@ -47,8 +49,8 @@ def examples() -> list[str]:
     Return a list of all available examples.
 
     Returns:
-        list[str]: List of available examples. This contains the names of the examples, not the full filenames (so,
-            e.g., `"some_example"` instead of `"some_example.iesopt.yaml"`)
+        List of available examples. This contains the names of the examples, not the full filenames (so, e.g.,
+        `"some_example"` instead of `"some_example.iesopt.yaml"`).
     """
     import os
 
@@ -64,13 +66,16 @@ def make_example(example: str, dst_dir: str | Path = "./", dst_name: str | None 
     A list of examples, and their exact names, can be obtained using :py:func:`iesopt.examples()`.
 
     Arguments:
-        example (str): Name of the example to generate.
-        dst_dir (str, optional): Directory to generate the example in, defaults to `"./"`.
-        dst_name (str, optional): Name of the generated example file (without the ".iesopt.yaml" extension), e.g.,
+        example : str
+            Name of the example to generate.
+        dst_dir : Optional[str]
+            Directory to generate the example in, defaults to `"./"`.
+        dst_name: Optional[str]
+            Name of the generated example file (without the ".iesopt.yaml" extension), e.g.,
             `"config"`, will create `dst_dir/config.iesopt.yaml`. Will default to the original name of the example.
 
     Returns:
-        Path: Path to the generated example file.
+        Path to the generated example file.
     """
     import shutil
     import os

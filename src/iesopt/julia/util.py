@@ -19,7 +19,7 @@ def jl_import(module: str):
 def jl_symbol(string: str):
     """Create a Julia `Symbol` from `string`.
 
-    This function can be called as: :py:func:`iesopt.Symbol`, or :py:func:`iesopt.jl_symbol`.
+    This function should be called as `iesopt.Symbol`, but can also be called as `iesopt.jl_symbol`.
 
     Arguments:
         string (str): The string to convert to a Julia `Symbol`.
@@ -28,12 +28,6 @@ def jl_symbol(string: str):
         The Julia `Symbol` object.
 
     Examples:
-        ..  code-block:: python
-            :caption: Convert a string to a Julia `Symbol`
-
-            import iesopt
-            iesopt.jl_symbol(":iesopt")     # => `Julia: :iesopt`
-
         ..  code-block:: python
             :caption: Directly import and use the `Symbol` alias
 

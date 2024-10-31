@@ -11,7 +11,19 @@ DOCS = Path(__file__).parent
 sys.path.insert(0, str((DOCS / "_extensions").resolve()))
 sys.path.insert(0, str((DOCS / ".." / "src").resolve()))
 sys.path.insert(0, str((DOCS / "..").resolve()))
-os.environ["IESOPT_DOCS_NOEXEC"] = "true"
+
+CREATE_DYNAMIC_DOCSTRINGS = [
+    # ("test", "getfield", "some_foo(...)")
+    # and then use:
+    # ```{include} ../../../dynamic/out/test.md
+    # ```
+]
+if len(CREATE_DYNAMIC_DOCSTRINGS) > 0:
+    import docs.dynamic.create as ddc
+
+    ddc.create_md(CREATE_DYNAMIC_DOCSTRINGS)
+else:
+    os.environ["IESOPT_DOCS_NOEXEC"] = "true"
 
 # -- General -----------------------------------------------------------------
 
@@ -22,8 +34,8 @@ version = "1.0.0"  # TODO: get from iesopt.__version__
 release = version
 
 extensions = [
+    # "myst_parser",
     "myst_nb",
-    #    "myst_parser",
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
     "sphinx.ext.githubpages",
@@ -40,6 +52,9 @@ source_suffix = {
     ".rst": "restructuredtext",
     ".ipynb": "myst-nb",
     ".myst": "myst-nb",
+}
+nb_custom_formats = {
+    ".md": ["jupytext.reads", {"fmt": "myst"}],
 }
 
 intersphinx_mapping = {"IESopt": ("https://ait-energy.github.io/IESopt.jl/dev", None)}

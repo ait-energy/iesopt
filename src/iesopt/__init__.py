@@ -46,6 +46,11 @@ def jump_shadow_price(item):
     pass
 
 
+def get_jl_docstr(obj: str):
+    """Get the documentation string of a Julia object inside the IESopt module."""
+    pass
+
+
 # =======================================================================
 
 # Setup Julia.
@@ -59,7 +64,7 @@ from iesopt.model import Model as Model, ModelStatus as ModelStatus  # noqa: E40
 from iesopt.results import Results as Results  # noqa: E402
 from iesopt.iesopt import run as run, examples as examples, make_example as make_example  # noqa: E402
 
-from .julia.util import jl_symbol  # noqa: E402
+from .julia.util import jl_symbol, jl_docs  # noqa: E402
 from .julia import jl_isa as jl_isa  # noqa: E402
 
 Symbol = jl_symbol
@@ -72,3 +77,4 @@ if not os.getenv("IESOPT_DOCS_NOEXEC"):
     jump_dual = _get_iesopt_module_attr("jump_dual")
     jump_reduced_cost = _get_iesopt_module_attr("jump_reduced_cost")
     jump_shadow_price = _get_iesopt_module_attr("jump_shadow_price")
+    get_jl_docstr = jl_docs

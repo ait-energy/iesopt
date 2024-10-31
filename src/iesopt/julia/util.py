@@ -57,3 +57,11 @@ def jl_isa(obj, julia_type: str):
         return julia.isa(obj, julia.AbstractDict)
 
     return julia.seval(f"(x) -> (x isa {julia_type})")(obj)
+
+
+def jl_docs(obj: str, module: str = "IESopt"):
+    """Get the documentation string of a Julia object inside the IESopt module."""
+    assert module == "IESopt", "Only the `IESopt` module is currently supported."
+    IESopt = get_iesopt_module_attr("IESopt")
+    binding = IESopt.getfield(IESopt, IESopt.Symbol(obj))
+    return str(get_iesopt_module_attr("Docs.doc")(binding))

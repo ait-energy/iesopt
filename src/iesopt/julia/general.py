@@ -50,4 +50,6 @@ def initialize():
     set_iesopt_module_attr("jump_reduced_cost", julia.seval("(x) -> JuMP.reduced_cost.(x)"))
     set_iesopt_module_attr("jump_shadow_price", julia.seval("(x) -> JuMP.reduced_cost.(x)"))
 
+    set_iesopt_module_attr("Docs.doc", julia.seval("(x) -> Docs.doc(x)"))
+
     return julia

@@ -33,10 +33,18 @@ pages/user_guides/toc_qna.md
 
 :::{toctree}
 :hidden:
-:caption: Reference
+:caption: Manual
 
-pages/reference/yaml/index.md
-pages/reference/python/index.md
+pages/manual/yaml/index.md
+pages/manual/python/index.md
+:::
+
+:::{toctree}
+:hidden:
+:caption: References
+
+pages/references/publications.md
+pages/references/projects.md
 :::
 
 :::{toctree}
@@ -56,7 +64,7 @@ IESopt is developed and maintained at the Center for Energy at AIT Austrian Inst
 :::
 
 :::{caution}
-The documentation is currently being put together based on cleaned parts of the internal docs. Until this is finished, this documentation only contains some placeholders.
+The documentation is currently being put together based on cleaned parts of the internal docs. Until this is finished, this documentation may contains some placeholders.
 :::
 
 ## Overview

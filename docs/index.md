@@ -37,6 +37,7 @@ pages/user_guides/toc_qna.md
 
 pages/manual/yaml/index.md
 pages/manual/python/index.md
+pages/manual/julia/index.md
 :::
 
 :::{toctree}

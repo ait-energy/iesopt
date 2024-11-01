@@ -20,6 +20,12 @@ The following points offer hints, notes, or recommendations for working with YAM
 - **Comments**: Comments in YAML files are preceded by a `#` character.
 - **Dictionaries**: YAML files are often used to define dictionaries. In Python (and Julia), dictionaries are/were unordered[^order], and the order of (dictionary) entries are therefore not considered to have any specific order. However, the order given in the documentation is recommended for readability.
 
+```{danger}
+Since we are using dictionaries to store most configurations inside the YAML files, be aware that keys have to be unique. No key can exist twice in the same dictionary - this means, e.g., that you cannot use two components with the same name. However, depending on the implementation of the YAML parser, duplicate keys might not raise an error: After loading a YAML file IESopt will only be able to see the last value of a duplicate key, without any way to detect that ambiguity.
+
+**This is a common source of errors, so be careful!**
+```
+
 ## Contents
 
 See the documentation of the built-in YAML here:
@@ -27,7 +33,6 @@ See the documentation of the built-in YAML here:
 :::{toctree}
 top_level.md
 core_components.md
-global_parameters.md
 :::
 
 [^order]: While `dict`s are standardized to be ordered starting with Python 3.7, and options like `OrderedCollections.jl` in Julia exist, the existence of these options is not guaranteed in all environments, and considering all potential parsers.

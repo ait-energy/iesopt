@@ -33,16 +33,45 @@ components:
 
 ## `parameters`
 
-General global parameters, that the whole model can access. Can be set from outside when, e.g., when calling {py:func}`iesopt.run`. See the [global parameters](./global_parameters.md) section for more details.
+General global parameters, that the whole model can access. Can be set from outside when, e.g., when calling {py:func}`iesopt.run`.
+
+```{note}
+This section is optional and only needed if you want to global model parameters.
+```
+
+The base approach is passing a dictionary, with all global parameters and their default values:
 
 ```{code-block} yaml
-:caption: Example for the `parameters` section in the top-level YAML configuration file.
+:caption: Example for a `dict`-based `parameters` section.
+
+parameters:
+  ng_emission_factor: 0.202
+  co2_cost: 125
+  elec_cost: null
+```
+
+Here `elec_cost` defaults to `null` - which is the equivalent of `None` (Python) or `nothing` (Julia). Either it is used internally for some setting that accepts `null` as a valid value, or it is meant to be set from outside.
+
+However, with a growing number of parameters, it might be more convenient to store them in a separate file. This can be done by passing the path to the file:
+
+```{code-block} yaml
+:caption: Example for file-based `parameters` section.
 
 parameters: global_params_scenarioHIGH.iesopt.param.yaml
 ```
 
-```{note}
-This section is optional and only needed if you want to global model parameters.
+The file `global_params_scenarioHIGH.iesopt.param.yaml` could then look like this:
+
+```{code-block} yaml
+:caption: Example content of `global_params_scenarioHIGH.iesopt.param.yaml`.
+
+ng_emission_factor: 0.202  # t CO2 / MWh_ng
+co2_cost: 125              # EUR / t CO2
+elec_cost: null            # EUR / MWh_el
+```
+
+```{hint}
+Make sure to use comments to better explain the parameters and their units, and structure the file in a way that makes it easy to read and understand. Note: The same is true for the dictionary approach - use comments! - but the file approach is more likely to be used with a large number of parameters.
 ```
 
 ## `config`
@@ -71,12 +100,55 @@ config:
     results: out/
 ```
 
+The following subsections explain each part of the `config` section in more detail.
+
 ### `name`
 
-- `model`
-- `scenario`
+This section does not directly affect the model but can be used to store the name of the model and the scenario. This can be useful for logging and debugging purposes, as well as for the results output.
 
----
+```{note}
+This section is optional and only needed if you want to global model parameters.
+```
+
+:Parameters:
+:`model`: Name of the model, e.g., a high-level description, or the name of the project.
+:`scenario`: A specific scenario or case, e.g., the year, a specific set of parameters, or a version of input files.
+
+```{tip}
+The `scenario` setting supports dynamic placeholders. Currently, you can use `$TIME$` which will automatically be replaced by the timestamp of the model being built. This way, each result will have a unique scenario name, which prevents overwriting results.
+```
+
+Consider the following example for the `name` section:
+
+```{code-block} yaml
+:caption: Example for the `name` section.
+
+config:
+  name:
+    model: FarayOptIndustry
+    scenario: Base_2022_LOW_T-$TIME$
+```
+
+When running the model containing this configuration, the results will be stored in a folder structure that looks like this:
+
+```{code-block} text
+:caption: Example folder structure for the results of the model run.
+
+.
+├── data/
+│   └── ...
+├── out/
+│   ├── FarayOptIndustry/
+│   │   ├── Base_2022_LOW_T-2024_09_11_09520837.iesopt.result.jld2
+│   │   ├── Base_2022_LOW_T-2024_09_11_09520837.iesopt.log
+│   │   ├── Base_2022_LOW_T-2024_09_11_09520837.highs.log
+│   │   └── ...
+│   └── FarayOptIndustry_Baseline/
+│       └── ...
+└── config.iesopt.yaml
+```
+
+In this example, the `$TIME$` placeholder was replaced by the current timestamp, which is `2024_09_11_09520837` in this case. You can see the top-level config file (`config.iesopt.yaml`), a data folder (`data/`; see the [files](#files) and [paths](#paths) sections), the results folder (`out/`; see the [results](#results) and [paths](#paths) sections). Inside the results folder, IESopt creates a folder for each "model name". Each executed run creates its result files inside that, using the "scenario name" as base filename.
 
 ### `optimization`
 
@@ -85,6 +157,11 @@ config:
 :Options:
 :`LP`: Restricted to (continuous) linear programming formulations.
 :`MILP`: Enables mixed-integer linear programming formulations.
+:`MO`: Enables multi-objective optimization formulations.
+:`MGA`: Enables modelling-to-generate-alternatives formulations.
+:`SDDP`: Enables stochastic dual dynamic programming formulations.
+
+Options can be combined using `+` (where applicable), e.g., `LP+MO`.
 
 ```{code-block} yaml
 :caption: Example for the `problem_type` section.
@@ -92,6 +169,10 @@ config:
 config:
   optimization:
     problem_type: LP
+```
+
+```{note}
+The options `MO`, `MGA`, and `SDDP` represent very advanced functionality. These are not fully documented, or may be partially broken in any given release. If you are interested in these features, please reach out to the developers.
 ```
 
 #### `solver`
@@ -132,6 +213,48 @@ config:
       weights: 4
 ```
 
+#### `objectives`
+
+```{caution}
+This setting is part of advanced functionality. It is not fully documented, or may be partially broken in any given release. If you are interested in this feature, please reach out to the developers.
+```
+
+This allows defining custom objective expressions for the optimization problem. This can be useful if you want to optimize for a specific objective that is not directly supported by IESopt. Per default, IESopt is optimizing the only base objective expression, which is the model's total cost (called `total_cost`).
+
+```{code-block} yaml
+:caption: Example for the `objectives` section.
+
+objectives:
+  emissions: [co2_emissions.exp.value]
+```
+
+The above constructs a new objective expression that only consists of `co2_emissions.exp.value`. It may also be initialized empty (`[]`), in which case you can add terms later on in the model definition.
+
+#### `multiobjective`
+
+```{caution}
+This setting is part of advanced functionality. It is not fully documented, or may be partially broken in any given release. If you are interested in this feature, please reach out to the developers.
+```
+
+:Parameters:
+:`mode` (`str`): The mode to use for multi-objective optimization, currently supported modes are: `EpsilonConstraint`, `Lexicographic`, `Hierarchical`.
+:`terms` (`list[str]`): A list of objectives to optimize.
+:`settings` (`dict`): Settings for the multi-objective optimization, refer to the documentation of [MultiObjectiveAlgorithms.jl](https://github.com/jump-dev/MultiObjectiveAlgorithms.jl) for more information.
+
+```{code-block} yaml
+:caption: Example for the `multiobjective` section.
+
+multiobjective:
+  mode: EpsilonConstraint
+  terms: [total_cost, emissions]
+  settings:
+    MOA.SolutionLimit: 5
+```
+
+```{note}
+Refer to the related example models for more information on how to use multi-objective optimization in IESopt.
+```
+
 ### `files`
 
 This can be used to define input files that are later referenced in the configuration file. Each filename (possibly including a path) is linked to a name that can be used to reference the file later on.
@@ -150,10 +273,11 @@ In the above example, the file `inputs_2023_base.csv` is linked to the name `dat
 
 Settings for the results output. Details to be added.
 
-- `enabled`
-- `memory_only`
-- `compress`
-- `include`
+:Parameters:
+:`enabled` (`bool`, default = `true`): Whether to enable the automatic extraction of results. If this is set to `false`, no results will read from the solver after optimizing the model - you can however still access the solver results directly, see for example {py:func}`iesopt.jump_value`.
+:`memory_only` (`bool`, default = `true`): Whether to store the results in memory only, without writing them to disk. This can be useful if you plan to access and further process the results directly in Python or Julia, or only want to store specific results.
+:`compress` (`bool`, default = `false`): Whether to compress the results when writing them to disk. This can save disk space but might increase the time needed to write and read the results. Refer to [JLD2.jl](https://github.com/JuliaIO/JLD2.jl) for more information about compression.
+:`include` (`str`, default = `none` or `all`): A list of result extraction modes to activate, see below for more details. The default depends on the setting of `memory_only`: If `memory_only` is `true`, the default is `none`, otherwise it is `all`.
 
 ```{code-block} yaml
 :caption: Example for the `results` section.
@@ -164,19 +288,30 @@ config:
     memory_only: true
 ```
 
-### `paths`
+```{admonition} Details: Result extraction modes
+Currently the following options exist for the `include` setting:
 
-This section as a whole, or the individual paths, are optional and the following defaults are used if not set:
+:`input`: Add information about the model's input data to the results.
+:`git`: Add information about the status of any git setup that exists in the model's folder.
+:`log`: Add IESopt's full log of the optimization run to the results.
 
-- `files`: `./files/`
-- `templates`: `./templates/`
-- `components`: `./model/`
-- `addons`: `./addons/`
-- `results`: `./out/`
+These modes can be combined using `+`. For example, `input+git` will include both the input data and the git information in the results. If `include` is set to `all`, all modes are included. If `include` is set to `none`, no modes are included.
+```
 
 ```{note}
-The paths are all relative to the location of the top-level configuration file.
+Refer to the [name](#name) section for information on how the model and scenario names are used in the results output.
 ```
+
+### `paths`
+
+This section as a whole, or the individual paths, are optional - defaults will be used for those not set.
+
+:Parameters:
+:`files` (`str`, default = `./files/`): The path to the directory where input files are stored.
+:`templates` (`str`, default = `./templates/`): The path to the directory where templates are stored.
+:`components` (`str`, default = `./model/`): The path to the directory where model topology files are stored. These allow loading a large number of components at once. Refer to the [components](#components) section for more information.
+:`addons` (`str`, default = `./addons/`): The path to the directory where addons (`*.jl` files) are stored.
+:`results` (`str`, default = `./out/`): The path to the directory where results should be stored.
 
 ```{code-block} yaml
 :caption: Example for the `paths` section.
@@ -189,25 +324,9 @@ config:
     results: out/
 ```
 
-#### `files`
-
-The path to the directory where input files are stored.
-
-#### `templates`
-
-The path to the directory where templates are stored.
-
-#### `components`
-
-The path to the directory where model topology files are stored. These allow loading a large number of components at once.
-
-#### `addons`
-
-The path to the directory where addons (`*.jl` files) are stored.
-
-#### `results`
-
-The path to the directory where results should be stored.
+```{note}
+The paths are all relative to the location of the top-level configuration file.
+```
 
 ## `addons`
 
@@ -240,4 +359,45 @@ carriers:
 
 ## `components`
 
-This is the main section where all model components are defined (or loaded). Details to be added.
+This is the main section where all model components are defined (or loaded). There are two possibilities to define components: `components` and `load_components`. The former is used to define components directly in the top-level configuration file, while the latter is used to load components from a file. At least one of these sections must be present in the top-level configuration file - both can be used at the same time.
+
+```{code-block} yaml
+:caption: Basic example for the `components` section.
+
+components:
+  main_grid_node:
+    type: Node
+    carrier: electricity
+```
+
+When using `load_components`, the easiest way is to pass a list of filenames. These files are then loaded from the `components` path (see the [paths](#paths) section) and the components are added to the model. Note that using `components` is not necessary when using `load_components`, and is only done here for demonstration purposes.
+
+```{code-block} yaml
+:caption: Advanced example, utilizing `load_components`.
+
+load_components:
+  - units.csv
+  - nodes.csv
+  - profiles.csv
+
+components:
+  co2_emissions:
+    type: Profile
+    carrier: co2
+    mode: destroy
+    node_from: total_co2
+    cost: 100
+```
+
+`````{note}
+The `load_components` section allows more complex ways to read components from files: You can pass `.csv` as sole list entry to load all CSV files in the `components` path, or you can pass one, or multiple, regex patterns as list entries to load only specific files. For example, using
+
+```{code-block} yaml
+load_components:
+  - ^09[/\\]((?!snapshots\.csv$).)*\.csv$
+```
+
+will load all CSV files in the `components` path that are in a subfolder `09` except for `snapshots.csv`.
+
+**Note:** It is recommended to use `[/\\]` as path separators, like in the regex above, so the model can work on both UNIX and Windows systems.
+`````

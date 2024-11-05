@@ -82,6 +82,9 @@ General configuration settings for the optimization model.
 :caption: Example for the `config` section in the top-level YAML configuration file.
 
 config:
+  version:
+    core: 1.1.0
+    python: 1.4.7
   name:
     model: FarayOptIndustry
     scenario: Base_2022_LOW
@@ -101,6 +104,34 @@ config:
 ```
 
 The following subsections explain each part of the `config` section in more detail.
+
+### `version`
+
+This section allows specifying various IESopt versions, which is important to ensure reproducibility and compatibility: Executing a model based on a `config.iesopt.yaml` file with a different version of IESopt might lead to **unexpected results or errors**.
+
+```{code-block} yaml
+:caption: Example for the `version` section.
+
+config:
+  version:
+    core: 1.1.0
+    python: 1.4.7
+```
+
+We try to stick to [semantic versioning](https://semver.org/), which means that changes to the minor or patch version should not contain breaking changes, but:
+
+1. A bug fix to `IESopt.jl` might lead to different results of your model, meaning every bug fix might be a breaking change "for you".
+2. We might mess up and introduce a breaking change in a minor version, without intending it.
+
+Therefore: Make sure you **KNOW** what changes between versions, and **TEST** your models when upgrading.
+
+:Parameters:
+:`core`: The version of the core IESopt framework (`IESopt.jl`).
+:`python`: The version of the Python interface (`iesopt`).
+
+:::{tip}
+You may add arbitrary versions to this section, e.g., for personal use in specific addons or other dependencies.
+:::
 
 ### `name`
 

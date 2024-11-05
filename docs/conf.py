@@ -1,6 +1,7 @@
 import os
 import sys
 from pathlib import Path
+import importlib.metadata
 
 from sphinxawesome_theme.postprocess import Icons
 
@@ -19,18 +20,30 @@ CREATE_DYNAMIC_DOCSTRINGS = [
     # ```
 ]
 if len(CREATE_DYNAMIC_DOCSTRINGS) > 0:
-    import docs.dynamic.create as ddc
+    import docs.dynamic.create as ddcreate
 
-    ddc.create_md(CREATE_DYNAMIC_DOCSTRINGS)
+    ddcreate.create_md(CREATE_DYNAMIC_DOCSTRINGS)
 else:
     os.environ["IESOPT_DOCS_NOEXEC"] = "true"
+
+UPDATE_CORE_COMPONENTS = True
+if UPDATE_CORE_COMPONENTS:
+    os.environ.pop("IESOPT_DOCS_NOEXEC", None)
+
+    import docs.dynamic.core as ddcore
+
+    ddcore._dyn_core_create_md("Connection")
+    ddcore._dyn_core_create_md("Decision")
+    ddcore._dyn_core_create_md("Node")
+    ddcore._dyn_core_create_md("Profile")
+    ddcore._dyn_core_create_md("Unit")
 
 # -- General -----------------------------------------------------------------
 
 project = "IESopt"
 copyright = "AIT Austrian Institute of Technology GmbH"
 author = "S. Strömer (@sstroemer), D. Schwabeneder (@daschw)"
-version = "1.0.0"  # TODO: get from iesopt.__version__
+version = str(importlib.metadata.version("iesopt"))
 release = version
 
 extensions = [
@@ -90,9 +103,14 @@ html_theme_options = {
     },
 }
 
+html_context = {
+    "default_mode": "light",
+}
+
 # -- MyST & autodoc configuration --------------------------------------------
 
 myst_enable_extensions = ["dollarmath", "amsmath", "colon_fence", "fieldlist"]
 myst_heading_anchors = 3
 autodoc_packages = ["../src/iesopt"]
 suppress_warnings = ["autosectionlabel.*"]
+autosection_label_prefix_document = True

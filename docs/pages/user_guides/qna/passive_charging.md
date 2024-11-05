@@ -44,7 +44,7 @@ The mode setting `ranged` transforms a basic Profile (with default `mode: fixed`
 
 ### Custom constraint
 
-Use an addon to add a constraint limiting the passive charging based on the storage's unfilled capacity. Assuming that `heat_storage` is the name of the stateful Node that represents the underground storage, then:
+Use an addon to add a constraint limiting the passive charging based on the storage's unfilled capacity. Assuming that `heat_storage` is the name of the stateful [Node](/pages/manual/yaml/core/node.md) that represents the underground storage, then:
 
 ```julia
 # ... other stuff in your addon ...
@@ -67,7 +67,7 @@ This ensures the passive charging at time `t` doesn't exceed 1% of the storage's
 
 ### Steps to implement
 
-1. **Create the storage component**: Define your underground storage Node without using `state_percentage_loss` for passive charging.
+1. **Create the storage component**: Define your underground storage [Node](/pages/manual/yaml/core/node.md) without using `state_percentage_loss` for passive charging.
 2. **Add the Passive Charging Input**: Introduce a Profile to represent the passive energy inflow.
 3. **Set Profile Bounds**: Use the mode `ranged` for the Profile with appropriate lower (`lb`) and upper (`ub`) bounds.
 4. **Add the Constraint**: Implement the constraint to tie the passive charging rate to the storage's unfilled capacity.

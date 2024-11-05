@@ -1,4 +1,4 @@
-# Top-level
+# Top-level config
 
 The top-level YAML configuration file, often named `config.iesopt.yaml`, is the main configuration file for the IESopt optimization model. It may contain the following main sections:
 

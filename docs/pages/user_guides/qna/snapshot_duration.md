@@ -50,7 +50,7 @@ Accounting for the "conversion" between power and energy terms is handled intern
 #### Keep capacities in power units
 
 - **Unit Capacities:** Always express capacities in power units (e.g., kW), regardless of the time step duration.
-- **Profiles and Connections:** Similarly, profiles (e.g., time series data) and connection bounds should remain in power units.
+- **Profiles and Connections:** Similarly, [Profiles](/pages/manual/yaml/core/profile.md) (e.g., time series data) and [connection](/pages/manual/yaml/core/connection.md) bounds should remain in power units.
 
 #### Costs are per unit of energy
 

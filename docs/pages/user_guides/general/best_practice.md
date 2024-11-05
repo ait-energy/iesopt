@@ -13,7 +13,7 @@ Imagine a system where a heat pump is used to produce _heat_ for both heating an
    a gas boiler - but just for hot water - it is easier to do so when the energy carriers are separated.
 3. **Consistency:** It is easier to compare different systems when the energy carriers are consistently named.
 4. **Error prevention:** It is less likely to make mistakes when the energy carriers are clearly separated. Mistkenly
-   connecting two `Node`s with `heat`, that in reality could not be connected since they are part of two different
+   connecting two [Nodes](/pages/manual/yaml/core/node.md) with `heat`, that in reality could not be connected since they are part of two different
    systems, cannot happen when the energy carriers are separated.
 5. **Plotting:** It is easier to plot the system when the energy carriers are separated. For example, one can plot the
    heat demand for heating and hot water separately, or immediately see how much energy is being spent to supply the

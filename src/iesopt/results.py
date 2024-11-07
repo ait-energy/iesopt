@@ -301,7 +301,15 @@ class Results:
                     _data["value"].extend(v)
                     _data["mode"].extend([m] * n_snapshots)
 
-            return pd.DataFrame(_data)
+            try:
+                return pd.DataFrame(_data)
+            except Exception:
+                warnings.warn(
+                    "Failed to create DataFrame. This is mostlikely due to non aligned result shapes. A "
+                    "common cause are custom results, registered inside an addon, that have a different "
+                    "temporal resolution than the main model results. Consider filtering out such results."
+                )
+                return None
 
         raise ValueError(f"`orientation` can be 'wide' or 'long', got '{orientation}'.")
 

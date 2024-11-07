@@ -135,7 +135,7 @@ class Model:
     def extract_result(self, component: str, field: str, mode: str = "value"):
         """Manually extract a specific result from the model."""
         try:
-            c = self._IESopt.component(self.core, "node2")
+            c = self._IESopt.get_component(self.core, component)
         except Exception:
             raise Exception(f"Exception during `extract_result({component}, {field}, mode={mode})`")
 
@@ -164,7 +164,7 @@ class Model:
     def get_component(self, component: str):
         """Get a core component based on its full name."""
         try:
-            return self._IESopt.component(self.core, component)
+            return self._IESopt.get_component(self.core, component)
         except Exception:
             raise Exception(f"Error while retrieving component `{component}` from model")
 

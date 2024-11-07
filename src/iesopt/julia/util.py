@@ -7,7 +7,9 @@ def jl_safe_seval(code: str):
         return get_iesopt_module_attr("julia").seval(code)
     except Exception as e:
         logger.error("Exception while trying to execute Julia code: `%s`" % code)
-        raise e
+        logger.error("Exception details: `%s`" % getattr(e, "exception", "missing"))
+
+    return None
 
 
 def jl_import(module: str):
@@ -56,6 +58,3 @@ def jl_isa(obj, julia_type: str):
 def jl_docs(obj: str, module: str = "IESopt"):
     """Get the documentation string of a Julia object inside the IESopt module."""
     return str(jl_safe_seval(f"@doc {module}.{obj}"))
-    # IESopt = get_iesopt_module_attr("IESopt")
-    # binding = IESopt.getfield(IESopt, IESopt.Symbol(obj))
-    # return str(get_iesopt_module_attr("Docs.doc")(binding))

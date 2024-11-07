@@ -38,6 +38,7 @@ juliacall = "^0.9.20"
 pandas = "^2.0.0"
 juliapkg = "^0.1.13"
 pydantic = "^2.7.4"
+python-dotenv = "^1.0.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.7"

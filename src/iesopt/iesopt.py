@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from .util import logger, get_iesopt_module_attr
-from .julia.util import jl_symbol
 from .model import Model, ModelStatus
 
 
@@ -55,7 +54,7 @@ def examples() -> list[str]:
     import os
 
     julia = get_iesopt_module_attr("julia")
-    folder = Path(julia.IESoptLib.get_path(jl_symbol("examples")))
+    folder = Path(str(julia.IESopt.Assets.get_path("examples")))
     return sorted([fn.split(".iesopt.yaml")[0] for fn in os.listdir(folder) if fn.endswith(".iesopt.yaml")])
 
 
@@ -82,7 +81,7 @@ def make_example(example: str, dst_dir: str | Path = "./", dst_name: str | None 
     import stat
 
     julia = get_iesopt_module_attr("julia")
-    folder = Path(julia.IESoptLib.get_path(jl_symbol("examples")))
+    folder = Path(str(julia.IESopt.Assets.get_path("examples")))
 
     filename = folder / f"{example}.iesopt.yaml"
     datafolder = folder / "files"

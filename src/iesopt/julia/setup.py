@@ -41,9 +41,7 @@ def setup_julia():
 
     # Set versions of "core" packages.
     juliapkg.add(*lookup_package("jump"), version="=" + Config.get("jump"))
-    juliapkg.add(
-        *lookup_package("iesopt"), url="https://github.com/sstroemer/IESopt.jl", rev="rework-addons"
-    )  # version = "="+Config.get('core'))
+    juliapkg.add(*lookup_package("iesopt"), version="=" + Config.get("core"))
 
     # Set versions of "solver" packages.
     for entry in Config.find("solver_"):

@@ -8,6 +8,7 @@
 :::{toctree}
 :hidden:
 
+configuration.md
 model.md
 results.md
 util.md

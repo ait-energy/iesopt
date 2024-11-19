@@ -1,4 +1,3 @@
-import os
 from dotenv import dotenv_values
 
 
@@ -15,7 +14,7 @@ class Config:
     DEFAULTS = {
         "IESOPT_JULIA": "1.11.1",
         "IESOPT_CORE": "2.0.0",
-        "IESOPT_JUMP": "1.23.4",
+        "IESOPT_JUMP": "1.23.5",
         "IESOPT_SOLVER_HIGHS": "1.12.1",
         "IESOPT_MULTITHREADED": "no",  # yes, no
         "IESOPT_OPTIMIZATION": "latency",  # rapid, latency, normal, performance
@@ -32,7 +31,6 @@ class Config:
             for (k, v) in {
                 **cls.DEFAULTS,
                 **dotenv_values(),
-                **os.environ,
             }.items()
             if k.startswith("IESOPT_")
         }

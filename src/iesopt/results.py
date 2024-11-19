@@ -301,7 +301,15 @@ class Results:
                     _data["value"].extend(v)
                     _data["mode"].extend([m] * n_snapshots)
 
-            return pd.DataFrame(_data)
+            try:
+                return pd.DataFrame(_data)
+            except Exception:
+                warnings.warn(
+                    "Failed to create DataFrame. This is mostlikely due to non aligned result shapes. A "
+                    "common cause are custom results, registered inside an addon, that have a different "
+                    "temporal resolution than the main model results. Consider filtering out such results."
+                )
+                return None
 
         raise ValueError(f"`orientation` can be 'wide' or 'long', got '{orientation}'.")
 
@@ -411,12 +419,12 @@ class Results:
     def _from_model(self, model):
         self._source = "an IESopt model"
         self._model = {
-            "components": model.data.results.components,
-            "objectives": model.data.results.objectives,
-            "custom": model.data.results.customs,
+            "components": model.internal.results.components,
+            "objectives": model.internal.results.objectives,
+            "custom": model.internal.results.customs,
         }
-        self._snapshots = [model.data.model.snapshots[t].name for t in model.data.model.T]
-        self._components = sorted(model.data.results.components.keys())
+        self._snapshots = [model.internal.model.snapshots[t].name for t in model.internal.model.T]
+        self._components = sorted(model.internal.results.components.keys())
 
     def __repr__(self) -> str:
         _sep = "', '"

@@ -1,8 +1,9 @@
 from enum import Enum
 from pathlib import Path
+from warnings import warn
 
 from .util import logger, get_iesopt_module_attr
-from .julia.util import jl_symbol
+from .julia.util import jl_symbol, recursive_convert_py2jl
 from .results import Results
 
 
@@ -25,7 +26,7 @@ class Model:
 
     def __init__(self, filename: str | Path, **kwargs) -> None:
         self._filename = filename
-        self._kwargs = kwargs
+        self._kwargs = recursive_convert_py2jl(kwargs)
 
         self._model = None
         self._verbosity = kwargs.get("verbosity", True)
@@ -51,7 +52,7 @@ class Model:
 
         return (
             f"An IESopt model:"
-            f"\n\tname: {self.data.input.config.names.model}"
+            f"\n\tname: {self.data.input.config['general']['name']['model']}"
             f"\n\tsolver: {solver}"
             f"\n\t"
             f"\n\t{n_var} variables, {n_con} constraints"
@@ -67,8 +68,21 @@ class Model:
 
     @property
     def data(self):
+        """Access the IESopt data object of the model.
+
+        This is deprecated; use `model.internal` instead (similar to the Julia usage `IESopt.internal(model)`).
+        """
+        warn(
+            "Using `model.data` is deprecated; use `model.internal` instead (similar to the Julia usage `IESopt.internal(model)`)",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.internal
+
+    @property
+    def internal(self):
         """Access the IESopt data object of the model."""
-        return self.core.ext[jl_symbol("iesopt")]
+        return self._IESopt.internal(self.core)
 
     @property
     def status(self) -> ModelStatus:
@@ -135,7 +149,7 @@ class Model:
     def extract_result(self, component: str, field: str, mode: str = "value"):
         """Manually extract a specific result from the model."""
         try:
-            c = self._IESopt.component(self.core, "node2")
+            c = self._IESopt.get_component(self.core, component)
         except Exception:
             raise Exception(f"Exception during `extract_result({component}, {field}, mode={mode})`")
 
@@ -164,7 +178,7 @@ class Model:
     def get_component(self, component: str):
         """Get a core component based on its full name."""
         try:
-            return self._IESopt.component(self.core, component)
+            return self._IESopt.get_component(self.core, component)
         except Exception:
             raise Exception(f"Error while retrieving component `{component}` from model")
 

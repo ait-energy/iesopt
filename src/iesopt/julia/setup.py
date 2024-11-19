@@ -23,15 +23,15 @@ def lookup_package(name: str):
     raise Exception(f"Failed to lookup Julia package '{name}'; please report this issue")
 
 
-def add_package(f_add, name: str, config: str):
+def add_package(f_add, name: str, config: str, target: str):
     if "github" in config:
         if "#" in config:
             url, rev = config.split("#")
-            f_add(*lookup_package(name), url=url, rev=rev, target=os.getcwd())
+            f_add(*lookup_package(name), url=url, rev=rev, target=target)
         else:
-            f_add(*lookup_package(name), url=config, target=os.getcwd())
+            f_add(*lookup_package(name), url=config, target=target)
     else:
-        f_add(*lookup_package(name), version="=" + config, target=os.getcwd())
+        f_add(*lookup_package(name), version="=" + config, target=target)
 
 
 def setup_julia():
@@ -60,17 +60,20 @@ def setup_julia():
     # Setup Julia (checking if it "looks" valid).
     import juliapkg
 
+    target = str((Path(__file__).parent / "..").resolve())
+    logger.info(f"Using temporary target for juliapkg: '{target}'")
+
     # Set Julia version.
-    juliapkg.require_julia(f"={Config.get('julia')}")
+    juliapkg.require_julia(f"={Config.get('julia')}", target=target)
 
     # Set versions of "core" packages.
-    add_package(juliapkg.add, "jump", Config.get("jump"))
-    add_package(juliapkg.add, "iesopt", Config.get("core"))
+    add_package(juliapkg.add, "jump", Config.get("jump"), target)
+    add_package(juliapkg.add, "iesopt", Config.get("core"), target)
 
     # Set versions of "solver" packages.
     for entry in Config.find("solver_"):
         name = entry[7:]
-        add_package(juliapkg.add, name, Config.get(entry))
+        add_package(juliapkg.add, name, Config.get(entry), target)
 
     if not juliapkg.resolve(dry_run=True):
         logger.warning("The Julia environment is dirty and needs to be resolved, which can take some time")

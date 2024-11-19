@@ -1,5 +1,6 @@
 from enum import Enum
 from pathlib import Path
+from warnings import warn
 
 from .util import logger, get_iesopt_module_attr
 from .julia.util import jl_symbol, recursive_convert_py2jl
@@ -67,8 +68,21 @@ class Model:
 
     @property
     def data(self):
+        """Access the IESopt data object of the model.
+
+        This is deprecated; use `model.internal` instead (similar to the Julia usage `IESopt.internal(model)`).
+        """
+        warn(
+            "Using `model.data` is deprecated; use `model.internal` instead (similar to the Julia usage `IESopt.internal(model)`)",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self.internal
+
+    @property
+    def internal(self):
         """Access the IESopt data object of the model."""
-        return self.core.ext[jl_symbol("iesopt")]
+        return self._IESopt.internal(self.core)
 
     @property
     def status(self) -> ModelStatus:

@@ -21,6 +21,17 @@ def lookup_package(name: str):
     raise Exception(f"Failed to lookup Julia package '{name}'; please report this issue")
 
 
+def add_package(f_add, name: str, config: str):
+    if "github" in config:
+        if "#" in config:
+            url, rev = config.split("#")
+            f_add(*lookup_package(name), url=url, rev=rev, target=os.getcwd())
+        else:
+            f_add(*lookup_package(name), url=config, target=os.getcwd())
+    else:
+        f_add(*lookup_package(name), version="=" + config, target=os.getcwd())
+
+
 def setup_julia():
     logger.info("Checking Julia environment")
 
@@ -40,15 +51,13 @@ def setup_julia():
     juliapkg.require_julia(f"={Config.get('julia')}")
 
     # Set versions of "core" packages.
-    juliapkg.add(*lookup_package("jump"), version="=" + Config.get("jump"))
-    juliapkg.add(*lookup_package("iesopt"), version="=" + Config.get("core"))
+    add_package(juliapkg.add, "jump", Config.get("jump"))
+    add_package(juliapkg.add, "iesopt", Config.get("core"))
 
     # Set versions of "solver" packages.
     for entry in Config.find("solver_"):
         name = entry[7:]
-        juliapkg.add(*lookup_package(name), version="=" + Config.get(entry))
-
-    # NOTE: all other packages (listed with "IESOPT_PKG_***") should be added on the Julia side
+        add_package(juliapkg.add, name, Config.get(entry))
 
     if not juliapkg.resolve(dry_run=True):
         logger.warning("The Julia environment is dirty and needs to be resolved, which can take some time")
@@ -57,6 +66,7 @@ def setup_julia():
 
     logger.info("Julia environment ready, loading Julia")
 
+    os.environ["JULIA_PKG_PRESERVE_TIERED_INSTALLED"] = "true"
     os.environ["PYTHON_JULIACALL_STARTUP_FILE"] = "no"
     os.environ["PYTHON_JULIACALL_AUTOLOAD_IPYTHON_EXTENSION"] = "no"
 
@@ -65,8 +75,12 @@ def setup_julia():
         os.environ["PYTHON_JULIACALL_HANDLE_SIGNALS"] = "yes"
 
     opt = Config.get("optimization")
-    if opt == "latency":
+    if opt == "rapid":
         os.environ["PYTHON_JULIACALL_COMPILE"] = "min"
+        os.environ["PYTHON_JULIACALL_OPTIMIZE"] = "0"
+        os.environ["PYTHON_JULIACALL_MIN_OPTLEVEL"] = "0"
+    elif opt == "latency":
+        os.environ["PYTHON_JULIACALL_COMPILE"] = "yes"
         os.environ["PYTHON_JULIACALL_OPTIMIZE"] = "0"
         os.environ["PYTHON_JULIACALL_MIN_OPTLEVEL"] = "0"
     elif opt == "default":
@@ -95,7 +109,7 @@ def setup_julia():
     #     logger.info("Restoring local `SSL_CERT_FILE`")
     #     os.environ["SSL_CERT_FILE"] = _ssl
 
-    return juliacall.Main
+    return juliacall
 
 
 def import_modules():

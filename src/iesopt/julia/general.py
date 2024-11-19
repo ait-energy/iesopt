@@ -14,8 +14,10 @@ def initialize():
     logger.info("© 2021 - now:  AIT Austrian Institute of Technology GmbH")
     logger.info("Documentation: https://ait-energy.github.io/iesopt")
 
-    julia = setup_julia()
+    juliacall = setup_julia()
+    julia = juliacall.Main
     set_iesopt_module_attr("julia", julia)
+    set_iesopt_module_attr("juliacall", juliacall)
 
     import_modules()
     logger.info("Versions: py=%s, jl=%s" % (importlib.metadata.version("iesopt"), str(julia.pkgversion(julia.IESopt))))

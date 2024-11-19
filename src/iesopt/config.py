@@ -18,7 +18,7 @@ class Config:
         "IESOPT_JUMP": "1.23.3",
         "IESOPT_SOLVER_HIGHS": "1.12.0",
         "IESOPT_MULTITHREADED": "no",  # yes, no
-        "IESOPT_OPTIMIZATION": "default",  # latency, default, performance
+        "IESOPT_OPTIMIZATION": "latency",  # rapid, latency, normal, performance
     }
     _config = None
 

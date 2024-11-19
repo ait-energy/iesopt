@@ -2,7 +2,7 @@ from enum import Enum
 from pathlib import Path
 
 from .util import logger, get_iesopt_module_attr
-from .julia.util import jl_symbol
+from .julia.util import jl_symbol, recursive_convert_py2jl
 from .results import Results
 
 
@@ -25,7 +25,7 @@ class Model:
 
     def __init__(self, filename: str | Path, **kwargs) -> None:
         self._filename = filename
-        self._kwargs = kwargs
+        self._kwargs = recursive_convert_py2jl(kwargs)
 
         self._model = None
         self._verbosity = kwargs.get("verbosity", True)
@@ -51,7 +51,7 @@ class Model:
 
         return (
             f"An IESopt model:"
-            f"\n\tname: {self.data.input.config.names.model}"
+            f"\n\tname: {self.data.input.config['general']['name']['model']}"
             f"\n\tsolver: {solver}"
             f"\n\t"
             f"\n\t{n_var} variables, {n_con} constraints"

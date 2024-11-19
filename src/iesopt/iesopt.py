@@ -4,7 +4,7 @@ from .util import logger, get_iesopt_module_attr
 from .model import Model, ModelStatus
 
 
-def run(filename: str | Path, verbosity: bool | str = True, **kwargs) -> Model:
+def run(filename: str | Path, **kwargs) -> Model:
     r"""
     Generate and optimize an IESopt model.
 
@@ -13,11 +13,6 @@ def run(filename: str | Path, verbosity: bool | str = True, **kwargs) -> Model:
     Arguments:
         filename : str
             Path to the IESopt model file to load.
-        verbosity : Optional[bool | str]
-            Verbosity level for the IESopt model, defaults to `True`. If `True`, the core
-            model will be run in verbose mode, `"warning"` will show warnings (and errors), setting it to `False` will
-            only show errors. If `verbosity_solve` is not set in the top-level YAML config, `verbosity = True` will
-            enable solver verbose mode, otherwise the solver will be run in silent mode.
 
     Keyword Arguments:
         **kwargs: Additional keyword arguments to pass to the `Model` constructor.
@@ -32,7 +27,7 @@ def run(filename: str | Path, verbosity: bool | str = True, **kwargs) -> Model:
             import iesopt
             iesopt.run("opt/config.iesopt.yaml")
     """
-    model = Model(filename, verbosity=verbosity, **kwargs)
+    model = Model(filename, **kwargs)
     model.generate()
 
     if model.status == ModelStatus.GENERATED:

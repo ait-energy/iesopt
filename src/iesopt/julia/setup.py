@@ -1,4 +1,5 @@
 import os
+import sys
 # import ssl
 
 from ..util import logger
@@ -34,6 +35,13 @@ def add_package(f_add, name: str, config: str):
 
 def setup_julia():
     logger.info("Checking Julia environment")
+
+    if "juliacall" in sys.modules:
+        logger.error(
+            "It seems juliacall, and thus Julia, is already loaded; this may lead to unexpected behavior and prevents"
+            " proper setup based on the internal configs. If you are sure this is not an issue, you can safely ignore"
+            " this message, but we cannot guarantee anything to work as expected."
+        )
 
     # # Check for local SSL certificate file, that can interfere with Julia setup.
     # _ssl = None
@@ -73,6 +81,9 @@ def setup_julia():
     if Config.get("multithreaded"):
         os.environ["PYTHON_JULIACALL_THREADS"] = "auto"
         os.environ["PYTHON_JULIACALL_HANDLE_SIGNALS"] = "yes"
+    else:
+        os.environ["PYTHON_JULIACALL_THREADS"] = "1"
+        os.environ["PYTHON_JULIACALL_HANDLE_SIGNAL"] = "no"
 
     opt = Config.get("optimization")
     if opt == "rapid":

@@ -18,6 +18,7 @@ Getting started <self>
 notebooks/first_model.ipynb
 tocs/tutorials_extracting_results.md
 tocs/tutorials_templates.md
+pages/tutorials/addons.md
 :::
 
 <!--- notebooks/mga_basic.ipynb --->
@@ -54,6 +55,7 @@ pages/references/projects.md
 
 pages/dev/general.md
 pages/dev/core.md
+pages/dev/updating.md
 :::
 
 <!--- TABLE OF CONTENTS STRUCTURE --->

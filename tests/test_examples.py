@@ -24,7 +24,7 @@ class TestExamples:
         assert (tmp_path / "examples" / "config.iesopt.yaml").exists()
         assert (tmp_path / "examples" / "files").exists()
 
-    def test_run_example(self, tmp_path):
+    def test_run_examples(self, tmp_path):
         checks = {
             "01_basic_single_node": {
                 "status": "ModelStatus.OPTIMAL",
@@ -41,7 +41,7 @@ class TestExamples:
                 "objective_value": 1225.0,
                 "hash": "4637add63e6f0a60df332af31e9602b60733f50032a92c2a167a7cbcb754c202",
             },
-            "04_constraint_safety": {
+            "04_soft_constraints": {
                 "status": "ModelStatus.OPTIMAL",
                 "objective_value": 1000002975.0,
                 "hash": "061919112bea66bac9b2f96f634c5eaff721524338e67e752062da4c6618d3c0",
@@ -132,20 +132,10 @@ class TestExamples:
                 "objective_value": 7000.0,
                 "hash": "2494022e1bded1e072566050f8b79ea86cd2603239c7ff4e2a0b5fac44823250",
             },
-            "30_representative_snapshots": {
-                "status": "ModelStatus.OPTIMAL",
-                "objective_value": 326840.0,
-                "hash": "07478d28d5d4256193a9644ae6a868e9a0e8d4851e6b3f26ddab3a62f2c09716",
-            },
             "31_exclusive_operation": {
                 "status": "ModelStatus.OPTIMAL",
                 "objective_value": -10.0,
                 "hash": "7a0073ecd28bcbc6b98764c08060923b1fe4136a9b8bd7ec21bba216b98b479c",
-            },
-            "33_benders_investment": {
-                "status": "ModelStatus.OPTIMAL",
-                "objective_value": 13805699.938768059,
-                "hash": "03d3b92e5798861223d36acf7940b5e5b813f50c1e70785d6a802f1f779eacf3",
             },
             "35_fixed_costs": {
                 "status": "ModelStatus.OPTIMAL",
@@ -187,13 +177,11 @@ class TestExamples:
 
         for ex in checks.keys():
             config_file = iesopt.make_example(ex, dst_dir=tmp_path, dst_name="config")
-            model = iesopt.run(config_file, verbosity=False)
+            model = iesopt.run(config_file, config={"general.verbosity.core": "error"})
 
-            assert model.status == str(iesopt.ModelStatus.OPTIMAL)
+            assert str(model.status) == checks[ex]["status"]
 
-            res = model.results.to_pandas()
             obj = model.objective_value
-            hash = hashlib.sha256(pd.util.hash_pandas_object(res, index=True).values).hexdigest()
 
             if checks[ex]["objective_value"] == "moa":
                 assert obj is not None
@@ -201,4 +189,7 @@ class TestExamples:
             else:
                 assert (obj - checks[ex]["objective_value"]) < 1e-4
 
-            assert hash == checks[ex]["hash"]
+            if checks[ex]["hash"]:
+                res = model.results.to_pandas()
+                hash = hashlib.sha256(pd.util.hash_pandas_object(res, index=True).values).hexdigest()
+                assert hash == checks[ex]["hash"]

@@ -1,5 +1,6 @@
 import os
 import sys
+from pathlib import Path
 # import ssl
 
 from ..util import logger
@@ -42,6 +43,10 @@ def setup_julia():
             " proper setup based on the internal configs. If you are sure this is not an issue, you can safely ignore"
             " this message, but we cannot guarantee anything to work as expected."
         )
+
+    if Path("juliapkg.json").exists():
+        logger.warning("Found `juliapkg.json` file; removing it to prevent potential conflicts")
+        Path("juliapkg.json").unlink()
 
     # # Check for local SSL certificate file, that can interfere with Julia setup.
     # _ssl = None

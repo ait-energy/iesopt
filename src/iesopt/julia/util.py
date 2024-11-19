@@ -58,3 +58,14 @@ def jl_isa(obj, julia_type: str):
 def jl_docs(obj: str, module: str = "IESopt"):
     """Get the documentation string of a Julia object inside the IESopt module."""
     return str(jl_safe_seval(f"@doc {module}.{obj}"))
+
+
+def recursive_convert_py2jl(item):
+    juliacall = get_iesopt_module_attr("juliacall")
+
+    if isinstance(item, dict):
+        return juliacall.Main.Dict({k: recursive_convert_py2jl(v) for (k, v) in item.items()})
+    if isinstance(item, list):
+        return juliacall.convert(juliacall.Main.Vector, [recursive_convert_py2jl(v) for v in item])
+
+    return item

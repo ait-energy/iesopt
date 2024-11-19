@@ -4,8 +4,8 @@ import pandas as pd
 import hashlib
 
 
-def _check_example_model(name: str, dst_dir: str, checks: dict):
-    config_file = iesopt.make_example(name, dst_dir=dst_dir, dst_name="config")
+def _check_example_model(name: str, dst_dir, checks: dict):
+    config_file = iesopt.make_example(name, dst_dir=str(dst_dir), dst_name="config")
     model = iesopt.run(config_file, config={"general.verbosity.core": "error"})
 
     assert str(model.status) == checks["status"]

@@ -166,8 +166,8 @@ cython_debug/
 .ruff_cache/
 
 # Prevent tracking any JuliaPkg files
-juliapkg.json
+**/juliapkg.json
 
 # Temp. directory
 tmp_test/
-tests/tmp_test/
+**/tmp_test/

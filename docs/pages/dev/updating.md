@@ -23,8 +23,6 @@ See the respective section(s) in the [YAML/Top-level config](../manual/yaml/top_
 
 ### Changes to keyword arguments
 
-To be written: "parameters" and "config".
-
 Previously we allowed passing arbitrary keyword arguments to public functions, like {py:func}`iesopt.Model.generate` or {py:func}`iesopt.run`. This can lead to problems with latency on previously unseen types of arguments, especially now that we support arbitrary dictionaries as model parameters. This now works differently:
 
 - There are no arbitrary keyword arguments anymore.
@@ -41,9 +39,9 @@ Besides model parameters, specific keyword arguments existed, e.g., `verbosity`.
 import iesopt
 
 iesopt.run("my_config.iesopt.yaml", config = {
-    "general.verbosity.core" = "error",
-    "optimization.snapshots.count" = 168,
-    "files.data_in" = "scenario17/data.csv",
+    "general.verbosity.core": "error",
+    "optimization.snapshots.count": 168,
+    "files.data_in": "scenario17/data.csv",
 })
 ```
 

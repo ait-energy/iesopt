@@ -80,7 +80,7 @@ Everything that was previously part of `IESoptLib.jl` is now integrated into `IE
 
 #### Tags
 
-Compontent "tags" are back (or accessible again, they were never gone completely). That means you can tag components to later simplify result handling or working with your model. A tag can be added when creating a component:
+Component "tags" are back (or accessible again, they were never gone completely). That means you can tag components to later simplify result handling or working with your model. A tag can be added when creating a component:
 
 ```{code-block} yaml
 :caption: Adding a tag.

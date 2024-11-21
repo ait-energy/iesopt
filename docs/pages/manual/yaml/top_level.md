@@ -82,12 +82,13 @@ General configuration settings for the optimization model.
 :caption: Example for the `config` section in the top-level YAML configuration file.
 
 config:
-  version:
-    core: 1.1.0
-    python: 1.4.7
-  name:
-    model: FarayOptIndustry
-    scenario: Base_2022_LOW
+  general:
+    version:
+      core: 1.1.0
+      python: 1.4.7
+    name:
+      model: FarayOptIndustry
+      scenario: Base_2022_LOW
   optimization:
     problem_type: LP
     snapshots:
@@ -105,7 +106,11 @@ config:
 
 The following subsections explain each part of the `config` section in more detail.
 
-### `version`
+### `general`
+
+This contains general settings.
+
+#### `version`
 
 This section allows specifying various IESopt versions, which is important to ensure reproducibility and compatibility: Executing a model based on a `config.iesopt.yaml` file with a different version of IESopt might lead to **unexpected results or errors**.
 
@@ -113,9 +118,10 @@ This section allows specifying various IESopt versions, which is important to en
 :caption: Example for the `version` section.
 
 config:
-  version:
-    core: 1.1.0
-    python: 1.4.7
+  general:
+    version:
+      core: 1.1.0
+      python: 1.4.7
 ```
 
 We try to stick to [semantic versioning](https://semver.org/), which means that changes to the minor or patch version should not contain breaking changes, but:
@@ -133,7 +139,7 @@ Therefore: Make sure you **KNOW** what changes between versions, and **TEST** yo
 You may add arbitrary versions to this section, e.g., for personal use in specific addons or other dependencies.
 :::
 
-### `name`
+#### `name`
 
 This section does not directly affect the model but can be used to store the name of the model and the scenario. This can be useful for logging and debugging purposes, as well as for the results output.
 
@@ -155,9 +161,10 @@ Consider the following example for the `name` section:
 :caption: Example for the `name` section.
 
 config:
-  name:
-    model: FarayOptIndustry
-    scenario: Base_2022_LOW_T-$TIME$
+  general:
+    name:
+      model: FarayOptIndustry
+      scenario: Base_2022_LOW_T-$TIME$
 ```
 
 When running the model containing this configuration, the results will be stored in a folder structure that looks like this:
@@ -180,6 +187,16 @@ When running the model containing this configuration, the results will be stored
 ```
 
 In this example, the `$TIME$` placeholder was replaced by the current timestamp, which is `2024_09_11_09520837` in this case. You can see the top-level config file (`config.iesopt.yaml`), a data folder (`data/`; see the [files](#files) and [paths](#paths) sections), the results folder (`out/`; see the [results](#results) and [paths](#paths) sections). Inside the results folder, IESopt creates a folder for each "model name". Each executed run creates its result files inside that, using the "scenario name" as base filename.
+
+#### `verbosity`
+
+Controls the verbosity of various parts of a model run.
+
+:Parameters:
+:`core`: Verbosity of the (Julia) core, `IESopt.jl`. Supports: `debug`, `info` (default), `warning`, `error`.
+:`progress`: Whether to show progress bars (`on` or `off`), defaults to `on` unless `core` is set to `error` - in that case it defaults to `off`.
+:`python`: Verbosity of the Python wrapper, `iesopt`. Supports: `debug`, `info`, `warning`, `error`. Defaults to the verbosity set in `core`.
+:`solver`: Whether to silence solver prints/outputs (`on` or `off`), defaults to `on` unless `core` is set to `error` - in that case it defaults to `off`.
 
 ### `optimization`
 
@@ -255,8 +272,10 @@ This allows defining custom objective expressions for the optimization problem. 
 ```{code-block} yaml
 :caption: Example for the `objectives` section.
 
-objectives:
-  emissions: [co2_emissions.exp.value]
+config:
+  optimization:
+    objectives:
+      emissions: [co2_emissions.exp.value]
 ```
 
 The above constructs a new objective expression that only consists of `co2_emissions.exp.value`. It may also be initialized empty (`[]`), in which case you can add terms later on in the model definition.
@@ -275,16 +294,36 @@ This setting is part of advanced functionality. It is not fully documented, or m
 ```{code-block} yaml
 :caption: Example for the `multiobjective` section.
 
-multiobjective:
-  mode: EpsilonConstraint
-  terms: [total_cost, emissions]
-  settings:
-    MOA.SolutionLimit: 5
+config:
+  optimization:
+    multiobjective:
+      mode: EpsilonConstraint
+      terms: [total_cost, emissions]
+      settings:
+        MOA.SolutionLimit: 5
 ```
 
 ```{note}
 Refer to the related example models for more information on how to use multi-objective optimization in IESopt.
 ```
+
+#### `soft_constraints`
+
+This was called `constraint_safety` in all versions previous to `v2.0.0`. It controls if and how certain constraints of the model are relaxed to allow penalized violation of said constraints. This can be helpful, e.g., if your model is infeasible for certain external settings and you might want to ensure getting an approximate solution.
+
+```{code-block} yaml
+:caption: Example for the `soft_constraints` section.
+
+config:
+  optimization:
+    soft_constraints:
+      active: true
+      penalty: 1e6
+```
+
+:Parameters:
+:`active` (`bool`, default = `false`): Activate the feature.
+:`penalty` (`float`): Penalty that is used to penalize constraint violations.
 
 ### `files`
 
@@ -308,7 +347,8 @@ Settings for the results output. Details to be added.
 :`enabled` (`bool`, default = `true`): Whether to enable the automatic extraction of results. If this is set to `false`, no results will read from the solver after optimizing the model - you can however still access the solver results directly, see for example {py:func}`iesopt.jump_value`.
 :`memory_only` (`bool`, default = `true`): Whether to store the results in memory only, without writing them to disk. This can be useful if you plan to access and further process the results directly in Python or Julia, or only want to store specific results.
 :`compress` (`bool`, default = `false`): Whether to compress the results when writing them to disk. This can save disk space but might increase the time needed to write and read the results. Refer to [JLD2.jl](https://github.com/JuliaIO/JLD2.jl) for more information about compression.
-:`include` (`str`, default = `none` or `all`): A list of result extraction modes to activate, see below for more details. The default depends on the setting of `memory_only`: If `memory_only` is `true`, the default is `none`, otherwise it is `all`.
+:`include` (`str`, default = `none` or `nput+log`): A list of result extraction modes to activate, see below for more details. The default depends on the setting of `memory_only`: If `memory_only` is `true`, the default is `none`, otherwise it is `input+log`. You can use `all` to activate all possible settings.
+:`backend` (`str`, default = `jld2`): Backend to use in the result extraction. Currently `jld2` is the main/working one, while we are trying to improve the `duckdb` backend.
 
 ```{code-block} yaml
 :caption: Example for the `results` section.

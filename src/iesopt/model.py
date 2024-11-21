@@ -181,6 +181,18 @@ class Model:
             return self._IESopt.get_component(self.core, component)
         except Exception:
             raise Exception(f"Error while retrieving component `{component}` from model")
+    
+    def get_components(self, tagged = None):
+        """
+        Get all components of the model, possibly filtered by (a) tag(s).
+        
+        Arguments:
+            tagged (str or list of str): The tag(s) to filter the components by, can be `None` (default) to get all components.
+        """
+        if tagged is None:
+            return self._IESopt.get_components(self.core)
+        
+        return self._IESopt.get_components(self.core, recursive_convert_py2jl(tagged))
 
     def get_variable(self, component: str, variable: str):
         """Get a specific variable from a core component."""

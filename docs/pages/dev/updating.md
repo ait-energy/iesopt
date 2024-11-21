@@ -19,6 +19,7 @@ See the respective section(s) in the [YAML/Top-level config](../manual/yaml/top_
 - `name`
 - `version`
 - `high_performance`
+- `constraint_safety` is now called `soft_constraints` and part of the `optimization` section.
 
 ### Changes to keyword arguments
 

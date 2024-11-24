@@ -217,7 +217,8 @@ def _dyn_core_create_md(cc: str):
                         if len(res) == 2:
                             f.write(f":::{{{res[1]}}}\n\n")
                         elif len(res) == 3:
-                            f.write(f":::{{admonition}} **{res[2].strip('\"')}**\n:class: {res[1]}\n\n")
+                            _stripped = res[2].strip('"')
+                            f.write(f":::{{admonition}} **{_stripped}**\n:class: {res[1]}\n\n")
                         continue
 
                     if is_in_math_mode:

@@ -14,7 +14,7 @@ def jl_safe_seval(code: str):
 
 def jl_import(module: str):
     """Import a Julia module."""
-    logger.info("Importing Julia module `%s`" % module)
+    logger.info("    %s" % module)
     jl_safe_seval(f"import {module}")
 
 

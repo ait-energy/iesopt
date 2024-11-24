@@ -61,11 +61,11 @@ def jl_docs(obj: str, module: str = "IESopt"):
 
 
 def recursive_convert_py2jl(item):
-    juliacall = get_iesopt_module_attr("juliacall")
-
     if isinstance(item, dict):
+        juliacall = get_iesopt_module_attr("juliacall")
         return juliacall.Main.Dict({k: recursive_convert_py2jl(v) for (k, v) in item.items()})
     if isinstance(item, list):
+        juliacall = get_iesopt_module_attr("juliacall")
         return juliacall.convert(juliacall.Main.Vector, [recursive_convert_py2jl(v) for v in item])
 
     return item

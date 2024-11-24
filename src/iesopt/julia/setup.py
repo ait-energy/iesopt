@@ -35,6 +35,9 @@ def add_package(f_add, name: str, config: str, target: str):
 
 
 def setup_julia():
+    target = str((Path(__file__).parent / "..").resolve())
+    logger.info(f"    Target for juliapkg: '{target}'")
+
     logger.info("Checking Julia environment")
 
     if "juliacall" in sys.modules:
@@ -59,9 +62,6 @@ def setup_julia():
 
     # Setup Julia (checking if it "looks" valid).
     import juliapkg
-
-    target = str((Path(__file__).parent / "..").resolve())
-    logger.info(f"Using temporary target for juliapkg: '{target}'")
 
     # Set Julia version.
     juliapkg.require_julia(f"={Config.get('julia')}", target=target)
@@ -114,6 +114,8 @@ def setup_julia():
     import juliacall
 
     logger.info("Julia setup complete")
+    logger.info("    Executable: %s" % juliapkg.executable())
+    logger.info("    Project: %s" % juliapkg.project())
 
     custom_packages = list(Config.find("pkg_"))
     if len(custom_packages) > 0:
@@ -132,5 +134,6 @@ def setup_julia():
 
 
 def import_modules():
+    logger.info("Importing Julia modules:")
     jl_import("IESopt")
     jl_import("JuMP")

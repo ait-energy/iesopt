@@ -11,8 +11,8 @@ def initialize():
         return
 
     logger.info("Integrated Energy System Optimization (IESopt)")
-    logger.info("© 2021 - now:  AIT Austrian Institute of Technology GmbH")
-    logger.info("Documentation: https://ait-energy.github.io/iesopt")
+    logger.info("    © 2021 - now:  AIT Austrian Institute of Technology GmbH")
+    logger.info("    Documentation: https://ait-energy.github.io/iesopt")
 
     juliacall = setup_julia()
     julia = juliacall.Main
@@ -20,7 +20,9 @@ def initialize():
     set_iesopt_module_attr("juliacall", juliacall)
 
     import_modules()
-    logger.info("Versions: py=%s, jl=%s" % (importlib.metadata.version("iesopt"), str(julia.pkgversion(julia.IESopt))))
+    logger.info(
+        "Loaded versions: py=%s, jl=%s" % (importlib.metadata.version("iesopt"), str(julia.pkgversion(julia.IESopt)))
+    )
 
     set_iesopt_module_attr("IESopt", julia.IESopt)
     set_iesopt_module_attr("JuMP", julia.JuMP)

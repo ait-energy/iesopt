@@ -114,6 +114,8 @@ def setup_julia():
     import juliacall
 
     logger.info("Julia setup complete")
+    logger.info("    Executable:" % juliapkg.executable())
+    logger.info("    Project:" % juliapkg.project())
 
     custom_packages = list(Config.find("pkg_"))
     if len(custom_packages) > 0:

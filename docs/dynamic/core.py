@@ -128,12 +128,19 @@ def _dyn_core_create_md(cc: str):
     main_docstr = docs["docstr_main"]
     final_main_docstr = ""
     if '!!! details "Basic Examples"' in main_docstr:
+        within_example = False
         for line in main_docstr.splitlines():
-            if line == '!!! details "Basic Examples"':
-                final_main_docstr += ":::{admonition} **Basic Examples**\n:class: dropdown\n\n"
+            if not within_example:
+                if line == '!!! details "Basic Examples"':
+                    final_main_docstr += ":::{admonition} **Basic Examples**\n:class: dropdown\n\n"
+                    within_example = True
+                else:
+                    final_main_docstr += line + "\n"
             else:
                 final_main_docstr += line[4:] + "\n"
         final_main_docstr = final_main_docstr + ":::"
+    else:
+        final_main_docstr = main_docstr
 
     with open(DYNAMIC / ".." / "pages" / "manual" / "yaml" / "core" / f"{cc.lower()}.md", "w") as f:
         f.write(f"# {cc}\n\n")

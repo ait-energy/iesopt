@@ -122,5 +122,5 @@ components:
     type: Battery
 ```
 
-All batteries can then be found using `model.get_components("Battery")`. This can also be really helpful in addons, where (using Julia) you can find, e.g., all CHPs in your model by doing `chps = IESopt.get_components(model, "CHP")`.
+All batteries can then be found using `model.get_components("Battery")`. This can also be really helpful in addons, where (using Julia) you can find, e.g., all CHPs in your model by doing `chps = IESopt.get_components(model; tagged="CHP")`.
 :::

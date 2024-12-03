@@ -15,6 +15,7 @@ def lookup_package(name: str):
         "iesopt": ("IESopt", "ed3f0a38-8ad9-4cf8-877e-929e8d190fe9"),
         "gurobi": ("Gurobi", "2e9cd046-0924-5485-92f1-d5272153d98b"),
         "cplex": ("CPLEX", "a076750e-1247-5638-91d2-ce28b192dca0"),
+        "ipopt": ("Ipopt", "b6b21f68-93f8-5de0-b562-5493be1d77c9"),
     }
 
     if name in lookup:

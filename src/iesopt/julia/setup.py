@@ -16,6 +16,7 @@ def lookup_package(name: str):
         "gurobi": ("Gurobi", "2e9cd046-0924-5485-92f1-d5272153d98b"),
         "cplex": ("CPLEX", "a076750e-1247-5638-91d2-ce28b192dca0"),
         "ipopt": ("Ipopt", "b6b21f68-93f8-5de0-b562-5493be1d77c9"),
+        "pythoncall": ("PythonCall", "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"),
     }
 
     if name in lookup:
@@ -49,8 +50,10 @@ def setup_julia():
         )
 
     if Path("juliapkg.json").exists():
-        logger.warning("Found `juliapkg.json` file; removing it to prevent potential conflicts")
-        Path("juliapkg.json").unlink()
+        raise Exception("Found `juliapkg.json` file; remove it to prevent potential conflicts")
+
+    if (Path(__file__).parent / ".." / "juliapkg.json").exists():
+        (Path(__file__).parent / ".." / "juliapkg.json").unlink()
 
     # # Check for local SSL certificate file, that can interfere with Julia setup.
     # _ssl = None
@@ -66,6 +69,7 @@ def setup_julia():
 
     # Set Julia version.
     juliapkg.require_julia(f"={Config.get('julia')}", target=target)
+    add_package(juliapkg.add, "pythoncall", "0.9.23", target)  # TODO: why is that suddenly needed?
 
     # Set versions of "core" packages.
     add_package(juliapkg.add, "jump", Config.get("jump"), target)

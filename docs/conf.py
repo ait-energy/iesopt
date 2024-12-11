@@ -1,4 +1,3 @@
-import os
 import sys
 from pathlib import Path
 import importlib.metadata
@@ -23,20 +22,16 @@ if len(CREATE_DYNAMIC_DOCSTRINGS) > 0:
     import docs.dynamic.create as ddcreate
 
     ddcreate.create_md(CREATE_DYNAMIC_DOCSTRINGS)
-else:
-    os.environ["IESOPT_DOCS_NOEXEC"] = "true"
 
-UPDATE_CORE_COMPONENTS = True
-if UPDATE_CORE_COMPONENTS:
-    os.environ.pop("IESOPT_DOCS_NOEXEC", None)
+import docs.dynamic.core as ddcore  # noqa: E402
 
-    import docs.dynamic.core as ddcore
+ddcore._dyn_core_create_md("Connection")
+ddcore._dyn_core_create_md("Decision")
+ddcore._dyn_core_create_md("Node")
+ddcore._dyn_core_create_md("Profile")
+ddcore._dyn_core_create_md("Unit")
 
-    ddcore._dyn_core_create_md("Connection")
-    ddcore._dyn_core_create_md("Decision")
-    ddcore._dyn_core_create_md("Node")
-    ddcore._dyn_core_create_md("Profile")
-    ddcore._dyn_core_create_md("Unit")
+import docs.dynamic.julia  # noqa: E402, F401
 
 # -- General -----------------------------------------------------------------
 

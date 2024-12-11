@@ -26,3 +26,13 @@ my_result = IESopt.get_component(model, "turbine").exp.out_water
 ```
 
 :::
+
+:::{toctree}
+:hidden:
+
+assets.md
+iesu.md
+resultsduckdb.md
+resultsjld2.md
+utilities.md
+:::

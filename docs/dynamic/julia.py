@@ -60,8 +60,9 @@ def doc_julia_module(module):
 
 entries = doc_julia_module(iesopt.IESopt)
 
+
 def split_docstr(ds: str):
-    if ds[1] != ' ':
+    if ds[1] != " ":
         return ("", ds)
 
     head = ""
@@ -75,8 +76,9 @@ def split_docstr(ds: str):
             head += line[4:] + "\n"
         else:
             content += line + "\n"
-    
+
     return (head, content)
+
 
 def escape_md(md: str):
     ret = ""
@@ -84,7 +86,7 @@ def escape_md(md: str):
     for line in md.splitlines(True):
         if line.startswith("```"):
             within_code = not within_code
-        
+
         if within_code:
             ret += line
             continue
@@ -95,7 +97,7 @@ def escape_md(md: str):
             line = line.strip("#")
             line = line.strip(" \n")
             line = f"_**{line}**_  \n"
-        
+
         ret += line
 
     return ret
@@ -104,8 +106,6 @@ def escape_md(md: str):
 with open(DYNAMIC / ".." / "pages" / "manual" / "julia" / "index.md", "w") as f:
     with open(DYNAMIC / ".." / "pages" / "manual" / "julia" / "index.md_template", "r") as ft:
         f.write(ft.read())
-
-    f.write("## API Reference\n\n")
 
     for header in ["Types", "Macros", "Functions"]:
         f.write(f"### {header}\n\n")
@@ -120,7 +120,7 @@ with open(DYNAMIC / ".." / "pages" / "manual" / "julia" / "index.md", "w") as f:
                 f.write(f"```julia\n{docstr[0]}\n```\n\n")
             if docstr[1] != "":
                 f.write(f"{escape_md(docstr[1])}\n\n")
-            
+
             f.write("---\n\n")
 
 
@@ -147,7 +147,5 @@ for module in entries["modules"]:
                     f.write(f"```julia\n{docstr[0]}\n```\n\n")
                 if docstr[1] != "":
                     f.write(f"{escape_md(docstr[1])}\n\n")
-                
-                f.write("---\n\n")
 
-# print(iesopt.get_jl_docstr(entries["types"][0][1]))
+                f.write("---\n\n")

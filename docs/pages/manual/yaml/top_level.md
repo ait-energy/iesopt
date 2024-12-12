@@ -193,10 +193,10 @@ In this example, the `$TIME$` placeholder was replaced by the current timestamp,
 Controls the verbosity of various parts of a model run.
 
 :Parameters:
-:`core`: Verbosity of the (Julia) core, `IESopt.jl`. Supports: `debug`, `info` (default), `warning`, `error`.
-:`progress`: Whether to show progress bars (`on` or `off`), defaults to `on` unless `core` is set to `error` - in that case it defaults to `off`.
-:`python`: Verbosity of the Python wrapper, `iesopt`. Supports: `debug`, `info`, `warning`, `error`. Defaults to the verbosity set in `core`.
-:`solver`: Whether to silence solver prints/outputs (`on` or `off`), defaults to `on` unless `core` is set to `error` - in that case it defaults to `off`.
+:`core` (`str`, default = `info`): Verbosity of the (Julia) core, `IESopt.jl`. Supports: `debug`, `info` (default), `warning`, `error`.
+:`progress` (`str`): Whether to show progress bars (`on` or `off`), defaults to `on` unless `core` is set to `error` - in that case it defaults to `off`.
+:`python` (`str`): Verbosity of the Python wrapper, `iesopt`. Supports: `debug`, `info`, `warning`, `error`. Defaults to the verbosity set in `core`.
+:`solver` (`str`): Whether to silence solver prints/outputs (`on` or `off`), defaults to `on` unless `core` is set to `error` - in that case it defaults to `off`.
 
 #### `performance`
 
@@ -206,6 +206,16 @@ Controls various "performance" related settings of the model.
 :`string_names` (`bool`, default = `true`): Activates (or deactivates) "string names" for expressions, variables, and constraints. These make the model readable for humans, but cost (a lot of) performance. Refer to the [`JuMP.jl` documentation](https://jump.dev/JuMP.jl/stable/tutorials/getting_started/performance_tips/#Disable-string-names) and its `set_string_names_on_creation` function, or read upon how this upstream functionality originated from a discussion during the early stages of IESopt development ([discourse.julialang](https://discourse.julialang.org/t/optimal-model-creation-and-garbage-collection/72619), [this issue](https://github.com/jump-dev/JuMP.jl/issues/2817), and some time later [this PR](https://github.com/jump-dev/JuMP.jl/pull/2978)).
 :`logfile` (`bool`, default = `true`): Controls whether or not to write an IESopt logfile (which captures everything even if verbosity prevents displaying it). While this does save a bit of time it also prevents tracking down errors, so disable it wisely. This is most important to disable in iterative solves of small models, where logging accounts for a larger portion of overall time.
 :`force_addon_reload` (`bool`, default = `true`): If set to `false`, addons that have already been loaded once will not be reloaded. This can help with repeated solves of the same model. Be aware, that this might interfere with reloading changes to an addon's code that you have made, so unless you need it (and understand it) it is best left as `true`.
+
+```{code-block} yaml
+:caption: Example for the `performance` section.
+
+config:
+  general:
+    performance:
+      string_names: false
+      logfile: true
+```
 
 ### `optimization`
 

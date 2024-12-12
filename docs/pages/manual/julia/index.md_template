@@ -1,0 +1,48 @@
+# Julia
+
+If you are interested in more details on how to use [IESopt.jl](https://github.com/ait-energy/IESopt.jl) directly, please refer to it's source code.
+
+This page contains the docstrings of all things that are part of the public API of IESopt, except:
+
+- All core components. Their full documentation is available in the [components section](../yaml/core_components.md).
+- The docstrings related to sub-modules of IESopt, e.g., `IESopt.Assets`. These can be found in the sub-pages of the current section.
+
+## Notes
+
+- You can use `IESopt.IESU` as abbreviation for `IESopt.Utilities`, which allows using, e.g., `IESU.annuity(...)` after doing `using IESopt` - which may be better to understand when reading the code instead of `IESopt.Utilities.annuity(...)` (when only importing), or `Utilities.annuity(...)` (which does not show any relation to IESopt).
+
+:::{tip}
+The public API of the Python wrapper was, as far as possible, designed to be almost identical to the one of the Julia package, so things should look similar.
+
+For example, the following Python code:
+
+```python
+import iesopt
+
+model = iesopt.generate("config.iesopt.yaml")
+
+my_result = model.get_component("turbine").exp.out_water
+```
+
+can be translated to Julia like this:
+
+```julia
+import IESopt
+
+model = IESopt.generate!("config.iesopt.yaml")
+
+my_result = IESopt.get_component(model, "turbine").exp.out_water
+```
+
+:::
+
+:::{toctree}
+:hidden:
+
+assets.md
+utilities.md
+resultsduckdb.md
+resultsjld2.md
+:::
+
+## API Reference

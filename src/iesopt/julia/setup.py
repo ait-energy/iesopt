@@ -69,7 +69,7 @@ def setup_julia():
 
     # Set Julia version.
     juliapkg.require_julia(f"={Config.get('julia')}", target=target)
-    add_package(juliapkg.add, "pythoncall", "0.9.23", target)  # TODO: why is that suddenly needed?
+    # add_package(juliapkg.add, "pythoncall", "0.9.23", target)
 
     # Set versions of "core" packages.
     add_package(juliapkg.add, "jump", Config.get("jump"), target)

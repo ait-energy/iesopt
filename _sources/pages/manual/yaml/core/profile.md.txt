@@ -1,0 +1,350 @@
+# Profile
+
+```{note}
+This section of the documentation is auto-generated from the code of the Julia-based core model. Refer to [IESopt.jl](https://github.com/ait-energy/IESopt.jl) for any further details (which may require some familiarity with Julia).
+
+**If you spot incorrect math-mode rendering**, or similar issues, please [file an issue](https://github.com/ait-energy/iesopt/issues), since rendering documentation from Julia to Python is not the easiest task.
+```
+
+## Overview
+
+A `Profile` allows representing "model boundaries" - parts of initial problem that are not endogenously modelled - with a support for time series data. Examples are hydro reservoir inflows, electricity demand, importing gas, and so on. Besides modelling fixed profiles, they also allow different ways to modify the value endogenously.
+
+:::{admonition} **Basic Examples**
+:class: dropdown
+
+A `Profile` that depicts a fixed electricity demand:
+
+```yaml
+demand_XY:
+  type: Profile
+  carrier: electricity
+  node_from: grid
+  value: demand_XY@input_file
+```
+
+A `Profile` that handles cost of fuel:
+
+```yaml
+fuel_gas:
+  type: Profile
+  carrier: gas
+  node_to: country_gas_grid
+  mode: create
+  cost: 100.0
+```
+
+A `Profile` that handles CO2 emission costs:
+
+```yaml
+co2_cost:
+  type: Profile
+  carrier: co2
+  node_from: total_co2
+  mode: destroy
+  cost: 150.0
+```
+
+A `Profile` that handles selling electricity:
+
+```yaml
+sell_electricity:
+  type: Profile
+  carrier: electricity
+  node_from: internal_grid_node
+  mode: destroy
+  cost: -30.0
+```
+
+:::
+
+## Parameters
+
+### `carrier`
+
+`Carrier` of this `Profile`. Must match the `Carrier` of the `Node` that this connects to.
+
+- **mandatory:** yes
+- **default:** $-$
+- **values:** string
+- **unit:** -
+
+
+### `value`
+
+The concrete value of this `Profile` - either static or as time series. Only applicable if `mode: fixed`.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** numeric, `col@file`
+- **unit:** power
+
+
+### `node_from`
+
+Name of the `Node` that this `Profile` draws energy from. Exactly one of `node_from` and `node_to` must be set.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** string
+- **unit:** -
+
+
+### `node_to`
+
+Name of the `Node` that this `Profile` feeds energy to. Exactly one of `node_from` and `node_to` must be set.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** string
+- **unit:** -
+
+
+### `mode`
+
+The mode of operation of this `Profile`. `fixed` uses the supplied `value`, `ranged` allows ranging between `lb` and `ub`, while `create` (must specify `node_to`) and `destroy` (must specify `node_from`) handle arbitrary energy flows that are bounded from below by `0`. Use `fixed` if you want to fix the value of the `Profile` to a specific value, e.g., a given energy demand. Use `create` to "import" energy into the model, e.g., from a not explicitly modelled gas market, indcucing a certain `cost` for buying that energy. Use `destroy` to "export" energy from the model, e.g., to handle CO2 going into the atmosphere (which may be taxed, etc., by the `cost` of this `Profile`). Use `ranged` if you need more fine grained control over the value of the `Profile`, than what `create` and `destroy` allow (e.g., a grid limited energy supplier).
+
+- **mandatory:** no
+- **default:** $fixed$
+- **values:** -
+- **unit:** -
+
+
+### `lb`
+
+The lower bound of the range of this `Profile` (must be used together with `mode: ranged`).
+
+- **mandatory:** no
+- **default:** $-\infty$
+- **values:** numeric
+- **unit:** power
+
+
+### `ub`
+
+The upper bound of the range of this `Profile` (must be used together with `mode: ranged`).
+
+- **mandatory:** no
+- **default:** $+\infty$
+- **values:** numeric
+- **unit:** power
+
+
+### `cost`
+
+Cost per unit of energy that this `Profile` injects or withdraws from a `Node`. Refer to the basic examples to see how this can be combined with `mode` for different use cases.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** monetary per energy
+
+
+### `build_priority`
+
+Priority for the build order of components. Components with higher build_priority are built before. This can be useful for addons, that connect multiple components and rely on specific components being initialized before others.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** -
+
+
+## Detailed reference
+
+
+### Expressions
+
+#### `value`
+
+:::{admonition} How to access this expression?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_profile").exp.value
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_profile").exp.value
+```
+
+:::
+
+Full implementation and all details: [`profile/exp_value @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/profile/exp_value.jl)
+
+> Construct the `JuMP.AffExpr` that keeps the total value of this `Profile` for each `Snapshot`.
+> 
+> &nbsp;
+> 
+> This is skipped if the `value` of this `Profile` is handled by an `Expression`. Otherwise it is initialized based on `profile.value`.
+### Variables
+
+#### `aux_value`
+
+:::{admonition} How to access this variable?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_profile").var.aux_value
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_profile").var.aux_value
+```
+
+:::
+
+Full implementation and all details: [`profile/var_aux_value @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/profile/var_aux_value.jl)
+
+> Add the variable that is used in this `Profile`s value to the `model`.
+> 
+> &nbsp;
+> 
+> The variable `var_value[t]` is constructed and is linked to the correct `Node`s. There are different ways, IESopt interprets this, based on the setting of `profile.mode`:
+> 
+> &nbsp;
+> 
+> 1. **fixed**: The value is already handled by the constant term of `profile.exp.value` and NO variable is constructed.
+> 2. **create**, **destroy**, or **ranged**: This models the creation or destruction of energy - used mainly to represent model boundaries, and energy that comes into the model or leaves the model's scope. It is however important that `create` should mostly be used feeding into a `Node` (`profile.node_from = nothing`) and `destroy` withdrawing from a `Node` (`profile.node_to = nothing`). If `lb` and `ub` are defined, `ranged` can be used that allows a more detailed control over the `Profile`, specifying upper and lower bounds for every `Snapshot`. See `_profile_con_value_bounds!(profile::Profile)` for details on the specific bounds for each case.
+> 
+> &nbsp;
+> 
+> This variable is added to the `profile.exp.value`. Additionally, the energy (that `profile.exp.value` represents) gets "injected" at the `Node`s that the `profile` is connected to, resulting in
+> 
+> &nbsp;
+> 
+$$
+\begin{aligned}
+& \text{profile.node}_{from}\text{.injection}_t = \text{profile.node}_{from}\text{.injection}_t - \text{value}_t, \qquad \forall t \in T \\
+& \text{profile.node}_{to}\text{.injection}_t = \text{profile.node}_{to}\text{.injection}_t + \text{value}_t, \qquad \forall t \in T
+\end{aligned}
+$$
+### Constraints
+
+#### `value_bounds`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_profile").con.value_bounds
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_profile").con.value_bounds
+```
+
+:::
+
+Full implementation and all details: [`profile/con_value_bounds @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/profile/con_value_bounds.jl)
+
+> Add the constraint defining the bounds of this `profile` to the `model`.
+> 
+> &nbsp;
+> 
+> This heavily depends on the `mode` setting, as it does nothing if the `mode` is set to `fixed`, or the `value` is actually controlled by an `Expression`. The variable can be accessed via `profile.var.aux_value[t]`, but using the normal result extraction is recommended, since that properly handles the `profile.exp.value` instead.
+> 
+> &nbsp;
+> 
+> Otherwise:
+> 
+> &nbsp;
+> 
+> `if profile.mode === :create or profile.mode === :destroy`
+> 
+$$
+\begin{aligned}
+& \text{aux_value}_t \geq 0, \qquad \forall t \in T
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+> 
+> &nbsp;
+> 
+> `if profile.mode === :ranged`
+> 
+$$
+\begin{aligned}
+& \text{value}_t \geq \text{lb}_t, \qquad \forall t \in T \\
+& \text{value}_t \leq \text{ub}_t, \qquad \forall t \in T
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+> 
+> &nbsp;
+> 
+> Here, `lb` and `ub` can be left empty, which drops the respective constraint.
+### Objectives
+
+#### `cost`
+
+:::{admonition} How to access this objective?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_profile").obj.cost
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_profile").obj.cost
+```
+
+:::
+
+Full implementation and all details: [`profile/obj_cost @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/profile/obj_cost.jl)
+
+> Add the (potential) cost of this `Profile` to the global objective function.
+> 
+> &nbsp;
+> 
+> The `profile.cost` setting specifies a potential cost for the creation ("resource costs", i.e. importing gas into the model) or destruction ("penalties", i.e. costs linked to the emission of CO2). It can have a unique value for every `Snapshot`, i.e. allowing to model a time-varying gas price throughout the year.
+> 
+> &nbsp;
+> 
+> The contribution to the global objective function is as follows:
+> 
+> &nbsp;
+> 
+$$
+\sum_{t\in T} \text{value}_t \cdot \text{profile.cost}_t \cdot \omega_t
+$$
+> 
+> &nbsp;
+> 
+> Here $\omega_t$ is the `weight` of `Snapshot` `t`, and $\text{value}_t$ actually refers to the value of `profile.exp.value[t]` (and not only on the maybe non-existing variable).

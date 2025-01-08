@@ -168,6 +168,9 @@ cython_debug/
 # Prevent tracking any JuliaPkg files
 **/juliapkg.json
 
+# Prevent tracking root folder Python files
+*.py
+
 # Temp. directory
 tmp_test/
 **/tmp_test/

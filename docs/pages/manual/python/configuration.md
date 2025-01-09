@@ -38,6 +38,21 @@ IESOPT_SOLVER_HIGHS = 1.12.0
 
 Other examples may be setting `IESOPT_SOLVER_CPLEX` or `IESOPT_SOLVER_GUROBI`.
 
+### Forcing a solver executable version
+
+For example when installing Gurobi, it might be that the Julia wrapper pulls a version newer than the one you are able
+to use according to your license. This can be fixed by explicitly adding the corresponding `_jll` ("binary wrapper")
+as dependency:
+
+```{code-block} text
+:caption: Fixing a solver executable version in `.env`.
+
+IESOPT_PKG_Gurobi_jll = 11.0.3
+IESOPT_SOLVER_GUROBI = 1.6.0
+```
+
+This will use the latest `Gurobi_jll` version related to Gurobi 11.
+
 ## Important versions
 
 The following other entries are potentially used in some projects:

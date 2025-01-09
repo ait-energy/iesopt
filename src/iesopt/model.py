@@ -134,22 +134,21 @@ class Model:
             ..  code-block:: python
                 :caption: Writing a model to a problem file.
 
-            import iesopt
+                import iesopt
 
-            cfg = iesopt.make_example("01_basic_single_node", dst_dir="opt")
+                cfg = iesopt.make_example("01_basic_single_node", dst_dir="opt")
 
-            # Model will be automatically generated when calling `write_to_file`:
-            model = iesopt.Model(cfg)
-            model.write_to_file()
+                # Model will be automatically generated when calling `write_to_file`:
+                model = iesopt.Model(cfg)
+                model.write_to_file()
 
-            # It also works with already optimized models:
-            model = iesopt.run(cfg)
-            model.write_to_file("opt/out/my_problem.LP")
+                # It also works with already optimized models:
+                model = iesopt.run(cfg)
+                model.write_to_file("opt/out/my_problem.LP")
 
-            # And supports different formats:
-            target = model.write_to_file("opt/out/my_problem.foo", format="mof")
-            print(target)
-            ```
+                # And supports different formats:
+                target = model.write_to_file("opt/out/my_problem.foo", format="mof")
+                print(target)
         """
         if self._status == ModelStatus.EMPTY:
             self.generate()
@@ -179,6 +178,9 @@ class Model:
                 _term_status = self._JuMP.termination_status(self.core)
                 if str(_term_status) == "INFEASIBLE":
                     self._status = ModelStatus.INFEASIBLE
+                    logger.error(
+                        "The model seems to be infeasible; refer to `model.compute_iis()` and its documentation if you want to know more about the source of the infeasibility."
+                    )
                 elif str(_term_status) == "INFEASIBLE_OR_UNBOUNDED":
                     self._status = ModelStatus.INFEASIBLE_OR_UNBOUNDED
                 else:

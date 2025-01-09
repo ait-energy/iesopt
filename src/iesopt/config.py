@@ -27,7 +27,7 @@ class Config:
             return
 
         cls._config = {
-            k[7:].lower(): v
+            (k[7:] if k.startswith("IESOPT_PKG_") else k[7:].lower()): v
             for (k, v) in {
                 **cls.DEFAULTS,
                 **dotenv_values(),

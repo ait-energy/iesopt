@@ -7,6 +7,7 @@ def jl_safe_seval(code: str):
         return get_iesopt_module_attr("julia").seval(code)
     except Exception as e:
         logger.error("Exception while trying to execute Julia code: `%s`" % code)
+        logger.error("Exception: `%s`" % str(e))
         logger.error("Exception details: `%s`" % getattr(e, "exception", "missing"))
 
     return None

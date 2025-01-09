@@ -194,6 +194,35 @@ class Model:
             except Exception as e:
                 logger.error("Failed to extract debugging info")
 
+    def compute_iis(self, filename=None) -> None:
+        """Compute and print the Irreducible Infeasible Set (IIS) of the model, or optionally write it to a file.
+
+        Note that this requires a solver that supports IIS computation.
+
+        Arguments:
+            filename (Optional[str | Path]): The filename to write the IIS to. If `None`, the IIS is only printed to the
+                                             console.
+
+        Examples:
+            ..  code-block:: python
+                :caption: Computing the IIS of a model.
+
+                import iesopt
+
+                model = iesopt.run("infeasible_model.iesopt.yaml")
+                model.compute_iis()
+
+                # or (arbitrary filename/extension):
+                model.compute_iis(filename="my_problem.txt")
+        """
+        try:
+            if filename is None:
+                self._IESopt.compute_IIS(self.core)
+            else:
+                self._IESopt.compute_IIS(self.core, filename=str(filename))
+        except Exception as e:
+            logger.error("Error while computing IIS: `%s`" % str(e.args[0]))
+
     @property
     def results(self) -> Results:
         """Get the results of the model."""

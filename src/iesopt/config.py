@@ -13,9 +13,9 @@ def _strtobool(val: str):
 class Config:
     DEFAULTS = {
         "IESOPT_JULIA": "1.11.2",
-        "IESOPT_CORE": "2.2.0",
-        "IESOPT_JUMP": "1.23.5",
-        "IESOPT_SOLVER_HIGHS": "1.12.2",
+        "IESOPT_CORE": "2.3.0",
+        "IESOPT_JUMP": "1.23.6",
+        "IESOPT_SOLVER_HIGHS": "1.13.0",
         "IESOPT_MULTITHREADED": "no",  # yes, no
         "IESOPT_OPTIMIZATION": "latency",  # rapid, latency, normal, performance
     }
@@ -27,7 +27,7 @@ class Config:
             return
 
         cls._config = {
-            k[7:].lower(): v
+            (k[7:] if k.startswith("IESOPT_PKG_") else k[7:].lower()): v
             for (k, v) in {
                 **cls.DEFAULTS,
                 **dotenv_values(),

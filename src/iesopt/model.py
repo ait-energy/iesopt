@@ -3,7 +3,7 @@ from pathlib import Path
 from warnings import warn
 
 from .util import logger, get_iesopt_module_attr
-from .julia.util import jl_symbol, recursive_convert_py2jl
+from .julia.util import jl_symbol, recursive_convert_py2jl, jl_safe_seval
 from .results import Results
 
 
@@ -111,6 +111,58 @@ class Model:
             except Exception as e:
                 logger.error("Failed to extract debugging info")
 
+    def write_to_file(self, filename=None, *, format: str = "automatic") -> str:
+        """Write the model to a file.
+
+        Consult the Julia version of this function, [IESopt.write_to_file](https://ait-energy.github.io/iesopt/pages/manual/julia/index.html#write-to-file)
+        for more information. This will automatically invoke `generate` if the model has not been generated yet.
+
+        Arguments:
+            filename (Optional[str]): The filename to write to. If `None`, the path and name are automatically
+                                      determined by IESopt.
+
+        Keyword Arguments:
+            format (str): The format to write the file in. If `automatic`, the format is determined based on the
+                          extension of the filename. Otherwise, it used as input to [`JuMP.write_to_file`](https://jump.dev/JuMP.jl/stable/api/JuMP/#write_to_file),
+                          by converting to uppercase and prefixing it with `MOI.FileFormats.FORMAT_`. Writing to, e.g.,
+                          an LP file can be done by setting `format="lp"` or `format="LP"`.
+
+        Returns:
+            str: The filename (including path) of the written file.
+
+        Examples:
+            ..  code-block:: python
+                :caption: Writing a model to a problem file.
+
+                import iesopt
+
+                cfg = iesopt.make_example("01_basic_single_node", dst_dir="opt")
+
+                # Model will be automatically generated when calling `write_to_file`:
+                model = iesopt.Model(cfg)
+                model.write_to_file()
+
+                # It also works with already optimized models:
+                model = iesopt.run(cfg)
+                model.write_to_file("opt/out/my_problem.LP")
+
+                # And supports different formats:
+                target = model.write_to_file("opt/out/my_problem.foo", format="mof")
+                print(target)
+        """
+        if self._status == ModelStatus.EMPTY:
+            self.generate()
+
+        try:
+            if filename is None:
+                return self._IESopt.write_to_file(self.core)
+            else:
+                format = jl_safe_seval(f"JuMP.MOI.FileFormats.FORMAT_{format.upper()}")
+                return self._IESopt.write_to_file(self.core, str(filename), format=format)
+        except Exception as e:
+            logger.error(f"Error while writing model to file: {e}")
+            return ""
+
     def optimize(self) -> None:
         """Optimize the model."""
         try:
@@ -126,6 +178,9 @@ class Model:
                 _term_status = self._JuMP.termination_status(self.core)
                 if str(_term_status) == "INFEASIBLE":
                     self._status = ModelStatus.INFEASIBLE
+                    logger.error(
+                        "The model seems to be infeasible; refer to `model.compute_iis()` and its documentation if you want to know more about the source of the infeasibility."
+                    )
                 elif str(_term_status) == "INFEASIBLE_OR_UNBOUNDED":
                     self._status = ModelStatus.INFEASIBLE_OR_UNBOUNDED
                 else:
@@ -138,6 +193,35 @@ class Model:
                 logger.error(f"Current debugging info: {self.data.debug}")
             except Exception as e:
                 logger.error("Failed to extract debugging info")
+
+    def compute_iis(self, filename=None) -> None:
+        """Compute and print the Irreducible Infeasible Set (IIS) of the model, or optionally write it to a file.
+
+        Note that this requires a solver that supports IIS computation.
+
+        Arguments:
+            filename (Optional[str | Path]): The filename to write the IIS to. If `None`, the IIS is only printed to the
+                                             console.
+
+        Examples:
+            ..  code-block:: python
+                :caption: Computing the IIS of a model.
+
+                import iesopt
+
+                model = iesopt.run("infeasible_model.iesopt.yaml")
+                model.compute_iis()
+
+                # or (arbitrary filename/extension):
+                model.compute_iis(filename="my_problem.txt")
+        """
+        try:
+            if filename is None:
+                self._IESopt.compute_IIS(self.core)
+            else:
+                self._IESopt.compute_IIS(self.core, filename=str(filename))
+        except Exception as e:
+            logger.error("Error while computing IIS: `%s`" % str(e.args[0]))
 
     @property
     def results(self) -> Results:

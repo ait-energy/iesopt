@@ -4,7 +4,7 @@ from pathlib import Path
 # import ssl
 
 from ..util import logger
-from .util import jl_import, jl_safe_seval
+from .util import jl_import
 from ..config import Config
 
 
@@ -122,13 +122,21 @@ def setup_julia():
     logger.info("    Executable: %s" % juliapkg.executable())
     logger.info("    Project: %s" % juliapkg.project())
 
-    custom_packages = list(Config.find("pkg_"))
+    custom_packages = list(Config.find("PKG_"))
     if len(custom_packages) > 0:
         logger.info("Installing custom Julia packages")
-        jl_import("Pkg")
+
+        try:
+            juliacall.Main.seval("import Pkg")
+        except Exception as e:
+            logger.error(f"Failed to import Julia `Pkg`: {e}")
+
         for entry in custom_packages:
             name = entry[4:]
-            jl_safe_seval(f"Pkg.add(Pkg.{name})")
+            try:
+                juliacall.Pkg.add(name=name, version=Config.get(entry))
+            except Exception as e:
+                logger.error(f"Failed to install custom package '{name}': {e}")
 
     # # Restoring potential SSL certificate.
     # if _ssl is not None:

@@ -7,6 +7,7 @@ def jl_safe_seval(code: str):
         return get_iesopt_module_attr("julia").seval(code)
     except Exception as e:
         logger.error("Exception while trying to execute Julia code: `%s`" % code)
+        logger.error("Exception: `%s`" % str(e))
         logger.error("Exception details: `%s`" % getattr(e, "exception", "missing"))
 
     return None
@@ -57,7 +58,10 @@ def jl_isa(obj, julia_type: str):
 
 def jl_docs(obj: str, module: str = "IESopt"):
     """Get the documentation string of a Julia object inside the IESopt module."""
-    return "".join(el for el in jl_safe_seval(f"@doc {module}.{obj}").text)
+    julia_docstr = jl_safe_seval(f"@doc {module}.{obj}")
+    if julia_docstr is None:
+        return "Missing documentation string."
+    return "".join(el for el in julia_docstr.text)
 
 
 def recursive_convert_py2jl(item):

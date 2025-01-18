@@ -358,6 +358,42 @@ config:
 
 In the above example, the file `inputs_2023_base.csv` is linked to the name `data`. This means that the file can be referenced in the configuration file using `data`, accessing a column - e.g., "pv_generation" - using `pv_generation@data`.
 
+:::{note}
+Assuming that, in the above example, we call `data` the file's "descriptor" and `inputs_2023_base.csv` the file's "name", then make sure that **the descriptor does not start with an underscore**, and further only uses alphanumeric characters and underscores (so no `!`, `~`, or other "unexpected" special characters).
+:::
+
+#### `_csv_config`
+
+:::{caution}
+This feature is experimental and can change, break, or be discontinued at any time.
+:::
+
+You can configure the behavior of the CSV reader by adding a `_csv_config` section to the `files` section.
+
+:Parameters:
+:`comment` (`string`, default = `null`): If empty/not-given, no "comments" are recognized. If set to any string, all lines starting with this string are considered comments and ignored. Common options are `#` or `;`. Make sure to properly escape the string if needed, e.g., `comment: "#"`.
+:`delim` (`char`, default = `,`): The delimiter used in the CSV file. Common options are `,` (EN locale), `;` (DE locale), or `\t` (tab-separated).
+:`decimal` (`char`, default = `.`): The decimal separator used in the CSV file. Common options are `.` (EN locale) or `,` (DE locale). Make sure this is set correctly in conjunction with the `delim` setting.
+
+```{code-block} yaml
+:caption: Ignore comment rows in input CSVs.
+
+config:
+  files:
+    _csv_config:
+      comment: "#"
+```
+
+```{code-block} yaml
+:caption: Switch to a format often used on German systems.
+
+config:
+  files:
+    _csv_config:
+      delim: ";"
+      decimal: ","
+```
+
 ### `results`
 
 Settings for the results output. Details to be added.

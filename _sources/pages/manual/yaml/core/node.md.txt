@@ -1,0 +1,425 @@
+# Node
+
+```{note}
+This section of the documentation is auto-generated from the code of the Julia-based core model. Refer to [IESopt.jl](https://github.com/ait-energy/IESopt.jl) for any further details (which may require some familiarity with Julia).
+
+**If you spot incorrect math-mode rendering**, or similar issues, please [file an issue](https://github.com/ait-energy/iesopt/issues), since rendering documentation from Julia to Python is not the easiest task.
+```
+
+## Overview
+
+A `Node` represents a basic intersection/hub for energy flows. This can for example be some sort of bus (for electrical systems). It enforces a nodal balance equation (= "energy that flows into it must flow out") for every [`Snapshot`](@ref). Enabling the internal state of the `Node` allows it to act as energy storage, modifying the nodal balance equation. This allows using `Node`s for various storage tasks (like batteries, hydro reservoirs, heat storages, ...). 
+
+:::{admonition} **Basic Examples**
+:class: dropdown
+
+A `Node` that represents an electrical bus:
+
+```yaml
+bus:
+  type: Node
+  carrier: electricity
+```
+
+A `Node` that represents a simplified hydrogen storage:
+
+```yaml
+store:
+  type: Node
+  carrier: hydrogen
+  has_state: true
+  state_lb: 0
+  state_ub: 50
+```
+
+:::
+
+## Parameters
+
+### `carrier`
+
+`Carrier` of this `Node`. All connecting components need to respect that.
+
+- **mandatory:** yes
+- **default:** $-$
+- **values:** string
+- **unit:** -
+
+
+### `has_state`
+
+If `true`, the `Node` is considered to have an internal state ("stateful `Node`"). This allows it to act as energy storage. Connect `Connection`s or `Unit`s to it, acting as charger/discharger.
+
+- **mandatory:** no
+- **default:** $false$
+- **values:** `true`, `false`
+- **unit:** -
+
+
+### `state_lb`
+
+Lower bound of the internal state, requires `has_state = true`.
+
+- **mandatory:** no
+- **default:** $-\infty$
+- **values:** numeric, `col@file`, `decision:value`
+- **unit:** energy
+
+
+### `state_ub`
+
+Upper bound of the internal state, requires `has_state = true`.
+
+- **mandatory:** no
+- **default:** $+\infty$
+- **values:** numeric, `col@file`, `decision:value`
+- **unit:** energy
+
+
+### `state_cyclic`
+
+Controls how the state considers the boundary between last and first `Snapshot`. `disabled` disables cyclic behaviour of the state (see also `state_initial`), `eq` leads to the state at the end of the year being the initial state at the beginning of the year, while `geq` does the same while allowing the end-of-year state to be higher (= "allowing to destroy energy at the end of the year").
+
+- **mandatory:** no
+- **default:** $eq$
+- **values:** `eq`, `geq`, or `disabled`
+- **unit:** -
+
+
+### `state_initial`
+
+Sets the initial state. Must be used in combination with `state_cyclic = disabled`.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** numeric
+- **unit:** energy
+
+
+### `state_final`
+
+Sets the final state. Must be used in combination with `state_cyclic = disabled`.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** numeric
+- **unit:** energy
+
+
+### `state_percentage_loss`
+
+Per `Snapshot` percentage loss of state (losing 1% should be set as `0.01`).
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** ``\in [0, 1]``
+- **unit:** -
+
+
+### `nodal_balance`
+
+Can only be used for `has_state = false`. `enforce` forces total injections to always be zero (similar to Kirchhoff's current law), `create` allows "supply < demand", `destroy` allows "supply > demand", at this `Node`.
+
+- **mandatory:** no
+- **default:** $enforce$
+- **values:** `enforce`, `destroy`, or `create`
+- **unit:** -
+
+
+### `sum_window_size`
+
+TODO.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** integer
+- **unit:** -
+
+
+### `sum_window_step`
+
+TODO.
+
+- **mandatory:** no
+- **default:** $1$
+- **values:** integer
+- **unit:** -
+
+
+### `build_priority`
+
+Priority for the build order of components. Components with higher build_priority are built before. This can be useful for addons, that connect multiple components and rely on specific components being initialized before others.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** -
+
+
+## Detailed reference
+
+
+### Expressions
+
+#### `injection`
+
+:::{admonition} How to access this expression?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_node").exp.injection
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_node").exp.injection
+```
+
+:::
+
+Full implementation and all details: [`node/exp_injection @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/exp_injection.jl)
+
+> Add an empty (`JuMP.AffExpr(0)`) expression to the `node` that keeps track of feed-in and withdrawal of energy.
+> 
+> &nbsp;
+> 
+> This constructs the expression $\text{injection}_t, \forall t \in T$ that is utilized in `node.con.nodalbalance`. Core components (`Connection`s, `Profile`s, and `Unit`s) that feed energy into this node add to it, all others subtract from it. A stateless node forces this nodal balance to always equal `0` which essentially describes "generation = demand".
+### Variables
+
+#### `pf_theta`
+
+:::{admonition} How to access this variable?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_node").var.pf_theta
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_node").var.pf_theta
+```
+
+:::
+
+Full implementation and all details: [`node/var_pf_theta @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/var_pf_theta.jl)
+
+> Construct the auxiliary phase angle variable for the `linear_angle` power flow algorithm.
+> 
+> &nbsp;
+> 
+> This needs the global `Powerflow` addon, configured with `mode: linear_angle`, and constructs a variable `var_pf_theta` for each `Snapshot`. If the `pf_slack` property of this `Node` is set to `true`, it does not add a variable but sets `var_pf_theta[t] = 0` for each `Snapshot`. ```
+#### `state`
+
+:::{admonition} How to access this variable?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_node").var.state
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_node").var.state
+```
+
+:::
+
+Full implementation and all details: [`node/var_state @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/var_state.jl)
+
+> Add the variable representing the state of this `node` to the `model`, if `node.has_state == true`. This can be accessed via `node.var.state[t]`.
+> 
+> &nbsp;
+> 
+> Additionally, if the state's initial value is specified via `state_initial` the following gets added:
+> 
+> &nbsp;
+> 
+$$
+\text{state}_1 = \text{state}_{initial}
+$$
+### Constraints
+
+#### `last_state`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_node").con.last_state
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_node").con.last_state
+```
+
+:::
+
+Full implementation and all details: [`node/con_last_state @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/con_last_state.jl)
+
+> Add the constraint defining the bounds of the `node`'s state during the last Snapshot to the `model`, if `node.has_state == true`.
+> 
+> &nbsp;
+> 
+> This is necessary since it could otherwise happen, that the state following the last Snapshot is actually not feasible (e.g. we could charge a storage by more than it's state allows for). The equations are based on the construction of the overall state variable.
+> 
+> &nbsp;
+> 
+$$
+\begin{aligned}
+& \text{state}_{end} \cdot \text{factor}^\omega_t + \text{injection}_{end} \cdot \omega_t \geq \text{state}_{lb} \\ 
+& \text{state}_{end} \cdot \text{factor}^\omega_t + \text{injection}_{end} \cdot \omega_t \leq \text{state}_{ub} 
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+> Here $\omega_t$ is the `weight` of `Snapshot` `t`, and $\text{factor}$ is either `1.0` (if there are now percentage losses configured), or `(1.0 - node.state_percentage_loss)` otherwise.
+> 
+> &nbsp;
+> 
+:::{admonition} **Constraint safety**
+:class: note
+
+The lower and upper bound constraint are subject to penalized slacks.
+:::
+#### `nodalbalance`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_node").con.nodalbalance
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_node").con.nodalbalance
+```
+
+:::
+
+Full implementation and all details: [`node/con_nodalbalance @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/con_nodalbalance.jl)
+
+> Add the constraint describing the nodal balance to the `model`.
+> 
+> &nbsp;
+> 
+> Depending on whether the `node` is stateful or not, this constructs different representations:
+> 
+> &nbsp;
+> 
+> `if node.has_state == true`
+> 
+$$
+\begin{aligned}
+& \text{state}_t = \text{state}_{t-1} \cdot \text{factor}^\omega_{t-1} + \text{injection}_{t-1} \cdot \omega_{t-1}, \qquad \forall t \in T \setminus \{1\} \\
+\\
+& \text{state}_1 = \text{state}_{end} \cdot \text{factor}^\omega_{end} + \text{injection}_{end} \cdot \omega_{end}
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+> 
+> &nbsp;
+> 
+> Here $\omega_t$ is the `weight` of `Snapshot` `t`, and $\text{factor}$ is either `1.0` (if there are now percentage losses configured), or `(1.0 - node.state_percentage_loss)` otherwise. $\text{injection}_{t}$ describes the overall injection (all feed-ins minus all withdrawals). $end$ indicates the last snapshot in $T$. Depending on the setting of `state_cyclic` the second constraint is written as $=$ (`"eq"`) or $\leq$ (`"leq"`). The latter allows the destruction of excess energy at the end of the total time period to help with feasibility.
+> 
+> &nbsp;
+> 
+> `if node.has_state == false`
+> 
+$$
+\begin{aligned}
+& \text{injection}_{t} = 0, \qquad \forall t \in T \\
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+> 
+> &nbsp;
+> 
+> This equation can further be configured using the `nodal_balance` parameter, which accepts `enforce` (resulting in $=$), `create` (resulting in $\leq$; allowing the creation of energy - or "negative injections"), and `destroy` ( resulting in $\geq$; allowing the destruction of energy - or "positive injections"). This can be used to model some form of energy that can either be sold (using a `destroy` `Profile` connected to this `Node`), or "wasted into the air" using the `destroy` setting of this `Node`.
+#### `state_bounds`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_node").con.state_bounds
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_node").con.state_bounds
+```
+
+:::
+
+Full implementation and all details: [`node/con_state_bounds @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/con_state_bounds.jl)
+
+> Add the constraint defining the bounds of the `node`'s state to the `model`, if `node.has_state == true`.
+> 
+> &nbsp;
+> 
+$$
+\begin{aligned}
+& \text{state}_t \geq \text{state}_{lb}, \qquad \forall t \in T \\
+& \text{state}_t \leq \text{state}_{ub}, \qquad \forall t \in T
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+:::{admonition} **Constraint safety**
+:class: note
+
+The lower and upper bound constraint are subject to penalized slacks.
+:::
+### Objectives
+

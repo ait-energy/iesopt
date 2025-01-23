@@ -1,0 +1,377 @@
+# Connection
+
+```{note}
+This section of the documentation is auto-generated from the code of the Julia-based core model. Refer to [IESopt.jl](https://github.com/ait-energy/IESopt.jl) for any further details (which may require some familiarity with Julia).
+
+**If you spot incorrect math-mode rendering**, or similar issues, please [file an issue](https://github.com/ait-energy/iesopt/issues), since rendering documentation from Julia to Python is not the easiest task.
+```
+
+## Overview
+
+A `Connection` is used to model arbitrary flows of energy between `Node`s. It allows for limits, costs, delays, ...
+
+
+## Parameters
+
+### `node_from`
+
+This `Connection` models a flow from `node_from` to `node_to` (both are `Node`s).
+
+- **mandatory:** yes
+- **default:** $-$
+- **values:** string
+- **unit:** -
+
+
+### `node_to`
+
+This `Connection` models a flow from `node_from` to `node_to` (both are `Node`s).
+
+- **mandatory:** yes
+- **default:** $-$
+- **values:** string
+- **unit:** -
+
+
+### `carrier`
+
+`Carrier` of this `Connection`. If not given, automatically picks the `carrier` of the `Node`s it connects. This parameter is not necessary, and only exists to allow for a more explicit definition.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** string
+- **unit:** -
+
+
+### `capacity`
+
+The symmetric bound on this `Connection`'s flow. Results in `lb = -capacity` and `ub = capacity`. Must not be specified if `lb`, `ub`, or both are explicitly stated.
+
+- **mandatory:** no
+- **default:** $+\infty$
+- **values:** numeric, `col@file`, `decision:value`
+- **unit:** power
+
+
+### `lb`
+
+Lower bound of this `Connection`'s flow.
+
+- **mandatory:** no
+- **default:** $-\infty$
+- **values:** numeric, `col@file`, `decision:value`
+- **unit:** power
+
+
+### `ub`
+
+Upper bound of this `Connection`'s flow.
+
+- **mandatory:** no
+- **default:** $+\infty$
+- **values:** numeric, `col@file`, `decision:value`
+- **unit:** power
+
+
+### `cost`
+
+Cost of every unit of energy flow over this connection that is added to the model's objective function. Keep in mind that negative flows will induce negative costs, which can be used to model revenues. Further, a bidirectional `Connection` (if `lb < 0`, which is the default, or if `capacity` is used) with a positive `cost` will lead to negative costs for the reverse flow. If you do not want this, split the `Connection` into two separate ones, each being unidirectional (with `lb: 0`). Remember, that these can share the same "capacity" (which is then set as`ub`), even when using `decision:value` or `col@file` as value.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** numeric
+- **unit:** monetary (per energy)
+
+
+### `loss`
+
+Fractional loss when transferring energy. Per default, this loss occurs "at the destination", which means that for a loss of 5%, set as `loss: 0.05`, and considering a `Snapshot` where the `Connection` has a flow value of `100`, it will "extract" `100` from `node_from` and "inject" `95` into `node_to`. Since the flow variable is given as power, this would, e.g., translate to consuming 200 units of energy at `node_from` and injecting 190 units at `node_to`, if the `Snapshot` duration is 2 hours. Refer to `loss_mode` for more information on how to modify this behaviour.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** ``\in [0, 1]``
+- **unit:** -
+
+
+### `loss_mode`
+
+Configures where the fractional loss (set by `loss`) occurs. `to` means that the loss occurs at the destination, `from` means that the loss occurs at the source, and `split` means that the loss is split between source and destination. Not that for most cases `to` is the correct choice, as it is the most common behaviour - the other options, e.g., lead to the possibility of drawing at a higher power from the `node_from` than the `capacity` of the Connection "allows".
+
+- **mandatory:** no
+- **default:** $to$
+- **values:** to, from, split
+- **unit:** -
+
+
+### `delay`
+
+Delay between withdrawing energy from `node_from` and injecting it into `node_to`. This can be used to model, e.g., river flows, where the water takes some time to travel from one point to another (e.g., in a cascade of reservoirs). Note that this delay is always "cyclic" meaning if it extends over the modeling period, it will be "wrapped around", starting again at the beginning of the period. Further, the flow is always withdrawn at Snapshot `t` and injected at `t + delay`.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** ``\in [0, \infty]``
+- **unit:** hours
+
+
+### `build_priority`
+
+Priority for the build order of components. Components with higher build_priority are built before. This can be useful for addons, that connect multiple components and rely on specific components being initialized before others.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** -
+
+
+## Detailed reference
+
+
+### Expressions
+
+#### `in`
+
+:::{admonition} How to access this expression?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_connection").exp.in
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_connection").exp.in
+```
+
+:::
+
+Full implementation and all details: [`connection/exp_in @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/connection/exp_in.jl)
+
+> The construction of a Connection's in/out expressions is directly done in `_connection_var_flow!(...)`, the function that constructs the variable `flow`.
+#### `out`
+
+:::{admonition} How to access this expression?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_connection").exp.out
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_connection").exp.out
+```
+
+:::
+
+Full implementation and all details: [`connection/exp_out @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/connection/exp_out.jl)
+
+> The construction of a Connection's in/out expressions is directly done in `_connection_var_flow!(...)`, the function that constructs the variable `flow`.
+#### `pf_flow`
+
+:::{admonition} How to access this expression?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_connection").exp.pf_flow
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_connection").exp.pf_flow
+```
+
+:::
+
+Full implementation and all details: [`connection/exp_pf_flow @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/connection/exp_pf_flow.jl)
+
+> Construct the `JuMP.AffExpr` holding the PTDF based flow of this `Connection`.
+> 
+> &nbsp;
+> 
+> This needs the global addon `Powerflow` with proper settings for `mode`, as well as properly configured power flow parameters for this `Connection` (`pf_V`, `pf_I`, `pf_X`, ...).
+### Variables
+
+#### `flow`
+
+:::{admonition} How to access this variable?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_connection").var.flow
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_connection").var.flow
+```
+
+:::
+
+Full implementation and all details: [`connection/var_flow @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/connection/var_flow.jl)
+
+> Add the variable representing the flow of this `connection` to the `model`. This can be accessed via `connection.var.flow[t]`.
+> 
+> &nbsp;
+> 
+> Additionally, the flow gets "injected" at the `Node`s that the `connection` is connecting, resulting in
+> 
+> &nbsp;
+> 
+$$
+\begin{aligned}
+& \text{connection.node}_{from}\text{.injection}_t = \text{connection.node}_{from}\text{.injection}_t - \text{flow}_t, \qquad \forall t \in T \\
+& \text{connection.node}_{to}\text{.injection}_t = \text{connection.node}_{to}\text{.injection}_t + \text{flow}_t, \qquad \forall t \in T
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+> For "PF controlled" `Connection`s (ones that define the necessary power flow parameters), the flow variable may not be constructed (depending on specific power flow being used). The automatic result extraction will detect this and return the correct values either way. Accessing it manually can be done using `connection.exp.pf_flow[t]`.
+### Constraints
+
+#### `flow_bounds`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_connection").con.flow_bounds
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_connection").con.flow_bounds
+```
+
+:::
+
+Full implementation and all details: [`connection/con_flow_bounds @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/connection/con_flow_bounds.jl)
+
+> Add the constraint defining the bounds of the flow (related to `connection`) to the `model`.
+> 
+> &nbsp;
+> 
+> Specifying `capacity` will lead to symmetric bounds ($\text{lb} := -capacity$ and $\text{ub} := capacity$), while asymmetric bounds can be set by explicitly specifying `lb` and `ub`.
+> 
+> &nbsp;
+> 
+:::{note}
+
+Usage of `etdf` is currently not fully tested, and not documented.
+:::
+> Upper and lower bounds can be "infinite" (by not setting them) resulting in the respective constraints not being added, and the flow variable therefore being (partially) unconstrained. Depending on the configuration the `flow` is calculated differently:
+> 
+> &nbsp;
+> 
+> * if `connection.etdf` is set, it is based on an ETDF sum flow,
+> * if `connection.exp.pf_flow` is available, it equals this
+> * else it equal `connection.var.flow`
+> 
+> &nbsp;
+> 
+> This flow is then constrained:
+> 
+> &nbsp;
+> 
+$$
+\begin{aligned}
+& \text{flow}_t \geq \text{lb}, \qquad \forall t \in T \\
+& \text{flow}_t \leq \text{ub}, \qquad \forall t \in T
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+> 
+> &nbsp;
+> 
+:::{admonition} **Constraint safety**
+:class: note
+
+The lower and upper bound constraint are subject to penalized slacks.
+:::
+### Objectives
+
+#### `cost`
+
+:::{admonition} How to access this objective?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_connection").obj.cost
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_connection").obj.cost
+```
+
+:::
+
+Full implementation and all details: [`connection/obj_cost @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/connection/obj_cost.jl)
+
+> Add the (potential) cost of this `connection` to the global objective function.
+> 
+> &nbsp;
+> 
+> The `connection.cost` setting introduces a fixed cost of "transportation" to the flow of this `Connection`. It is based on the directed flow. This means that flows in the "opposite" direction will lead to negative costs:
+> 
+> &nbsp;
+> 
+$$
+\sum_{t \in T} \text{flow}_t \cdot \text{cost}_t \cdot \omega_t
+$$
+> 
+> &nbsp;
+> 
+> Here $\omega_t$ is the weight of `Snapshot` `t`.
+> 
+> &nbsp;
+> 
+:::{admonition} **Costs for flows in both directions**
+:class: note
+
+If you need to apply a cost term to the absolute value of the flow, consider splitting the `Connection` into two different ones, in opposing directions, and including `lb = 0`.
+:::

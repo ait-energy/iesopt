@@ -102,6 +102,10 @@ ipython_config.py
 #   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
 poetry.lock
 
+# uv
+# See Poetry.lock
+uv.lock
+
 # pdm
 #   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
 #pdm.lock
@@ -169,7 +173,7 @@ cython_debug/
 **/juliapkg.json
 
 # Prevent tracking root folder Python files
-*.py
+/*.py
 
 # Temp. directory
 tmp_test/

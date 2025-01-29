@@ -7,27 +7,30 @@ permissions:
 
 jobs:
   docs:
-    # needs: run_tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - uses: ./.github/actions/set-versions
+
+      - uses: julia-actions/setup-julia@v2
         with:
-            python-version: "3.11"
-      - name: Install dependencies
-        run: |
-          pip install sphinx myst_parser myst-nb sphinxawesome-theme sphinx-togglebutton jupytext
-      - name: Install local package
-        run: |
-          pip install -e .
+          version: ${{env.VERSION_JULIA}}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{env.VERSION_UV}}
+
       - name: Sphinx build
         run: |
-          sphinx-build docs docs/_build
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/main' }}
-        with:
-          publish_branch: gh-pages
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_build/
-          force_orphan: true
+          uv run sphinx-build docs docs/_build
+
+#      - name: Deploy to GitHub Pages
+#        uses: peaceiris/actions-gh-pages@v3
+#        if: ${{ github.ref == 'refs/heads/main' }}
+#        with:
+#          publish_branch: gh-pages
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          publish_dir: docs/_build/
+#          force_orphan: true

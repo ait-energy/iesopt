@@ -1,0 +1,11 @@
+name: 'Install SSL certificates'
+description: 'Installs SSL certificates via apt'
+runs:
+  using: 'composite'
+  steps:
+    - run: |
+        apt update
+        apt install -y ca-certificates
+        update-ca-certificates --fresh
+        export SSL_CERT_DIR=/etc/ssl/certs
+

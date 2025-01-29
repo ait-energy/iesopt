@@ -1,5 +1,9 @@
 name: 'Set versions'
 description: 'Sets env variables with various software versions used in the workflows'
+
+defaults:
+    shell: bash
+
 runs:
   using: 'composite'
   steps:

@@ -180,13 +180,13 @@ def _dyn_core_create_md(cc: str):
                     f"# Using Julia (`IESopt.jl`):\n"
                     f"import IESopt\n\n"
                     f"model = IESopt.run(...)  # assuming this is your model\n"
-                    f"IESopt.get_component(model, \"your_{info['component']}\").{info['type_short']}.{info['name']}\n"
+                    f'IESopt.get_component(model, "your_{info["component"]}").{info["type_short"]}.{info["name"]}\n'
                     f"```\n\n"
                     f"```python\n"
                     f"# Using Python (`iesopt`):\n"
                     f"import iesopt\n\n"
                     f"model = iesopt.run(...)  # assuming this is your model\n"
-                    f"model.get_component(\"your_{info['component']}\").{info['type_short']}.{info['name']}\n"
+                    f'model.get_component("your_{info["component"]}").{info["type_short"]}.{info["name"]}\n'
                     f"```\n\n"
                     f":::\n\n"
                 )

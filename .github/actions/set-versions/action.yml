@@ -1,10 +1,6 @@
 name: 'Set versions'
 description: 'Sets env variables with various software versions used in the workflows'
 
-defaults:
-  run:
-
-
 runs:
   using: 'composite'
   steps:

@@ -7,7 +7,7 @@ on:
 permissions:
   contents: read
   id-token: write
-        
+
 jobs:
   # Build it.
   build-package:
@@ -18,18 +18,18 @@ jobs:
           with:
             fetch-depth: 0
         - uses: hynek/build-and-inspect-python-package@v2
-  
+
   # Publish to PyPI.
-  pypi-publish:
-    needs: build-package
-    name: Upload release to PyPI
-    runs-on: ubuntu-latest
-    environment: release
-    steps:
-        - name: Download packages built by build-and-inspect-python-package
-          uses: actions/download-artifact@v4
-          with:
-            name: Packages
-            path: dist
-        - name: Publish package distributions to PyPI
-          uses: pypa/gh-action-pypi-publish@release/v1
+#  pypi-publish:
+#    needs: build-package
+#    name: Upload release to PyPI
+#    runs-on: ubuntu-latest
+#    environment: release
+#    steps:
+#        - name: Download packages built by build-and-inspect-python-package
+#          uses: actions/download-artifact@v4
+#          with:
+#            name: Packages
+#            path: dist
+#        - name: Publish package distributions to PyPI
+#          uses: pypa/gh-action-pypi-publish@release/v1

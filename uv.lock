@@ -196,11 +196,11 @@ wheels = [
 
 [[package]]
 name = "codespell"
-version = "2.4.0"
+version = "2.4.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/b0/2f/706691245790ae6c63252d48b7ff5e3635951d55b3ce3c0ac13d898bf70b/codespell-2.4.0.tar.gz", hash = "sha256:587d45b14707fb8ce51339ba4cce50ae0e98ce228ef61f3c5e160e34f681be58", size = 344743 }
+sdist = { url = "https://files.pythonhosted.org/packages/15/e0/709453393c0ea77d007d907dd436b3ee262e28b30995ea1aa36c6ffbccaf/codespell-2.4.1.tar.gz", hash = "sha256:299fcdcb09d23e81e35a671bbe746d5ad7e8385972e65dbb833a2eaac33c01e5", size = 344740 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/19/ce/39bfb82aa428a3ac4d94cc8c9faa3eadeadb2606eee3b584f68d9b575b43/codespell-2.4.0-py3-none-any.whl", hash = "sha256:b4c5b779f747dd481587aeecb5773301183f52b94b96ed51a28126d0482eec1d", size = 344508 },
+    { url = "https://files.pythonhosted.org/packages/20/01/b394922252051e97aab231d416c86da3d8a6d781eeadcdca1082867de64e/codespell-2.4.1-py3-none-any.whl", hash = "sha256:3dadafa67df7e4a3dbf51e0d7315061b80d265f9552ebd699b3dd6834b47e425", size = 344501 },
 ]
 
 [[package]]
@@ -448,8 +448,8 @@ test = [
 
 [package.metadata]
 requires-dist = [
-    { name = "juliacall", specifier = ">=0.9.20" },
-    { name = "juliapkg", specifier = ">=0.1.13" },
+    { name = "juliacall", specifier = "==0.9.20" },
+    { name = "juliapkg", specifier = "==0.1.13" },
     { name = "pandas", specifier = ">=2.0.0" },
     { name = "pathlib", specifier = ">=1.0.0" },
     { name = "pydantic", specifier = ">=2.7.4" },
@@ -621,26 +621,26 @@ wheels = [
 
 [[package]]
 name = "juliacall"
-version = "0.9.24"
+version = "0.9.20"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "juliapkg" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cb/4b/63965b6ebc97c861b5b565bdfc5fbe942aaf6ac99b1b17427e1369fb4bec/juliacall-0.9.24.tar.gz", hash = "sha256:31bed223489b535e4e8db46bfff4596350c24f757b9c2d17296c07397f75948b", size = 470319 }
+sdist = { url = "https://files.pythonhosted.org/packages/91/15/3c02061dd751f46aaf1a5f97af07bd82886d710a9b9e44e5d66b4f72f2b4/juliacall-0.9.20.tar.gz", hash = "sha256:d67e399777c368858051f600c39fd8ed5d79d601a11d6336f103a9748ed69ded", size = 12686 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2b/88/bc544390a0bbf1eb425540b2ba2abe0d478c31d3002a703fdb640f4abc2a/juliacall-0.9.24-py3-none-any.whl", hash = "sha256:f1d7b718228c477aeba770290647f3b2d0052f683da891b4e9f88c1e1da0a394", size = 11950 },
+    { url = "https://files.pythonhosted.org/packages/d3/35/77fc66c70f604b2e03249c77bd1a7d10f950c6037b5264af150d914344c3/juliacall-0.9.20-py3-none-any.whl", hash = "sha256:1debce8c332ed4973b1a5e1b456d7561735965b64e8964fdd8f9d274a24bc395", size = 12109 },
 ]
 
 [[package]]
 name = "juliapkg"
-version = "0.1.15"
+version = "0.1.13"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "semver" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8e/15/f3a172409d41cdf1a8c4289cfaab3fadfcce21fbe53d9730b5c7754da4b9/juliapkg-0.1.15.tar.gz", hash = "sha256:a36096fed2ddfe6fbd1af9bfd1b182136d84a660d0c4187539194229fb383720", size = 16065 }
+sdist = { url = "https://files.pythonhosted.org/packages/7f/c3/f52ad2434f06a368e02a298186fabe6859a3b95ca6018aee719bd0abf35f/juliapkg-0.1.13.tar.gz", hash = "sha256:4273ac66ef4b4d6832b995af2c7a80d5e8a1c22567cba1846d61bf23dd9335c3", size = 16118 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a1/87/05a0d9acd2172516480e384bd66f269e97c61b7b5412deaceca0db3e43be/juliapkg-0.1.15-py3-none-any.whl", hash = "sha256:47b3ebb5bc200b31252e3be0e740a37925ff472919cac84f32b7bd4afa3a1a53", size = 16137 },
+    { url = "https://files.pythonhosted.org/packages/66/c1/b0b7da9df3f9125c06fe85ef02ce7549c91fb4e221a9c2f282650a6908d9/juliapkg-0.1.13-py3-none-any.whl", hash = "sha256:2a629fe393bccdf024c675380c98271c42998dcd3601101bc6dc997f10595ac9", size = 16040 },
 ]
 
 [[package]]

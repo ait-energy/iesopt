@@ -10,7 +10,9 @@ ENDCOLOR="\e[0m"
 test -z "$(git status --porcelain)" || (echo -e "${RED}Repository is dirty. Aborting. ${ENDCOLOR}" && exit 1)
 
 # store current git hash for undo command
-current_git_hash=$(git show --oneline -s | cut -f 1 -d" ") 
+current_git_hash=$(git show --oneline -s | cut -f 1 -d" ")
+undo_command="git reset --hard $current_git_hash"
+echo -e "If anything goes wrong use $BLUE $undo_command $ENDCOLOR to reset your repository."
 
 # Get the current version from pyproject.toml and make sure it is a .dev version
 version="$(uvx --from=toml-cli toml get --toml-path=pyproject.toml project.version)"
@@ -47,5 +49,5 @@ uvx --from=toml-cli toml set --toml-path=pyproject.toml project.version $new_ver
 git commit -am"Start developing version $new_version"
 
 echo -e "Tag created. Use $BLUE git push --tags $ENDCOLOR to make this release permanent"
-echo -e "Or undo all changes with $GREEN git reset --hard $current_git_hash && git tag --delete $tag $ENDCOLOR"
+echo -e "Or undo all changes with $GREEN $undo_command && git tag --delete $tag $ENDCOLOR"
 

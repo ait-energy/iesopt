@@ -12,7 +12,7 @@ test -z "$(git status --porcelain)" || (echo -e "${RED}Repository is dirty. Abor
 # Get the current version from pyproject.toml and make sure it is a .dev version
 version="$(uvx --from=toml-cli toml get --toml-path=pyproject.toml project.version)"
 echo "Current Project version is $version"
-if [[!  $version == *".dev"* ]]; then
+if [[ !  $version == *".dev"* ]]; then
   echo -e "${RED}$version is no dev version. Aborting.${ENDCOLOR}"
   exit 1
 fi

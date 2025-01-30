@@ -28,7 +28,7 @@ version="$(echo $version | sed 's/\.dev.*$//')"
 # Ask user
 echo -e "Release version ${GREEN} $version ${ENDCOLOR} ? [y/N]"
 read answer
-if  [ "$answer" == "${answer#[Yy]}" ] ; then
+if  [[ ! $answer =~ ^[Yy]$ ]] ; then
   echo "Aborted" && exit 1
 fi
 

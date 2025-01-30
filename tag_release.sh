@@ -7,7 +7,7 @@ BLUE="\e[94m"
 ENDCOLOR="\e[0m"
 
 # make sure the git repo is clean
-test -z "$(git status --porcelain)" || echo -e "${RED}Repository is dirty. Aborting. ${ENDCOLOR}" && exit 1
+test -z "$(git status --porcelain)" || (echo -e "${RED}Repository is dirty. Aborting. ${ENDCOLOR}" && exit 1)
 
 # Get the current version from pyproject.toml and make sure it is a .dev version
 version="$(uvx --from=toml-cli toml get --toml-path=pyproject.toml project.version)"

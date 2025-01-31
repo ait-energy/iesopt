@@ -20,7 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "pathlib >= 1.0.0",
     "pandas >= 2.0.0",
@@ -45,8 +45,6 @@ build-backend = "hatchling.build"
 [dependency-groups]
 dev = [
     # code quality
-    "ruff >= 0.4.7",
-    "codespell >= 2.3.0",
     "pre-commit >= 3.8.0",
 
     # test
@@ -83,7 +81,7 @@ addopts = [
 
 [tool.tox]
 requires = ["tox>=4.19"]
-env_list = ["3.9", "3.13"]
+env_list = ["3.10", "3.11", "3.12", "3.13"]
 
 [tool.tox.env_run_base]
 description = "Run tests under {base_python}"

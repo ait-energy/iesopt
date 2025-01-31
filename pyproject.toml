@@ -36,7 +36,6 @@ Homepage = "https://github.com/ait-energy/iesopt"
 Documentation = "https://ait-energy.github.io/iesopt"
 Repository = "https://github.com/ait-energy/iesopt"
 Issues = "https://github.com/ait-energy/iesopt/issues"
-Changelog = "https://github.com/ait-energy/iesopt/releases"
 
 [build-system]
 requires = ["hatchling"]

@@ -2,32 +2,30 @@ name: pytest
 
 on: [push, pull_request]
 
+# needed to allow julia-actions/cache to delete old caches that it has created
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   run_tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Install Python
-        uses: actions/setup-python@v5
+      - uses: ./.github/actions/set-versions
+      - uses: julia-actions/setup-julia@v2
         with:
-            python-version: "3.11"
-      - name: Install poetry
-        uses: abatilo/actions-poetry@v2
-      - name: Setup a local virtual environment (if no poetry.toml file)
-        run: |
-          poetry config virtualenvs.create true --local
-          poetry config virtualenvs.in-project true --local
-      - uses: actions/cache@v3
-        name: Define a cache for the virtual environment based on the dependencies lock file
+          version: ${{env.VERSION_JULIA}}
+      - uses: julia-actions/cache@v2
+      - uses: astral-sh/setup-uv@v5
         with:
-          path: ./.venv
-          key: venv-${{ hashFiles('poetry.lock') }}
-      - name: Install the project dependencies
-        run: poetry install --with test
+          version: ${{env.VERSION_UV}}
       - name: Run the automated tests
-        run: poetry run pytest
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: ait-energy/iesopt
+        run: uv run pytest
+
+# TODO: Re-enable after merge
+#      - name: Upload coverage reports to Codecov
+#        uses: codecov/codecov-action@v4.0.1
+#        with:
+#          token: ${{ secrets.CODECOV_TOKEN }}
+#          slug: ait-energy/iesopt

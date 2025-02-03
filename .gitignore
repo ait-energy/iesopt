@@ -169,7 +169,7 @@ cython_debug/
 **/juliapkg.json
 
 # Prevent tracking root folder Python files
-*.py
+/*.py
 
 # Temp. directory
 tmp_test/

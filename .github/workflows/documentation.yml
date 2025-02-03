@@ -5,7 +5,7 @@ on: [push, pull_request, workflow_dispatch]
 # needed to allow julia-actions/cache to delete old caches that it has created
 permissions:
   actions: write
-  contents: read
+  contents: write
 
 jobs:
   docs:

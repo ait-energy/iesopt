@@ -21,7 +21,7 @@ jobs:
         with:
           version: ${{env.VERSION_UV}}
       - name: Run the automated tests
-        run: uv run pytest
+        run: uv run tox
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:

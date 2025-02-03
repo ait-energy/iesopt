@@ -22,10 +22,8 @@ jobs:
           version: ${{env.VERSION_UV}}
       - name: Run the automated tests
         run: uv run pytest
-
-# TODO: Re-enable after merge
-#      - name: Upload coverage reports to Codecov
-#        uses: codecov/codecov-action@v4.0.1
-#        with:
-#          token: ${{ secrets.CODECOV_TOKEN }}
-#          slug: ait-energy/iesopt
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: ait-energy/iesopt

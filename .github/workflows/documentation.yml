@@ -23,13 +23,11 @@ jobs:
       - name: Sphinx build
         run: |
           uv run sphinx-build docs docs/_build
-
-# TODO: Re-enable after merge
-#      - name: Deploy to GitHub Pages
-#        uses: peaceiris/actions-gh-pages@v3
-#        if: ${{ github.ref == 'refs/heads/main' }}
-#        with:
-#          publish_branch: gh-pages
-#          github_token: ${{ secrets.GITHUB_TOKEN }}
-#          publish_dir: docs/_build/
-#          force_orphan: true
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/
+          force_orphan: true

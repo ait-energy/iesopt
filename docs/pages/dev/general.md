@@ -11,25 +11,21 @@ Thank you for your interest in contributing to `iesopt`! This guide provides ins
     git clone https://github.com/your-username/iesopt.git
     cd iesopt
     ```
+3. **Install uv:**
+    Please follow the official [uv install instructions](https://docs.astral.sh/uv/getting-started/installation/)
 
-3. **Setup environment and install Poetry:**
+
+4. **Create the virtual environment:** To setup the development venv run
 
     ```bash
-    conda create -n iesopt python=3.12 -y
-    conda activate iesopt
-    pip install poetry
+    uv sync
     ```
+The virtual environment is now located in the ```.venv``` folder (if you ever need to start over, you can just delete this folder)
 
-4. **Install Dependencies:** Install all dependencies using Poetry, by running
-
-    ```bash
-    poetry install
-    ```
-
-5. **Pre-commit Hooks:** To maintain code quality, install pre-commit hooks:
+5. **Pre-commit Hooks:** To maintain code quality, please install the pre-commit hooks:
 
     ```bash
-    pre-commit install
+    uv run pre-commit install
     ```
 
 ## Code formatting and linting
@@ -42,13 +38,13 @@ After installing pre-commit hooks before, all checks should be automatically run
 You can either execute
 
 ```bash
-pre-commit
+uv run pre-commit
 ```
 
 This stashes all changes that you have not committed. If you want to check all files, as they are, you can do so by running:
 
 ```bash
-pre-commit run --all
+uv run pre-commit run --all
 ```
 
 :::
@@ -57,10 +53,10 @@ pre-commit run --all
 
 ## Running tests
 
-Execute
+To run the test suite in your dev environment do
 
 ```bash
-pytest
+uv run pytest
 ```
 
 This will print a coverage report, which looks like
@@ -78,6 +74,13 @@ TOTAL                            417    172    59%
 ```
 
 and tells you roughly how good each file is covered by automated tests. Further it creates a `coverage.xml` file in the project root folder, that you can use. In `VSCode`, the extension [Coverage Gutters](https://marketplace.visualstudio.com/items?itemName=ryanluker.vscode-coverage-gutters) allows inspecting test coverage directly in your code editor. If you have it installed and loaded, simply hit `Ctrl + Shift + 8` (if you are using default keybinds) to enable watching the coverage.
+
+### Running tox tests
+To run the test suite against all compatible Python versions do
+
+```bash
+uv run tox
+```
 
 ## Making changes
 
@@ -108,7 +111,7 @@ and tells you roughly how good each file is covered by automated tests. Further 
 ### Building locally
 
 ```bash
-sphinx-build --nitpicky --fail-on-warning --fresh-env --keep-going --builder html docs/ docs/_build/html
+uv run sphinx-build --nitpicky --fail-on-warning --fresh-env --keep-going --builder html docs/ docs/_build/html
 ```
 
 You can omit the `--fresh-env` option to not
@@ -120,7 +123,7 @@ You can omit the `--fresh-env` option to not
 and alternatively use
 
 ```bash
-make -C docs clean
+uv run make -C docs clean
 ```
 
 to clean the `docs` before rebuilding them.

@@ -64,6 +64,14 @@ def setup_julia():
     # ssl._create_default_https_context = ssl._create_unverified_context
     # logger.warn("Disabling SSL verification to prevent problems; this may be unsafe")
 
+    # Set `JULIA_SSL_CA_ROOTS_PATH` to prevent various SSL related issues (with Julia setup; LibGit2; etc.).
+    if "JULIA_SSL_CA_ROOTS_PATH" in os.environ:
+        logger.warn(
+            "Overwriting the env. variable `JULIA_SSL_CA_ROOTS_PATH` (current: `%s`) to prevent SSL issues during the Julia setup"
+            % str(os.environ["JULIA_SSL_CA_ROOTS_PATH"])
+        )
+    os.environ["JULIA_SSL_CA_ROOTS_PATH"] = ""
+
     # Setup Julia (checking if it "looks" valid).
     import juliapkg
 

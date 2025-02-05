@@ -34,7 +34,7 @@ fi
 
 # Switch pyproject.toml to release version and commit
 uvx --from=toml-cli toml set --toml-path=pyproject.toml project.version $version
-git commit -am"Tag release version $version"
+git commit -am"chore(tag_release): tag release version $version"
 
 # Tag this version
 tag="v$version"
@@ -46,7 +46,7 @@ new_version="$(echo $version | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')".de
 
 echo "Starting new version: $new_version"
 uvx --from=toml-cli toml set --toml-path=pyproject.toml project.version $new_version
-git commit -am"Start developing version $new_version"
+git commit -am"chore(tag_release): start developing version $new_version"
 
 echo -e "Tag created. Use $BLUE git push --tags $ENDCOLOR to make this release permanent"
 echo -e "Or undo all changes with $GREEN $undo_command && git tag --delete $tag $ENDCOLOR"

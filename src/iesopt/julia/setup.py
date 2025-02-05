@@ -66,11 +66,15 @@ def setup_julia():
 
     # Set `JULIA_SSL_CA_ROOTS_PATH` to prevent various SSL related issues (with Julia setup; LibGit2; etc.).
     if "JULIA_SSL_CA_ROOTS_PATH" in os.environ:
-        logger.info(
-            "Overwriting the env. variable `JULIA_SSL_CA_ROOTS_PATH` (current: `%s`) to prevent SSL issues during the Julia setup"
-            % str(os.environ["JULIA_SSL_CA_ROOTS_PATH"])
-        )
-    os.environ["JULIA_SSL_CA_ROOTS_PATH"] = ""
+        if os.environ["JULIA_SSL_CA_ROOTS_PATH"] != "":
+            logger.info(
+                "Overwriting the env. variable `JULIA_SSL_CA_ROOTS_PATH` (current: `%s`) to prevent SSL issues during the Julia setup"
+                % str(os.environ["JULIA_SSL_CA_ROOTS_PATH"])
+            )
+            os.environ["JULIA_SSL_CA_ROOTS_PATH"] = ""
+    else:
+        logger.debug('Setting `JULIA_SSL_CA_ROOTS_PATH = ""` to prevent SSL issues during the Julia setup')
+        os.environ["JULIA_SSL_CA_ROOTS_PATH"] = ""
 
     # Setup Julia (checking if it "looks" valid).
     import juliapkg

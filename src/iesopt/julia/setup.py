@@ -1,7 +1,7 @@
 import os
 import sys
 from pathlib import Path
-# import ssl
+import ssl
 
 from ..util import logger
 from .util import jl_import
@@ -55,22 +55,26 @@ def setup_julia():
     if (Path(__file__).parent / ".." / "juliapkg.json").exists():
         (Path(__file__).parent / ".." / "juliapkg.json").unlink()
 
-    # # Check for local SSL certificate file, that can interfere with Julia setup.
-    # _ssl = None
-    # if "SSL_CERT_FILE" in os.environ:
-    #     logger.info("Detected local `SSL_CERT_FILE`; disabling it during Julia setup")
-    #     _ssl = os.environ.pop("SSL_CERT_FILE")
+    # Check for local SSL certificate file, that can interfere with Julia setup.
+    _ssl = None
+    if "SSL_CERT_FILE" in os.environ:
+        logger.debug("Detected local `SSL_CERT_FILE`; disabling it during Julia setup")
+        _ssl = os.environ.pop("SSL_CERT_FILE")
 
-    # ssl._create_default_https_context = ssl._create_unverified_context
-    # logger.warn("Disabling SSL verification to prevent problems; this may be unsafe")
+    ssl._create_default_https_context = ssl._create_unverified_context
+    logger.info("Disabling SSL verification to prevent problems; this may be unsafe")
 
     # Set `JULIA_SSL_CA_ROOTS_PATH` to prevent various SSL related issues (with Julia setup; LibGit2; etc.).
     if "JULIA_SSL_CA_ROOTS_PATH" in os.environ:
-        logger.warn(
-            "Overwriting the env. variable `JULIA_SSL_CA_ROOTS_PATH` (current: `%s`) to prevent SSL issues during the Julia setup"
-            % str(os.environ["JULIA_SSL_CA_ROOTS_PATH"])
-        )
-    os.environ["JULIA_SSL_CA_ROOTS_PATH"] = ""
+        if os.environ["JULIA_SSL_CA_ROOTS_PATH"] != "":
+            logger.info(
+                "Overwriting the env. variable `JULIA_SSL_CA_ROOTS_PATH` (current: `%s`) to prevent SSL issues during the Julia setup"
+                % str(os.environ["JULIA_SSL_CA_ROOTS_PATH"])
+            )
+            os.environ["JULIA_SSL_CA_ROOTS_PATH"] = ""
+    else:
+        logger.debug('Setting `JULIA_SSL_CA_ROOTS_PATH = ""` to prevent SSL issues during the Julia setup')
+        os.environ["JULIA_SSL_CA_ROOTS_PATH"] = ""
 
     # Setup Julia (checking if it "looks" valid).
     import juliapkg
@@ -146,10 +150,10 @@ def setup_julia():
             except Exception as e:
                 logger.error(f"Failed to install custom package '{name}': {e}")
 
-    # # Restoring potential SSL certificate.
-    # if _ssl is not None:
-    #     logger.info("Restoring local `SSL_CERT_FILE`")
-    #     os.environ["SSL_CERT_FILE"] = _ssl
+    # Restoring potential SSL certificate.
+    if _ssl is not None:
+        logger.debug("Restoring local `SSL_CERT_FILE`")
+        os.environ["SSL_CERT_FILE"] = _ssl
 
     return juliacall
 

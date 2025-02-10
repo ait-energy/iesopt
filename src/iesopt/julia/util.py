@@ -1,3 +1,4 @@
+import pandas as pd
 from ..util import logger, get_iesopt_module_attr
 
 
@@ -66,10 +67,15 @@ def jl_docs(obj: str, module: str = "IESopt"):
 
 def recursive_convert_py2jl(item):
     if isinstance(item, dict):
-        juliacall = get_iesopt_module_attr("juliacall")
-        return juliacall.Main.Dict({k: recursive_convert_py2jl(v) for (k, v) in item.items()})
-    if isinstance(item, list):
-        juliacall = get_iesopt_module_attr("juliacall")
-        return juliacall.convert(juliacall.Main.Vector, [recursive_convert_py2jl(v) for v in item])
+        julia = get_iesopt_module_attr("julia")
+        convert = get_iesopt_module_attr("juliacall").convert
+        return convert(julia.Dict, {k: recursive_convert_py2jl(v) for (k, v) in item.items()})
+    elif isinstance(item, list):
+        julia = get_iesopt_module_attr("julia")
+        convert = get_iesopt_module_attr("juliacall").convert
+        return convert(julia.Vector, [recursive_convert_py2jl(v) for v in item])
+    elif isinstance(item, pd.DataFrame):
+        julia = get_iesopt_module_attr("julia")
+        return julia.IESopt.DataFrames.DataFrame(item)
 
     return item

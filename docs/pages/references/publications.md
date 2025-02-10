@@ -19,7 +19,7 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
-### Heat Highway (Marx, 2023)
+### Heat Highway (Marx, SES 2023)
 
 :**title**: Heat Highway - Heat Transmission Network Design Optimization and Robustness Analysis for a Case Study in Tyrol - Methodology
 :**publication**: [![CITATION](https://img.shields.io/badge/PURE-publications.ait.ac.at-blue?style=social)](https://publications.ait.ac.at/en/publications/heat-highway-heat-transmission-network-design-optimization-and-ro)
@@ -29,7 +29,7 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
-### H2REAL (Ortmann, 2024)
+### H2REAL (Ortmann, EEM 2024)
 
 :**title**: Development of a Global Market Model for Renewable Hydrogen
 :**publication**: [![CITATION](https://img.shields.io/badge/PURE-publications.ait.ac.at-blue?style=social)](https://publications.ait.ac.at/en/publications/development-of-a-global-market-model-for-renewable-hydrogen)
@@ -40,7 +40,7 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
-### H2REAL (Ortmann, 2024)
+### H2REAL (Ortmann, EnInnov 2024)
 
 :**title**: Entwicklung eines globalen Marktmodells für Wasserstoff
 :**publication**: [![CITATION](https://img.shields.io/badge/PURE-publications.ait.ac.at-blue?style=social)](https://publications.ait.ac.at/de/publications/entwicklung-eines-globalen-marktmodells-f%C3%BCr-wasserstoff)
@@ -51,7 +51,7 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
-### HyTechonomy (Reuter, 2023)
+### HyTechonomy (Reuter, SES 2023)
 
 :**title**: Optimizing the Domestic Production and Infrastructure for Green Hydrogen in Austria for 2030
 :**publication**: [![CITATION](https://img.shields.io/badge/PURE-publications.ait.ac.at-blue?style=social)](https://publications.ait.ac.at/en/publications/optimizing-the-domestic-production-and-infrastructure-for-green-h)
@@ -70,6 +70,8 @@ instructions in the [section on contributing](#contributing) below.
 :**abstract**: In this study, we employ an optimization model to optimally design a self-sufficient, independent of any imports and exports, hydrogen infrastructure for Austria by 2030. Our approach integrates key hydrogen technologies within a detailed spatial investment and operation model – coupled with a European scale electricity market model. We focus on optimizing diverse infrastructure components including trailers, pipelines, electrolyzers, and storages to meet Austria's projected hydrogen demand. To accurately estimate this demand in hourly resolution, we combine existing hydrogen strategies and projections to account for developments in various industrial sectors, consider demand driven by the transport sector, and integrate hydrogen demand arising from its use in gas-powered plants. Accounting for the inherent uncertainty linked to such projections, we run the analysis for two complementary scenarios. Our approach addresses the challenges of integrating large quantities of renewable hydrogen into a future energy system by recognizing the critical role of domestic production in the early market stages. The main contribution of this work is to address the gap in optimizing hydrogen infrastructure for effective integration of domestic renewable hydrogen production in Austria by 2030, considering sector coupling potentials, optimal electrolyzer placement, and the design of local hydrogen networks.
 :**keywords**: Hydrogen, Renewable energy, Infrastructure modeling, Energy system modeling, Optimization
 :**citation**: Strömer, S., Beck, A., Traninger, M., Orsolits, D., Reuter, S. (2024). Transitioning to a renewable hydrogen system: Optimal infrastructure for self-sufficient hydrogen supply in Austria by 2030. In _Smart Energy Volume 15(2024)_ (pp. 1-17).
+
+---
 
 ## Contributing
 
@@ -106,7 +108,7 @@ The "custom header" is used to prevent overly long titles from messing up the ov
 ### TheFundingProject (FirstAuthor, Year)
 ```
 
-Where `TheFundingProject` is the project this publication was mainly funded by. If no project is related, then just doing `### (FirstAuthor, Year)` is the preferred fallback. `FirstAuthor` is only the last name of the first author; `Year` is the date of publication listed in the official citation.
+Where `TheFundingProject` is the project this publication was mainly funded by. If no project is related, then just doing `### (FirstAuthor, Year)` is the preferred fallback. `FirstAuthor` is only the last name of the first author; `Year` is the date of publication listed in the official citation. If the entry refers to a conference use `### FundingProject (FirstAuthor, Conf. Year)`, e.g., `ProjectX (Jane Doe, IEWT 2023)`.
 
 ### Creating citation badges
 

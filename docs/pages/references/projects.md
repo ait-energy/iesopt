@@ -8,7 +8,16 @@ instructions in the [section on contributing](#contributing) below.
 
 ## List of references
 
-To be added.
+(references-projects-hytechonomy)=
+### HyTechonomy
+
+:**title**: Hydrogen Technologies for Sustainable Economies
+:**homepage**: [hytechonomy.com](https://www.hytechonomy.com/)
+:**funding**: [ffg.at](https://projekte.ffg.at/projekt/3915332)
+:**description**: The overall scientific vision of the COMET-Project HyTechonomy is to provide the technological and strategic know-how basis for the substitution of the fossil energy carriers by renewable hydrogen.
+:**AIT contact**: S. Reuter
+
+---
 
 ## Contributing
 
@@ -21,21 +30,21 @@ See the template below for the structure of a reference.
 
 ### Template
 
-To be added.
+```markdown
+(references-projects-project-slug-title)=
+### Project Slug Title
 
-### Creating citation badges
+:**title**: Full Project Title
+:**homepage**: [something.com](https://www.something.com/)
+:**funding**: [ffg.at](https://projekte.ffg.at/projekt/XXXXXXXXX)
+:**description**: some copy-pasted, or other sort of short description / abstract goes here
+:**AIT contact**: F. Lastname
 
-You can use [shields.io](https://shields.io/badges) to create badges, or use standardized ones that you already have
-(e.g., from Zenodo), otherwise stick to the ones provided below.
+---
+```
 
-**Pure:** _(publications.ait.ac.at)_
+Consider the following:
 
-> ```markdown
-> [![CITATION](https://img.shields.io/badge/PURE-publications.ait.ac.at-none?style=social)](ADDYOURLINKHERE)
-> ```
-
-**DOI:**
-
-> ```markdown
-> [![CITATION](https://img.shields.io/badge/DOI-10.XXXX%2Fname.YYYY.ZZZZZZ-none?style=social)](https://doi.org/10.XXXX/name.YYYY.ZZZZZZ)
-> ```
+- If possible link to an `ait.ac.at` subpage for `homepage`.
+- Project slug might be `HyTechonomy`, with the full title being `Hydrogen Technologies for Sustainable Economies`, then the link target (the thing above the slug title `(references-projects-project-slug-title)=`) would then be `(references-projects-hytechonomy)=`.
+- Replace the `funding` information accordingly.

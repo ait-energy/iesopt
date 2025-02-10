@@ -119,55 +119,41 @@ Skip this step if you want to install `iesopt` into an existing environment and 
 [Installing `iesopt`](#installing-iesopt).
 :::
 
-This assumes that you have a working `conda` executable installed on your system, e.g., after installing [Miniconda](https://docs.anaconda.com/miniconda/).
-If you added the binary paths to your `PATH` environment variable, you should be able to execute the following steps in
-every terminal (e.g., within [VSCode](https://code.visualstudio.com/)), otherwise make sure to use a proper shell - most
-likely you _Anaconda Prompt_.
+This assumes that you have a working `uv` installed on your system. If not head over to the [installation](https://docs.astral.sh/uv/getting-started/installation/) section of their documentation.
 
-First we create a new environment using (make sure to replace `yourenvname` by a fitting name)
+Make sure you are already inside the project folder that you want to develop in and run:
 
 ```bash
-conda create -n yourenvname python=3.12 -y
-conda activate yourenvname
+uv init
 ```
 
-Your terminal should now print the name of your environment in each new line, similar to
+This creates a basic setup for you, including a sample Python file that you can run.
+
+You can make sure all dependencies are actually installed using
 
 ```bash
-(yourenvname) user@PCNAME:~/your/current/path$
+uv sync
 ```
 
-Next, we install [Poetry](https://python-poetry.org/) by executing
+which you can also use to install everything after you've cloned a repository (because then you obviously don't need the `uv init` step).
+
+You can test if everything works as expected by running
 
 ```bash
-pip install poetry
+uv run hello.py
 ```
 
-and use it to create a new basic environment by executing
-
-```bash
-poetry init -n
-```
-
-Now you should see a new `pyproject.toml` file inside your folder, and are ready to [install `iesopt`](Installing `iesopt`).
-
-:::{admonition} Learning more about managing dependencies with Poetry
-:class: tip
-
-Checkout the great tutorial ["Dependency Management With Python Poetry"](https://realpython.com/dependency-management-python-poetry/)
-to learn more about all of this, or consult the [Basic usage](https://python-poetry.org/docs/basic-usage/) section of
-the Poetry documentation.
-:::
+If everything works, you are ready to install `iesopt`!
 
 ### Installing `iesopt`
 
-This assumes that you have a working environment, that has Poetry installed. It should however work similarly using
-`conda install` or `pip install` instead.
+This assumes that you have a working environment, managed by `uv`. It should however work similarly using
+`conda`, `pip`, or `poetry` instead.
 
 You can install `iesopt` by executing
 
 ```bash
-poetry add iesopt
+uv add iesopt
 ```
 
 And that's it... you are done!
@@ -182,7 +168,7 @@ To "prevent" this, we can do a lot of the heavy lifting right here and now, by s
 executing `python` in the terminal that you used to set up everything, like so
 
 ```bash
-(yourenvname) user@PCNAME:~/your/current/path$ python
+(yourenvname) user@PCNAME:~/your/current/path$ uv run python
 ```
 
 which should result in an info message similar to this one:
@@ -204,7 +190,6 @@ instantiation of a Julia environment. This may take a few minutes, but should en
 
 ```text
 INFO:iesopt:Julia setup successful
-INFO:iesopt:Importing Julia module `IESoptLib`
 INFO:iesopt:Importing Julia module `IESopt`
 INFO:iesopt:Importing Julia module `JuMP`
 ```

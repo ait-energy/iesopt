@@ -12,9 +12,11 @@ instructions in the [section on contributing](#contributing) below.
 
 :**title**: Heat Highway - Heat Transmission Network Design Optimization and Robustness Analysis for a Case Study in Tyrol - Methodology
 :**publication**: [![CITATION](https://img.shields.io/badge/PURE-publications.ait.ac.at-blue?style=social)](https://publications.ait.ac.at/en/publications/heat-highway-heat-transmission-network-design-optimization-and-ro)
-:**abstract**: The majority of district heating (DH) networks today are fueled by combustion processes based on fossil or biogenic fuels. For the decarbonization of DH networks various uncertainties regarding the future development of key factors, such as energy prices, need to be considered. Within the project “HeatHighway” a hypothetical inter-regional heat transfer network (HTN) in the region of the Inn valley in Tyrol, Austria was investigated.
+:**abstract**: > The majority of district heating (DH) networks today are fueled by combustion processes based on fossil or biogenic fuels. For the decarbonization of DH networks various uncertainties regarding the future development of key factors, such as energy prices, need to be considered. Within the project “HeatHighway” a hypothetical inter-regional heat transfer network (HTN) in the region of the Inn valley in Tyrol, Austria was investigated.
 :**keywords**: Future district heating, Waste heat sources, 4th generation DH, Heat transmission networks, Deterministic optimization, Monte Carlo simulation
-:**citation**: Marx, N. O., Schmidt, R. R., Blakcori, R., Maggauer, K., Strömer, S., & Forster, T. (2023, September). Heat Highway - Heat Transmission Network Design Optimization and Robustness Analysis for a Case Study in Tyrol - Methodology. In _9th International Conference on Smart Energy Systems_ (pp. 103-104).
+:**citation**: ```text
+               Marx, N. O., Schmidt, R. R., Blakcori, R., Maggauer, K., Strömer, S., & Forster, T. (2023, September). Heat Highway - Heat Transmission Network Design Optimization and Robustness Analysis for a Case Study in Tyrol - Methodology. In _9th International Conference on Smart Energy Systems_ (pp. 103-104).
+               ```
 
 ---
 
@@ -25,7 +27,9 @@ instructions in the [section on contributing](#contributing) below.
 :**project**: [HyTechonomy](#references-projects-hytechonomy)
 :**abstract**: > The decarbonisation of the Austrian energy system is expected to be facilitated by the uptake of hydrogen-based technologies, which requires the establishment of a hydrogen infrastructure to meet the rising demand. While large quantities of hydrogen are expected to be imported in the future, current developments in the energy market suggest that domestic production of hydrogen should not be ignored to ensure the security of supply. As domestic production ramps up, locating electrolysers to ensure optimal system integration is still an open question. To address this challenge, the "HyTechonomy" project developed an optimisation model that identifies the most promising domestic locations for green hydrogen production and optimal means of hydrogen transport for the year 2030.
 :**keywords**: Hydrogen infrastructure, Energy system modelling, centralised electrolysis, decentralised electrolysis
-:**citation**: ```Reuter, S., Strömer, S., Traninger, M., & Beck, A. (2023, September). Optimizing the Domestic Production and Infrastructure for Green Hydrogen in Austria for 2030. In _Book of Abstracts: 9th International Conference on Smart Energy Systems_ (pp. 278-279).```
+:**citation**: ```text
+               Reuter, S., Strömer, S., Traninger, M., & Beck, A. (2023, September). Optimizing the Domestic Production and Infrastructure for Green Hydrogen in Austria for 2030. In _Book of Abstracts: 9th International Conference on Smart Energy Systems_ (pp. 278-279).
+               ```
 
 ---
 
@@ -51,7 +55,9 @@ too).
 :**project**: [Project (short) name](#references-projects-shortname)
 :**abstract**: put the abstract here
 :**keywords**: put all keywords here
-:**citation**: ```put the APA styled citation here```
+:**citation**: ```text
+               put the APA styled citation here
+               ```
 
 ---
 `````

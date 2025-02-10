@@ -14,7 +14,7 @@ instructions in the [section on contributing](#contributing) below.
 :**title**: Hydrogen Technologies for Sustainable Economies
 :**homepage**: [hytechonomy.com](https://www.hytechonomy.com/)
 :**funding**: [ffg.at](https://projekte.ffg.at/projekt/3915332)
-:**description**: > The overall scientific vision of the COMET-Project HyTechonomy is to provide the technological and strategic know-how basis for the substitution of the fossil energy carriers by renewable hydrogen.
+:**description**: The overall scientific vision of the COMET-Project HyTechonomy is to provide the technological and strategic know-how basis for the substitution of the fossil energy carriers by renewable hydrogen.
 :**AIT contact**: S. Reuter
 
 ---
@@ -37,7 +37,7 @@ See the template below for the structure of a reference.
 :**title**: Full Project Title
 :**homepage**: [something.com](https://www.something.com/)
 :**funding**: [ffg.at](https://projekte.ffg.at/projekt/XXXXXXXXX)
-:**description**: > some copy-pasted, or other sort of short description / abstract goes here
+:**description**: some copy-pasted, or other sort of short description / abstract goes here
 :**AIT contact**: F. Lastname
 
 ---

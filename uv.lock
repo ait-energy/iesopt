@@ -482,7 +482,7 @@ wheels = [
 
 [[package]]
 name = "iesopt"
-version = "2.4.3.dev0"
+version = "2.5.1.dev0"
 source = { editable = "." }
 dependencies = [
     { name = "juliacall" },

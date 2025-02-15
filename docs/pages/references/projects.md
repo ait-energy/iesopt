@@ -8,6 +8,39 @@ instructions in the [section on contributing](#contributing) below.
 
 ## List of references
 
+(references-projects-deriskdh)=
+### DeRiskDH
+
+:**title**: DeRiskDH
+:**homepage**: [ait.ac.at](https://www.ait.ac.at/themen/integratedenergysystems/projekte/deriskdh)
+:**funding**: [ffg.at](https://www.ffg.at/vorzeigeregionenergie)
+:**description**: Risk minimization for decarbonizing heating networks via network temperature reductions and flexibility utilization
+:**AIT contact**: R. Schmidt
+
+---
+
+(references-projects-heathighway)=
+### Heat Highway
+
+:**title**: Heat Highway
+:**homepage**: [ait.ac.at](https://www.ait.ac.at/themen/integratedenergysystems/projekte/heat-highway)
+:**funding**: [ffg.at](https://projekte.ffg.at/projekt/3851881)
+:**description**: The HeatHighway project investigates supra-regional heat transmission networks, focusing on the use of multiple waste heat sources.
+:**AIT contact**: R. Schmidt
+
+---
+
+(references-projects-heatminedh)=
+### HeatMineDH
+
+:**title**: Low-Grade Renewable and Waste Heat Mapping and Investment Planning for Efficient District Heating
+:**homepage**: [ait.ac.at](https://www.ait.ac.at/themen/integratedenergysystems/projekte/heatminedh)
+:**funding**: [cinea.ec.europa.eu](https://cinea.ec.europa.eu/programmes/life_en?prefLang=de)
+:**description**: HeatMineDH aims to develop business cases and investment plans for the incorporation of low-grade heat sources into high temperature district heating networks.
+:**AIT contact**: R. Schmidt
+
+---
+
 (references-projects-hytechonomy)=
 ### HyTechonomy
 

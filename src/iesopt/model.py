@@ -41,6 +41,11 @@ class Model:
         self._jump_value = get_iesopt_module_attr("jump_value")
         self._jump_dual = get_iesopt_module_attr("jump_dual")
 
+        if "virtual_files" in self._kwargs:
+            # Ensure proper type of this entry, since it is enforced by `IESopt.parse!`.
+            _dict_typed = self._IESopt.seval("Dict{String, DataFrames.DataFrame}")
+            self._kwargs["virtual_files"] = _dict_typed(self._kwargs["virtual_files"])
+
     def __repr__(self) -> str:
         if self._model is None:
             return "An IESopt model (not yet generated)"

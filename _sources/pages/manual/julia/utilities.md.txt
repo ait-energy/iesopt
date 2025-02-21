@@ -1,0 +1,112 @@
+# Utilities
+
+```{note}
+This section of the documentation is auto-generated from the code of the Julia-based core model. Refer to [IESopt.jl](https://github.com/ait-energy/IESopt.jl) for any further details (which may require some familiarity with Julia).
+
+**If you spot incorrect math-mode rendering**, or similar issues, please [file an issue](https://github.com/ait-energy/iesopt/issues), since rendering documentation from Julia to Python is not the easiest task.
+```
+
+## Overview
+
+This module contains utility functions for the IESopt package, that can be helpful in preparing or analysing components.
+
+
+
+## API Reference
+
+### Types
+
+### Macros
+
+### Functions
+
+#### `annuity`
+
+```julia
+annuity(total::Real; lifetime::Real, rate::Float64, fraction::Float64)
+
+
+```
+
+Calculate the annuity of a total amount over a lifetime with a given interest rate.
+
+_**Arguments**_  
+
+- `total::Real`: The total amount to be annuitized.
+
+_**Keyword Arguments**_  
+
+- `lifetime::Real`: The lifetime over which the total amount is to be annuitized.
+- `rate::Float64`: The interest rate at which the total amount is to be annuitized.
+- `fraction::Float64`: The fraction of a year that the annuity is to be calculated for (default: 1.0).
+
+_**Returns**_  
+
+`Float64`: The annuity of the total amount over the lifetime with the given interest rate.
+
+_**Example**_  
+
+Calculating a simple annuity, for a total amount of € 1000,- over a lifetime of 10 years with an interest rate of 5%:
+
+```julia
+# Set a parameter inside a template.
+set("capex", IESU.annuity(1000.0; lifetime=10, rate=0.05))
+```
+
+Calculating a simple annuity, for a total amount of € 1000,- over a lifetime of 10 years with an interest rate of 5%,
+for a fraction of a year (given by `MODEL.yearspan`, which is the total timespan of the model in years):
+
+```julia
+# Set a parameter inside a template.
+set("capex", IESU.annuity(1000.0; lifetime=10, rate=0.05, fraction=MODEL.yearspan))
+```
+
+
+
+---
+
+#### `timespan`
+
+```julia
+timespan(model::JuMP.Model)::Float64
+
+
+```
+
+Calculate the total timespan (duration, time period, ...) of a model in hours.
+
+_**Arguments**_  
+
+- `model::JuMP.Model`: The model for which the timespan is to be calculated.
+
+_**Returns**_  
+
+`Float64`: The total timespan of the model in hours.
+
+
+
+---
+
+#### `yearspan`
+
+```julia
+yearspan(model::JuMP.Model)::Float64
+
+
+```
+
+Calculate the total timespan (duration, time period, ...) of a model in years. This assumes that a full year has a total
+of 8760 hours.
+
+_**Arguments**_  
+
+- `model::JuMP.Model`: The model for which the timespan is to be calculated.
+
+_**Returns**_  
+
+`Float64`: The total timespan of the model in years.
+
+
+
+---
+

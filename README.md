@@ -19,4 +19,16 @@ while still being user-friendly. This is enabled by reducing energy system asset
 supported by specialized implementation, and can be combined into complex systems without the need of a detailed
 understanding of mathematical modeling or proficiency in any coding-language.
 
-> Note: We are currently merging the documentation which was split into three locations and is also done (for a large part) in Julia, into this repository. This is a work in progress and will be updated over the next weeks.
+> If you are looking for the framework's core model, written in Julia, head over to the [IESopt.jl repository](https://github.com/ait-energy/IESopt.jl).
+
+## Getting started
+
+Head over to the [documentation](https://ait-energy.github.io/iesopt/) to get started with **IESopt**.
+
+## Contributing
+
+PRs accepted. Checkout the _developer documentation section_ in the [documentation](https://ait-energy.github.io/iesopt/).
+
+## License
+
+[MIT © AIT Austrian Institute of Technology GmbH.](LICENSE)

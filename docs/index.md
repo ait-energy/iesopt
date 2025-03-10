@@ -19,6 +19,8 @@ notebooks/first_model.ipynb
 tocs/tutorials_extracting_results.md
 tocs/tutorials_templates.md
 pages/tutorials/addons.md
+
+tocs/examples.md
 :::
 
 <!--- notebooks/mga_basic.ipynb --->

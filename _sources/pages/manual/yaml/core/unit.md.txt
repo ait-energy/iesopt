@@ -1,0 +1,859 @@
+# Unit
+
+```{note}
+This section of the documentation is auto-generated from the code of the Julia-based core model. Refer to [IESopt.jl](https://github.com/ait-energy/IESopt.jl) for any further details (which may require some familiarity with Julia).
+
+**If you spot incorrect math-mode rendering**, or similar issues, please [file an issue](https://github.com/ait-energy/iesopt/issues), since rendering documentation from Julia to Python is not the easiest task.
+```
+
+## Overview
+
+A `Unit` allows transforming one (or many) forms of energy into another one (or many), given some constraints and costs.
+
+:::{admonition} **Basic Examples**
+:class: dropdown
+
+A `Unit` that represents a basic gas turbine:
+
+```yaml
+gas_turbine:
+  type: Unit
+  inputs: {gas: gas_grid}
+  outputs: {electricity: node, co2: total_co2}
+  conversion: 1 gas -> 0.4 electricity + 0.2 co2
+  capacity: 10 out:electricity
+```
+
+A `Unit` that represents a basic wind turbine:
+
+```yaml
+wind_turbine:
+  type: Unit
+  outputs: {electricity: node}
+  conversion: ~ -> 1 electricity
+  capacity: 10 out:electricity
+  availability_factor: wind_factor@input_data
+  marginal_cost: 1.7 per out:electricity
+```
+
+A `Unit` that represents a basic heat pump, utilizing a varying COP:
+
+```yaml
+heatpump:
+  type: Unit
+  inputs: {electricity: grid}
+  outputs: {heat: heat_system}
+  conversion: 1 electricity -> cop@inputfile heat
+  capacity: 10 in:electricity
+```
+
+:::
+
+## Parameters
+
+### `conversion`
+
+The conversion expression describing how this `Unit` transforms energy. Specified in the form of "$\alpha \cdot carrier_1 + \beta \cdot carrier_2$ -> $\gamma \cdot carrier_3 + \delta \cdot carrier_4$". Coefficients allow simple numerical calculations, but are not allowed to include spaces (so e.g. `(1.0/9.0)` is valid). Coefficients are allowed to be `NumericalInput`s, resulting in `column@data_file` being a valid coefficient (this can be used e.g. for time-varying COPs of heatpumps).
+
+- **mandatory:** yes
+- **default:** $-$
+- **values:** string
+- **unit:** -
+
+
+### `capacity`
+
+Maximum capacity of this `Unit`, to be given in the format `X in/out:carrier` where `X` is the amount, `in` or `out` (followed by `:`) specifies whether the limit is to be placed on the in- our output of this `Unit`, and `carrier` specifies the respective `Carrier`. Example: `100 in:electricity` (to limit the "input rating").
+
+- **mandatory:** yes
+- **default:** $-$
+- **values:** value dir:carrier
+- **unit:** -
+
+
+### `outputs`
+
+Dictionary specifying the output "ports" of this `Unit`. Refer to the basic examples for the general syntax.
+
+- **mandatory:** yes
+- **default:** $-$
+- **values:** dict
+- **unit:** -
+
+
+### `inputs`
+
+Dictionary specifying the input "ports" of this `Unit`. If not specified (= no explicit input), the `conversion` has to follow the form of `conversion: ~ -> ...`, indicating an "open" input. This may, e.g., be used for renewable energy sources, where the primary energy input (e.g., solar) is not explicitly modeled.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** dict
+- **unit:** -
+
+
+### `availability`
+
+Time series (or fixed value) that limits the available capacity. If, e.g., `capacity: 100 out:electricity` and `availability: 70`, the available capacity will only be `70 electricity`. Can be used to model non-availability of power plants, e.g., due to maintenance. For time-varying availability of intermittent generators (e.g., wind), it's recommended (most of the time) to use `availability_factor` instead.
+
+- **mandatory:** no
+- **default:** $+\infty$
+- **values:** numeric
+- **unit:** power
+
+
+### `availability_factor`
+
+Similar to `availability`, but given as factor of `capacity` instead. If, e.g., `capacity: 100 out:electricity` and `availability_factor: 0.7`, the available capacity will only be `70 electricity`. This is especially useful for intermittent generators, where the availability is not a fixed value, but depends on the weather, and can be passed, e.g., by setting `availability_factor: wind@input_data_file`.
+
+- **mandatory:** no
+- **default:** $1$
+- **values:** ``\in [0, 1]``
+- **unit:** -
+
+
+### `adapt_min_to_availability`
+
+If `true`, the minimal partial load will be influenced by the availability. Example: Consider a `Unit` with `capacity: 100 out:electricity`, a `min_conversion` of `0.4`, and an `availability_factor` of `0.5`. This entails having `50 electricity` available, while the minimal partial load is `40 electricity`. This results in the `Unit` at best operating only closely above the minimal partial load. Furthermore, an `availability_factor` below `0.4` would result in no feasible generation, besides shutting the `Unit` off. While this might be the intended mode of operation in many use cases, `adapt_min_to_availability` can change this: If set to `true`, this dynamically changes the minimal partial load. In the previous example, that means `(100 * 0.5) * 0.4 = 20 electricity` (the 50% minimum load are now based on the available 40), changing the overall behaviour (including efficiencies) as well as leading to feasible generations even when the `availability_factor` is below `0.4`.
+
+- **mandatory:** no
+- **default:** $false$
+- **values:** `true`, `false`
+- **unit:** -
+
+
+### `marginal_cost`
+
+Marginal cost of the consumption/generation of one unit of energy of the specified carrier. Has to be given in the format `value per dir:carrier`, e.g. `3.5 per out:electricity` for a marginal cost of 3.5 monetary units per unit of electricity generated.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** `value per dir:carrier`
+- **unit:** monetary per energy
+
+
+### `enable_ramp_up`
+
+Enables calculation of upward ramps. Ramping is based on the carrier specified in `capacity`.
+
+- **mandatory:** no
+- **default:** $false$
+- **values:** `true`, `false`
+- **unit:** -
+
+
+### `enable_ramp_down`
+
+Enables calculation of downward ramps. Ramping is based on the carrier specified in `capacity`.
+
+- **mandatory:** no
+- **default:** $false$
+- **values:** `true`, `false`
+- **unit:** -
+
+
+### `ramp_up_cost`
+
+Sets the cost of ramping up (increasing in-/output) by 1 unit of the capacity carrier.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** monetary per power
+
+
+### `ramp_down_cost`
+
+Sets the cost of ramping down (decreasing in-/output) by 1 unit of the capacity carrier.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** monetary per power
+
+
+### `ramp_up_limit`
+
+Limits the allowed ramping up based on this factor of the total capacity. If `capacity: 100 in:electricity` with `ramp_up_limit: 0.2`, this limits the total increase of usage of electricity (on the input) to 20 units (power) per hour. For example, starting at an input of 35, after one hour the input has to be lesser than or equal to 55. If a `Snapshot`'s duration is set to, e.g., two hours, this would allow a total increase of 40 units.
+
+- **mandatory:** no
+- **default:** $1$
+- **values:** ``\in [0, 1]``
+- **unit:** -
+
+
+### `ramp_down_limit`
+
+Limits the allowed ramping down based on this factor of the total capacity. See `ramp_up_limit`.
+
+- **mandatory:** no
+- **default:** $1$
+- **values:** ``\in [0, 1]``
+- **unit:** -
+
+
+### `min_on_time`
+
+Minimum on-time of the `Unit`. If set, the `Unit` has to be on for at least this amount of time, after turning on. It is highly recommended to only use this with `unit_commitment: binary`, unless you know why it's fine to use with another mode.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** hours
+
+
+### `min_off_time`
+
+Minimum off-time of the `Unit`. If set, the `Unit` has to be off for at least this amount of time, after turning off. It is highly recommended to only use this with `unit_commitment: binary`, unless you know why it's fine to use with another mode.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** hours
+
+
+### `on_time_before`
+
+Time that this `Unit` has already been running before the optimization starts. Can be used in combination with `min_on_time`.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** hours
+
+
+### `off_time_before`
+
+Time that this `Unit` has already been off before the optimization starts. Can be used in combination with `min_off_time`.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** hours
+
+
+### `is_on_before`
+
+Number of `Unit`s that should be considered to have been running before the optimization starts. Can be used in combination with `on_time_before`, especially for `unit_count` greater than 1.
+
+- **mandatory:** no
+- **default:** $1$
+- **values:** numeric
+- **unit:** -
+
+
+### `unit_commitment`
+
+Controls how the unit commitment of this `Unit` is handled. `linear` results in the ability to startup parts of the unit (so `0.314159` is a feasible amount of "turned on unit"), while `binary` restricts the `Unit` to either be on (converting the `conversion_at_min` + possible additional conversion above that minimum) or off (converting nothing); `integer` is needed to consider `binary` unit commitment for `Unit`s with more than 1 "grouped unit" (see `unit_count`).
+
+- **mandatory:** no
+- **default:** $off$
+- **values:** `off`, `linear`, `binary`, `integer`
+- **unit:** -
+
+
+### `unit_count`
+
+Number of units aggregated in this `Unit`. Besides interacting with the mode of `unit_commitment`, this mainly is responsible for scaling the output (e.g. grouping 47 of the same wind turbine, ...).
+
+- **mandatory:** no
+- **default:** $1$
+- **values:** numeric
+- **unit:** -
+
+
+### `min_conversion`
+
+If `unit_commitment` is not set to `off`, this specifies the percentage that is considered to be the minimal feasible partial load this `Unit` can operate at. Operating below that setpoint is not allowed, at that point the `conversion_at_min` coefficients are used, and above that they are scaled to result in `conversion` when running at full capacity.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** ``\in [0, 1]``
+- **unit:** -
+
+
+### `conversion_at_min`
+
+The conversion expression while running on the minimal partial load. Only applicable if `unit_commitment` is not `off` and `min_conversion` is explicitly set. Follows the same form as `conversion`.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** string
+- **unit:** -
+
+
+### `startup_cost`
+
+Costs per startup (also applicable if startups are not binary or integer). This is necessary to allow `conversion_at_min` to have (at least partially) the effect that one expects, if `unit_commitment: linear`.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** monetary per start
+
+
+### `build_priority`
+
+Priority for the build order of components. Components with higher build_priority are built before. This can be useful for addons, that connect multiple components and rely on specific components being initialized before others.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** -
+
+
+## Detailed reference
+
+
+### Expressions
+
+### Variables
+
+#### `conversion`
+
+:::{admonition} How to access this variable?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").var.conversion
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").var.conversion
+```
+
+:::
+
+Full implementation and all details: [`unit/var_conversion @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/var_conversion.jl)
+
+> Add the variable describing the `unit`'s conversion to the `model`.
+> 
+> &nbsp;
+> 
+> This can be accessed via `unit.var.conversion[t]`; this does not describe the full output of the `Unit` since that maybe also include fixed generation based on the `ison` variable.
+> 
+> &nbsp;
+> 
+:::{info}
+
+This applies some heavy recalculation of efficiencies to account for minimum load and so on, that are currently not fully documented. This essentially comes down to the following: As long as minimum load is not enabled, that is rather simple (using the conversion expression to withdraw energy from the inputs and push energy into the outputs). If a separate minimum load conversion is specified it results in the following: (1) if running at minimum load the supplied minimum load conversion will be used; (2) if running at maximum capacity the "normal" conversion expression will be used; (3) for any point in-between a linear interpolation scales up all coefficients of the conversion expression to "connect" case (1) and (2).
+:::
+#### `ison`
+
+:::{admonition} How to access this variable?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").var.ison
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").var.ison
+```
+
+:::
+
+Full implementation and all details: [`unit/var_ison @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/var_ison.jl)
+
+> Add the variable describing the current "online" state of the `unit` to the `model`.
+> 
+> &nbsp;
+> 
+> The variable can be further parameterized using the `unit.unit_commitment` setting ("linear", "binary", "integer"). It will automatically enforce the constraints $0 \leq \text{ison} \leq \text{unitcount}$, with $\text{unitcount}$ describing the number of units that are aggregated in this `unit` (set by `unit.unit_count`). This can be accessed via `unit.var.ison[t]`.
+#### `ramp`
+
+:::{admonition} How to access this variable?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").var.ramp
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").var.ramp
+```
+
+:::
+
+Full implementation and all details: [`unit/var_ramp @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/var_ramp.jl)
+
+> Add the variable describing the per-snapshot ramping to the `model`.
+> 
+> &nbsp;
+> 
+> This adds two variables per snapshot to the model (if the respective setting `unit.enable_ramp_up` or `unit.enable_ramp_down` is activated). Both are preconstructed with a fixed lower bound of `0`. This describes the amount of change in conversion that occurs during the current snapshot. These can be accessed via `unit.var.ramp_up[t]` and `unit.var.ramp_down[t]`.
+> 
+> &nbsp;
+> 
+> These variables are only used for ramping **costs**. The limits are enforced directly on the conversion, which means this variable only exists if costs are specified!
+#### `startup`
+
+:::{admonition} How to access this variable?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").var.startup
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").var.startup
+```
+
+:::
+
+Full implementation and all details: [`unit/var_startup @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/var_startup.jl)
+
+> Add the variable describing the per-snapshot startup to the `model`.
+> 
+> &nbsp;
+> 
+> This adds a variable per snapshot to the model (if the respective setting `unit.unit_commitment` is activated). The variable can be further parameterized using the `unit.unit_commitment` setting ("linear", "binary", "integer"). It will automatically enforce the constraints $0 \leq \text{startup} \leq \text{unitcount}$, with $\text{unitcount}$ describing the number of units that are aggregated in this `unit` (set by `unit.unit_count`). This describes the startup that happens during the current snapshot and can be accessed via `unit.var.startup`.
+### Constraints
+
+#### `conversion_bounds`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").con.conversion_bounds
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").con.conversion_bounds
+```
+
+:::
+
+Full implementation and all details: [`unit/con_conversion_bounds @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/con_conversion_bounds.jl)
+
+> Add the constraint defining the `unit`'s conversion bounds to the `model`.
+> 
+> &nbsp;
+> 
+> This makes use of the current `min_capacity` (describing the lower limit of conversion; either 0 if no minimum load applies or the respective value of the minimum load) as well as the `online_capacity` (that can either be the full capacity if unit commitment is disabled, or the amount that is currently active).
+> 
+> &nbsp;
+> 
+> Depending on how the "availability" of this `unit` is handled it constructs the following constraints:
+> 
+> &nbsp;
+> 
+> `if !isnothing(unit.availability)`
+> 
+$$
+\begin{aligned}
+& \text{conversion}_t \geq \text{capacity}_{\text{min}, t}, \qquad \forall t \in T \\
+& \text{conversion}_t \leq \text{capacity}_{\text{online}, t}, \qquad \forall t \in T \\
+& \text{conversion}_t \leq \text{availability}_t, \qquad \forall t \in T
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+> 
+> &nbsp;
+> 
+> This effectively results in $\text{conversion}_t \leq \min(\text{capacity}_{\text{online}, t}, \text{availability}_t)$.
+> 
+> &nbsp;
+> 
+> `if !isnothing(unit.availability_factor)`
+> 
+$$
+\begin{aligned}
+& \text{conversion}_t \geq \text{capacity}_{\text{min}, t}, \qquad \forall t \in T \\
+& \text{conversion}_t \leq \text{capacity}_{\text{online}, t} \cdot \text{availability}_{\text{factor}, t}, \qquad \forall t \in T
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+> 
+> &nbsp;
+> 
+:::{info}
+
+If one is able to choose between using `availability` or `availability_factor` (e.g. for restricting available capacity during a planned revision to half the units capacity), enabling `availability_factor` (in this example 0.5) will result in a faster model (build and probably solve) since it makes use of one less constraint.
+:::
+> If no kind of availability limiting takes place, the following bounds are enforced:
+> 
+> &nbsp;
+> 
+$$
+\begin{aligned}
+& \text{conversion}_t \geq \text{capacity}_{\text{min}, t}, \qquad \forall t \in T \\
+& \text{conversion}_t \leq \text{capacity}_{\text{online}, t}, \qquad \forall t \in T
+\end{aligned}
+$$
+#### `ison`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").con.ison
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").con.ison
+```
+
+:::
+
+Full implementation and all details: [`unit/con_ison @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/con_ison.jl)
+
+> Construct the upper bound for `var_ison`, based on `unit.unit_count`, if it is handled by an external `Decision`.
+#### `min_onoff_time`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").con.min_onoff_time
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").con.min_onoff_time
+```
+
+:::
+
+Full implementation and all details: [`unit/con_min_onoff_time @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/con_min_onoff_time.jl)
+
+> Add the constraints modeling min on- or off-time of a `Unit` to the `model`.
+> 
+> &nbsp;
+> 
+> This constructs the constraints
+> 
+> &nbsp;
+> 
+$$
+\begin{align}
+& \sum_{t' = t}^{t + \text{min\_on\_time}} ison_{t'} >= \text{min\_on\_time} \cdot (ison_t - ison_{t-1}) \qquad \forall t \in T \\
+& \sum_{t' = t}^{t + \text{min\_off\_time}} (1 - ison_{t'}) >= \text{min\_off\_time} \cdot (ison_{t-1} - ison_t) \qquad \forall t \in T
+\end{align}
+$$
+> 
+> &nbsp;
+> 
+> respecting `on_time_before` and `off_time_before`, and `is_on_before`. See the code for more details.
+> 
+> &nbsp;
+> 
+:::{admonition} **Aggregated units**
+:class: info
+
+This is currently not fully adapted to account for `Unit`s with `unit_count > 1`.
+:::
+#### `ramp`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").con.ramp
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").con.ramp
+```
+
+:::
+
+Full implementation and all details: [`unit/con_ramp @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/con_ramp.jl)
+
+> Add the auxiliary constraint that enables calculation of per snapshot ramping to the `model`.
+> 
+> &nbsp;
+> 
+> Depending on whether ramps are enabled, none, one, or both of the following constraints are constructed:
+> 
+> &nbsp;
+> 
+$$
+\begin{aligned}
+& \text{ramp}_{\text{up}, t} \geq \text{conversion}_{t} - \text{conversion}_{t-1}, \qquad \forall t \in T \\
+& \text{ramp}_{\text{down}, t} \geq \text{conversion}_{t-1} - \text{conversion}_{t}, \qquad \forall t \in T
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+> This calculates the ramping that happens from the PREVIOUS snapshot to this one. That means that if:
+> 
+> &nbsp;
+> 
+> * `out[5] = 100` and `out[4] = 50`, then `ramp_up[5] = 50` and `ramp_down[5] = 0`
+> * `ramp_up[1] = ramp_down[1] = 0`
+> 
+> &nbsp;
+> 
+:::{info}
+
+This currently does not support pre-setting the initial states of the unit (it can be done manually but there is no exposed parameter), which will be implemented in the future to allow for easy / correct rolling optimization runs.
+:::
+#### `ramp_limit`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").con.ramp_limit
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").con.ramp_limit
+```
+
+:::
+
+Full implementation and all details: [`unit/con_ramp_limit @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/con_ramp_limit.jl)
+
+> Add the constraint describing the ramping limits of this `unit` to the `model`.
+> 
+> &nbsp;
+> 
+> This makes use of the maximum capacity of the `unit`, which is just the total installed capacity. Both, up- and downwards ramps can be enabled separately (via `unit.ramp_up_limit` and `unit.ramp_down_limit`), resulting in either or both of:
+> 
+> &nbsp;
+> 
+$$
+\begin{aligned}
+& \text{ramp}_{\text{up}, t} \leq \text{ramplimit}_\text{up} \cdot \text{capacity}_\text{max} \cdot \omega_t, \qquad \forall t \in T \\
+& \text{ramp}_{\text{down}, t} \leq \text{ramplimit}_\text{down} \cdot \text{capacity}_\text{max} \cdot \omega_t, \qquad \forall t \in T
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+> This does **not** make use of the ramping variable (that is only used for costs - if there are costs).
+> 
+> &nbsp;
+> 
+> This calculates the ramping that happens from the PREVIOUS snapshot to this one. That means that if:
+> 
+> &nbsp;
+> 
+> * `out[5] = 100` and `out[4] = 50`, then `ramp_up[5] = 50` and `ramp_down[5] = 0`
+> * `ramp_up[1] = ramp_down[1] = 0`
+#### `startup`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").con.startup
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").con.startup
+```
+
+:::
+
+Full implementation and all details: [`unit/con_startup @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/con_startup.jl)
+
+> Add the auxiliary constraint that enables calculation of per snapshot startup to the `model`.
+> 
+> &nbsp;
+> 
+> Depending on whether startup handling is enabled, the following constraint is constructed:
+> 
+> &nbsp;
+> 
+$$
+\begin{aligned}
+& \text{startup}_{\text{up}, t} \geq \text{ison}_{t} - \text{ison}_{t-1}, \qquad \forall t \in T
+\end{aligned}
+$$
+> 
+> &nbsp;
+> 
+> This calculates the startup that happens from the PREVIOUS snapshot to this one. That means that if:
+> 
+> &nbsp;
+> 
+> * `ison[5] = 1` and `ison[4] = 0`, then `startup[5] = 1`
+### Objectives
+
+#### `marginal_cost`
+
+:::{admonition} How to access this objective?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").obj.marginal_cost
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").obj.marginal_cost
+```
+
+:::
+
+Full implementation and all details: [`unit/obj_marginal_cost @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/obj_marginal_cost.jl)
+
+> Add the (potential) cost of this `unit`'s conversion (`unit.marginal_cost`) to the global objective function.
+> 
+> &nbsp;
+> 
+$$
+\sum_{t \in T} \text{conversion}_t \cdot \text{marginalcost}_t \cdot \omega_t
+$$
+#### `ramp_cost`
+
+:::{admonition} How to access this objective?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").obj.ramp_cost
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").obj.ramp_cost
+```
+
+:::
+
+Full implementation and all details: [`unit/obj_ramp_cost @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/obj_ramp_cost.jl)
+
+> Add the (potential) cost of this `unit`'s ramping to the global objective function.
+> 
+> &nbsp;
+> 
+> To allow for finer control, costs of up- and downwards ramping can be specified separately (using `unit.ramp_up_cost` and `unit.ramp_down_cost`):
+> 
+> &nbsp;
+> 
+$$
+\sum_{t \in T} \text{ramp}_{\text{up}, t} \cdot \text{rampcost}_{\text{up}} + \text{ramp}_{\text{down}, t} \cdot \text{rampcost}_{\text{down}}
+$$
+#### `startup_cost`
+
+:::{admonition} How to access this objective?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_unit").obj.startup_cost
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_unit").obj.startup_cost
+```
+
+:::
+
+Full implementation and all details: [`unit/obj_startup_cost @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/unit/obj_startup_cost.jl)
+
+> Add the (potential) cost of this `unit`'s startup behaviour (configured by `unit.startup_cost` if `unit.unit_commitment != :off`).
+> 
+> &nbsp;
+> 
+$$
+\sum_{t \in T} \text{startup}_t \cdot \text{startupcost}
+$$

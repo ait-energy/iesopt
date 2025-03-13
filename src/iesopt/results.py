@@ -389,7 +389,7 @@ class Results:
         return Results._safe_convert(result)
 
     def _from_file(self, file: str):
-        results = self._IESopt.load_results(file)
+        results = self._IESopt.ResultsJLD2.load_results(file)
 
         result_entries = ddict({})
         for key in results.keys():

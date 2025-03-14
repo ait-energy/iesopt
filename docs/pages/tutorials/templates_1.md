@@ -185,31 +185,31 @@ The validation function is used to check if the parameters are valid. Add the fo
 functions:
   validate: |
     # Check if `p_nom` is non-negative.
-    @check get("p_nom") isa Number
-    @check get("p_nom") >= 0
+    @check this.get("p_nom") isa Number
+    @check this.get("p_nom") >= 0
 
     # Check if the `Node` parameters are `String`s, where `heat_from` may also be `nothing`.
-    @check get("electricity_from") isa String
-    @check get("heat_from") isa String || isnothing(get("heat_from"))
-    @check get("heat_to") isa String
+    @check this.get("electricity_from") isa String
+    @check this.get("heat_from") isa String || isnothing(this.get("heat_from"))
+    @check this.get("heat_to") isa String
 
     # Check if `cop` is positive.
-    @check get("cop") isa Number
-    @check get("cop") > 0
+    @check this.get("cop") isa Number
+    @check this.get("cop") > 0
   # ... the rest of the template ...
 ```
 
 Let's go through this step by step:
 
 - You can start comments (as separate line or inline) with `#`, as you would in Python.
-- You can use `get("some_param")` to access the value of a parameter.
+- You can use `this.get("some_param")` to access the value of a parameter.
 - You can use `@check` to check if a condition is met. If it is not, an error will be thrown. All statements starting
   with `@` are so called "macros", which are just "special" functions. You can do `@check(condition)` or
   `@check condition`, since macros do not require parentheses.
 - You can use `isa` to check if a value is of a certain type. This is similar to `isinstance` in Python. While it is a
-  special keyword, if you prefer, you can also call it in a more conventional way: `isa(get("p_nom"), Number)`.
+  special keyword, if you prefer, you can also call it in a more conventional way: `isa(this.get("p_nom"), Number)`.
 - Data types are capitalized in Julia, so it is `String` instead of `string`, and `Number` is a superset of all numeric
-  types (if necessary you could instead, e.g., check for `get("some_param") isa Int`).
+  types (if necessary you could instead, e.g., check for `this.get("some_param") isa Int`).
 - Logical operators are similar to Python, so `||` is like `or`, and `&&` is like `and`.
 - If all checks pass, the template is considered valid, and the model can be built.
 
@@ -287,35 +287,35 @@ functions:
     # ... the previous validation code ...
 
     # Check if `p_nom_max` is either `nothing` or at least `p_nom`.
-    @check isnothing(get("p_nom_max")) || (get("p_nom_max") isa Number && get("p_nom_max") >= get("p_nom"))
+    @check isnothing(this.get("p_nom_max")) || (this.get("p_nom_max") isa Number && this.get("p_nom_max") >= this.get("p_nom"))
   prepare: |
     # Determine if investment should be enabled, and set the parameter (used to enable `decision`).
-    invest = !isnothing(get("p_nom_max")) && get("p_nom_max") > get("p_nom")
-    set("_invest", invest)
+    invest = !isnothing(this.get("p_nom_max")) && this.get("p_nom_max") > this.get("p_nom")
+    this.set("_invest", invest)
 
     if invest
         # Set the capacity to the size of the decision variable.
-        myself = get("self")
-        set("_capacity", "$(myself).decision:value")
+        myself = this.get("self")
+        this.set("_capacity", "$(myself).decision:value")
     else
         # Set the capacity to the value of `p_nom`.
-        set("_capacity", get("p_nom"))
+        this.set("_capacity", this.get("p_nom"))
     end
 
     # Prepare some helper variables to make the code afterwards more readable.
-    elec_from = get("electricity_from")
-    heat_from = get("heat_from")
-    cop = get("cop")
+    elec_from = this.get("electricity_from")
+    heat_from = this.get("heat_from")
+    cop = this.get("cop")
 
     # Handle the optional `heat_from` parameter.
     if isnothing(heat_from)
         # If `heat_from` is not specified, we just use electricity as input.
-        set("_inputs", "{electricity: $(elec_from)}")
-        set("_conversion", "1 electricity -> $(cop) heat")
+        this.set("_inputs", "{electricity: $(elec_from)}")
+        this.set("_conversion", "1 electricity -> $(cop) heat")
     else
         # If `heat_from` is specified, we now have to account for two inputs.
-        set("_inputs", "{electricity: $(elec_from), heat: $(heat_from)}")
-        set("_conversion", "1 electricity + $(cop - 1) heat -> $(cop) heat")
+        this.set("_inputs", "{electricity: $(elec_from), heat: $(heat_from)}")
+        this.set("_conversion", "1 electricity + $(cop - 1) heat -> $(cop) heat")
     end
 ```
 
@@ -340,100 +340,100 @@ To be added.
 To be added.
 
 !!! details "Complete template YAML"
-    ```yaml
-    # # Custom Heat Pump
+```yaml
+# # Custom Heat Pump
 
-    # A (custom) heat pump that consumes electricity and heat, and produces heat.
+# A (custom) heat pump that consumes electricity and heat, and produces heat.
 
-    # ## Parameters
-    # - `p_nom`: The nominal power (electricity) of the heat pump.
-    # - `electricity_from`: The `Node` that this heat pump is connected to for electricity input.
-    # - `heat_from`: The `Node` that this heat pump is connected to for heat input.
-    # - `heat_to`: The `Node` that this heat pump is connected to for heat output.
-    # - `cop`: The coefficient of performance of the heat pump.
+# ## Parameters
+# - `p_nom`: The nominal power (electricity) of the heat pump.
+# - `electricity_from`: The `Node` that this heat pump is connected to for electricity input.
+# - `heat_from`: The `Node` that this heat pump is connected to for heat input.
+# - `heat_to`: The `Node` that this heat pump is connected to for heat output.
+# - `cop`: The coefficient of performance of the heat pump.
 
-    # ## Components
-    # _to be added_
+# ## Components
+# _to be added_
 
-    # ## Usage
-    # _to be added_
+# ## Usage
+# _to be added_
 
-    # ## Details
-    # _to be added_
+# ## Details
+# _to be added_
 
-    parameters:
-      p_nom: null
-      p_nom_max: null
-      electricity_from: null
-      heat_from: null
-      heat_to: null
-      cop: null
-      _inputs: null
-      _conversion: null
-      _capacity: null
-      _invest: null
+parameters:
+  p_nom: null
+  p_nom_max: null
+  electricity_from: null
+  heat_from: null
+  heat_to: null
+  cop: null
+  _inputs: null
+  _conversion: null
+  _capacity: null
+  _invest: null
+
+components:
+  unit:
+    type: Unit
+    inputs: <_inputs>
+    outputs: {heat: <heat_to>}
+    conversion: <_conversion>
+    capacity: <_capacity> in:electricity
     
-    components:
-      unit:
-        type: Unit
-        inputs: <_inputs>
-        outputs: {heat: <heat_to>}
-        conversion: <_conversion>
-        capacity: <_capacity> in:electricity
-        
-      decision:
-        type: Decision
-        enabled: <_invest>
-        lb: <p_nom>
-        ub: <p_nom_max>
+  decision:
+    type: Decision
+    enabled: <_invest>
+    lb: <p_nom>
+    ub: <p_nom_max>
 
-    functions:
-      validate: |
-        # Check if `p_nom` is non-negative.
-        @check get("p_nom") isa Number
-        @check get("p_nom") >= 0
+functions:
+  validate: |
+    # Check if `p_nom` is non-negative.
+    @check this.get("p_nom") isa Number
+    @check this.get("p_nom") >= 0
 
-        # Check if the `Node` parameters are `String`s, where `heat_from` may also be `nothing`.
-        @check get("electricity_from") isa String
-        @check get("heat_from") isa String || isnothing(get("heat_from"))
-        @check get("heat_to") isa String
+    # Check if the `Node` parameters are `String`s, where `heat_from` may also be `nothing`.
+    @check this.get("electricity_from") isa String
+    @check this.get("heat_from") isa String || isnothing(this.get("heat_from"))
+    @check this.get("heat_to") isa String
 
-        # Check if `cop` is positive.
-        @check get("cop") isa Number
-        @check get("cop") > 0
+    # Check if `cop` is positive.
+    @check this.get("cop") isa Number
+    @check this.get("cop") > 0
 
-        # Check if `p_nom_max` is either `nothing` or at least `p_nom`.
-        @check isnothing(get("p_nom_max")) || (get("p_nom_max") isa Number && get("p_nom_max") >= get("p_nom"))
-      prepare: |
-        # Determine if investment should be enabled, and set the parameter (used to enable `decision`).
-        invest = !isnothing(get("p_nom_max")) && get("p_nom_max") > get("p_nom")
-        set("_invest", invest)
+    # Check if `p_nom_max` is either `nothing` or at least `p_nom`.
+    @check isnothing(this.get("p_nom_max")) || (this.get("p_nom_max") isa Number && this.get("p_nom_max") >= this.get("p_nom"))
+  prepare: |
+    # Determine if investment should be enabled, and set the parameter (used to enable `decision`).
+    invest = !isnothing(this.get("p_nom_max")) && this.get("p_nom_max") > this.get("p_nom")
+    this.set("_invest", invest)
 
-        if invest
-            # Set the capacity to the size of the decision variable.
-            myself = get("self")
-            set("_capacity", "$(myself).decision:value")
-        else
-            # Set the capacity to the value of `p_nom`.
-            set("_capacity", get("p_nom"))
-        end
+    if invest
+        # Set the capacity to the size of the decision variable.
+        myself = this.get("self")
+        this.set("_capacity", "$(myself).decision:value")
+    else
+        # Set the capacity to the value of `p_nom`.
+        this.set("_capacity", this.get("p_nom"))
+    end
 
-        # Prepare some helper variables to make the code afterwards more readable.
-        elec_from = get("electricity_from")
-        heat_from = get("heat_from")
-        cop = get("cop")
+    # Prepare some helper variables to make the code afterwards more readable.
+    elec_from = this.get("electricity_from")
+    heat_from = this.get("heat_from")
+    cop = this.get("cop")
 
-        # Handle the optional `heat_from` parameter.
-        if isnothing(heat_from)
-            # If `heat_from` is not specified, we just use electricity as input.
-            set("_inputs", "{electricity: $(elec_from)}")
-            set("_conversion", "1 electricity -> $(cop) heat")
-        else
-            # If `heat_from` is specified, we now have to account for two inputs.
-            set("_inputs", "{electricity: $(elec_from), heat: $(heat_from)}")
-            set("_conversion", "1 electricity + $(cop - 1) heat -> $(cop) heat")
-        end
-    ```
+    # Handle the optional `heat_from` parameter.
+    if isnothing(heat_from)
+        # If `heat_from` is not specified, we just use electricity as input.
+        this.set("_inputs", "{electricity: $(elec_from)}")
+        this.set("_conversion", "1 electricity -> $(cop) heat")
+    else
+        # If `heat_from` is specified, we now have to account for two inputs.
+        this.set("_inputs", "{electricity: $(elec_from), heat: $(heat_from)}")
+        this.set("_conversion", "1 electricity + $(cop - 1) heat -> $(cop) heat")
+    end
+```
 
 ## Next steps
 

@@ -20,11 +20,14 @@ Possibilities for that could be:
   standard one
 - `FooHeatPump`, if you need it specifically for a project called "Foo"
 
-!!! info "Naming conventions"
-    Templates follow a naming convention similar to `PascalCase`:
-    - The name must start with an upper-case letter
-    - It must consist of at least two letters
-    - Numbers and special characters are not allowed
+:::{admonition} Naming conventions
+:class: note
+Templates follow a naming convention similar to `PascalCase`:
+
+- The name must start with an upper-case letter
+- It must consist of at least two letters
+- Numbers and special characters are not allowed
+:::
 
 Let's go with `CustomHeatPump` for now. Create a new file `CustomHeatPump.iesopt.template.yaml` (if you are already
 working on a model, the best place to put this would be a `templates/` folder), and add the following lines:
@@ -119,9 +122,11 @@ parameters:
   # ...
 ```
 
-!!! info "Docstring format"
-    All of that is actually just Markdown inserted into your template. However, make sure to stick to separating the
-    leading `#` from the actual text by a space, as this is required for IESopt to better understand your documentation.
+:::{admonition} Docstring format
+:class: note
+All of that is actually just Markdown inserted into your template. However, make sure to stick to separating the
+leading `#` from the actual text by a space, as this is required for IESopt to better understand your documentation.
+:::
 
 Now, every user of the template will see this information, and they will notice, that none of the parameters are marked
 as optional. As you see, there are a lot of other sections to be added, but we will fill them out at the end, after we
@@ -272,12 +277,14 @@ So ... a lot of changes. Let's go through them step by step:
   are the minimum and maximum values that the decision can take. In our case, the decision is the nominal power of the
   heat pump, which can be between `p_nom` and `p_nom_max`.
 
-!!! info "Naming the components"
-    The names of the components are arbitrary, and you can choose whatever you like. However, it is recommended to use
-    meaningful names, so that you can easily understand what the component does. Component names follow a naming
-    convention similar to `snake_case`: They must start with a lower-case letter, and can contain numbers and
-    underscores (but are not allowed to end in an `_`). They can further contain `.`, but this is "dangerous" and an
-    expert feature, that you should not use unless you know what it does, and why you need it.
+:::{admonition} Naming the components
+:class: note
+The names of the components are arbitrary, and you can choose whatever you like. However, it is recommended to use
+meaningful names, so that you can easily understand what the component does. Component names follow a naming
+convention similar to `snake_case`: They must start with a lower-case letter, and can contain numbers and
+underscores (but are not allowed to end in an `_`). They can further contain `.`, but this is "dangerous" and an
+expert feature, that you should not use unless you know what it does, and why you need it.
+:::
 
 Onto the actual functionality. Let's add the `prepare` function, and some additional validation code:
 
@@ -339,7 +346,9 @@ To be added.
 
 To be added.
 
-!!! details "Complete template YAML"
+:::{admonition} Complete template YAML
+:collapsible: closed
+
 ```yaml
 # # Custom Heat Pump
 
@@ -434,6 +443,8 @@ functions:
         this.set("_conversion", "1 electricity + $(cop - 1) heat -> $(cop) heat")
     end
 ```
+
+:::
 
 ## Next steps
 

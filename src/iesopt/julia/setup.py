@@ -36,8 +36,7 @@ def add_package(f_add, name: str, config: str, target: str):
         f_add(*lookup_package(name), version="=" + config, target=target)
 
 
-def setup_julia():
-    target = Path().cwd() / ".iesopt"
+def setup_julia(target: Path):
     target.mkdir(exist_ok=True)
     target_fullpath = str(target.resolve())
     logger.info(f"    Target for juliapkg: '{target_fullpath}'")

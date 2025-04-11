@@ -103,3 +103,6 @@ def create_sysimage():
     julia.PackageCompiler.create_sysimage(
         juliacall.convert(julia.Vector, ["IESopt", "JuMP", "HiGHS", "Pkg"]), sysimage_path=str(__sysimage__)
     )
+
+    print("Successfully created sysimage; launch your script/code again to use it")
+    exit(0)

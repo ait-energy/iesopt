@@ -36,7 +36,7 @@ def add_package(f_add, name: str, config: str, target: str):
         f_add(*lookup_package(name), version="=" + config, target=target)
 
 
-def setup_julia(target: Path):
+def setup_julia(target: Path, sysimage: Path):
     target.mkdir(exist_ok=True)
     target_fullpath = str(target.resolve())
     logger.info(f"    Target for juliapkg: '{target_fullpath}'")
@@ -129,11 +129,22 @@ def setup_julia(target: Path):
     else:
         raise Exception(f"Unknown optimization setting '{opt}'")
 
+    if sysimage.exists():
+        logger.info("    Using custom sysimage: %s" % str(sysimage))
+        os.environ["PYTHON_JULIACALL_SYSIMAGE"] = str(sysimage)
+    else:
+        logger.info("    Using default sysimage")
+        logger.warning(
+            " Consider executing `iesopt.create_sysimage()` once to create a custom sysimage that might offer improved"
+            " performance"
+        )
+
+    logger.info("    Executable: %s" % juliapkg.executable())
+    logger.info("    Project: %s" % juliapkg.project())
+
     import juliacall
 
     logger.info("Julia setup complete")
-    logger.info("    Executable: %s" % juliapkg.executable())
-    logger.info("    Project: %s" % juliapkg.project())
 
     custom_packages = list(Config.find("PKG_"))
     if len(custom_packages) > 0:

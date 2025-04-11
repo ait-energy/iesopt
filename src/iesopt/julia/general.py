@@ -6,7 +6,7 @@ from ..util import logger, set_iesopt_module_attr
 from .setup import setup_julia, import_modules
 
 
-def initialize(target: Path):
+def initialize(target: Path, sysimage: Path):
     if os.getenv("IESOPT_DOCS_NOEXEC"):
         logger.warning("Detected docs environment (env. var. `IESOPT_DOCS_NOEXEC` is set), skip loading Julia")
         return
@@ -15,7 +15,7 @@ def initialize(target: Path):
     logger.info("    © 2021 - now:  AIT Austrian Institute of Technology GmbH")
     logger.info("    Documentation: https://ait-energy.github.io/iesopt")
 
-    juliacall = setup_julia(target)
+    juliacall = setup_julia(target, sysimage)
     julia = juliacall.Main
     set_iesopt_module_attr("julia", julia)
     set_iesopt_module_attr("juliacall", juliacall)

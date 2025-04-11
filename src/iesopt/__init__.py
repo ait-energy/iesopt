@@ -64,7 +64,7 @@ def get_jl_docstr(obj: str):
 from .julia import initialize as _initialize_everything  # noqa: E402
 from .util import get_iesopt_module_attr as _get_iesopt_module_attr  # noqa: E402
 
-julia = _initialize_everything(__target__)
+julia = _initialize_everything(__target__, __sysimage__)
 
 # Export everything.
 from iesopt.model import Model as Model, ModelStatus as ModelStatus  # noqa: E402
@@ -89,18 +89,17 @@ if not os.getenv("IESOPT_DOCS_NOEXEC"):
 
 def create_sysimage():
     """Create a sysimage containing IESopt.jl and important dependencies."""
-    import iesopt
     import juliacall
     import juliapkg
 
-    iesopt.julia.Pkg.add("PackageCompiler")
-    iesopt.julia.seval("import PackageCompiler")
+    julia.Pkg.add("PackageCompiler")
+    julia.seval("import PackageCompiler")
 
     __target__.mkdir(exist_ok=True)
 
     juliapkg.add("Pkg", "44cfe95a-1eb2-52ea-b672-e2afdf69b78f", target=str(__target__ / "juliapkg.json"))
     juliapkg.resolve()
 
-    iesopt.julia.PackageCompiler.create_sysimage(
-        juliacall.convert(iesopt.julia.Vector, ["IESopt", "JuMP", "HiGHS", "Pkg"]), sysimage_path=__sysimage__
+    julia.PackageCompiler.create_sysimage(
+        juliacall.convert(julia.Vector, ["IESopt", "JuMP", "HiGHS", "Pkg"]), sysimage_path=str(__sysimage__)
     )

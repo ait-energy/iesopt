@@ -36,9 +36,10 @@ def add_package(f_add, name: str, config: str, target: str):
         f_add(*lookup_package(name), version="=" + config, target=target)
 
 
-def setup_julia():
-    target = str((Path(__file__).parent / "..").resolve())
-    logger.info(f"    Target for juliapkg: '{target}'")
+def setup_julia(target: Path, sysimage: Path):
+    target.mkdir(exist_ok=True)
+    target_fullpath = str(target.resolve())
+    logger.info(f"    Target for juliapkg: '{target_fullpath}'")
 
     logger.info("Checking Julia environment")
 
@@ -52,8 +53,8 @@ def setup_julia():
     if Path("juliapkg.json").exists():
         raise Exception("Found `juliapkg.json` file; remove it to prevent potential conflicts")
 
-    if (Path(__file__).parent / ".." / "juliapkg.json").exists():
-        (Path(__file__).parent / ".." / "juliapkg.json").unlink()
+    if (target / "juliapkg.json").exists():
+        (target / "juliapkg.json").unlink()
 
     # Check for local SSL certificate file, that can interfere with Julia setup.
     _ssl = None
@@ -77,20 +78,21 @@ def setup_julia():
         os.environ["JULIA_SSL_CA_ROOTS_PATH"] = ""
 
     # Setup Julia (checking if it "looks" valid).
+    sys.path.insert(0, target_fullpath)
     import juliapkg
 
     # Set Julia version.
-    juliapkg.require_julia(f"={Config.get('julia')}", target=target)
+    juliapkg.require_julia(f"={Config.get('julia')}", target=target_fullpath)
     # add_package(juliapkg.add, "pythoncall", "0.9.23", target)
 
     # Set versions of "core" packages.
-    add_package(juliapkg.add, "jump", Config.get("jump"), target)
-    add_package(juliapkg.add, "iesopt", Config.get("core"), target)
+    add_package(juliapkg.add, "jump", Config.get("jump"), target=target_fullpath)
+    add_package(juliapkg.add, "iesopt", Config.get("core"), target=target_fullpath)
 
     # Set versions of "solver" packages.
     for entry in Config.find("solver_"):
         name = entry[7:]
-        add_package(juliapkg.add, name, Config.get(entry), target)
+        add_package(juliapkg.add, name, Config.get(entry), target=target_fullpath)
 
     if not juliapkg.resolve(dry_run=True):
         logger.warning("The Julia environment is dirty and needs to be resolved, which can take some time")
@@ -128,11 +130,24 @@ def setup_julia():
     else:
         raise Exception(f"Unknown optimization setting '{opt}'")
 
+    if sysimage.exists():
+        logger.info("    Using custom sysimage: %s" % str(sysimage))
+        os.environ["PYTHON_JULIACALL_SYSIMAGE"] = str(sysimage)
+    else:
+        logger.info("    Using default sysimage")
+        logger.warning(
+            " Consider executing `iesopt.create_sysimage()` once to create a custom sysimage that might offer improved"
+            " performance"
+        )
+
+    logger.info("    Executable: %s" % juliapkg.executable())
+    logger.info("    Project: %s" % juliapkg.project())
+
+    os.environ["PYTHON_JULIACALL_BINDIR"] = str(Path(juliapkg.executable()).parent)
+
     import juliacall
 
     logger.info("Julia setup complete")
-    logger.info("    Executable: %s" % juliapkg.executable())
-    logger.info("    Project: %s" % juliapkg.project())
 
     custom_packages = list(Config.find("PKG_"))
     if len(custom_packages) > 0:

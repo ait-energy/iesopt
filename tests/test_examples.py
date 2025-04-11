@@ -121,7 +121,7 @@ class TestExamples:
         _check_example_model(
             "08_basic_investment",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": 2015.642857142858, "hash": "5ebfdb9021"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": 2015.642857142858, "hash": "9926bf435a"},
         )
 
     def test_example_09(self, tmp_path):
@@ -268,7 +268,7 @@ class TestExamples:
         model = _check_example_model(
             "41_multiobjective_epsilon",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": "moa", "hash": "ea1005c6e9"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": "moa", "hash": "7b1af169ea"},
         )
 
         assert len(model.objective_value) == 2
@@ -280,7 +280,7 @@ class TestExamples:
         model = _check_example_model(
             "43_multiobjective_hierarchical",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": "moa", "hash": "ad4aa3fd6a"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": "moa", "hash": "8e87105785"},
         )
 
         assert len(model.objective_value) == 3
@@ -309,7 +309,7 @@ class TestExamples:
         _check_example_model(
             "46_constants_in_objective",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": 3015.642857142858, "hash": "5ebfdb9021"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": 3015.642857142858, "hash": "9926bf435a"},
         )
 
     def test_example_47(self, tmp_path):

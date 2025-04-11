@@ -102,6 +102,8 @@ html_context = {
     "default_mode": "light",
 }
 
+html_favicon = "_static/favicon.ico"
+
 # -- MyST & autodoc configuration --------------------------------------------
 
 myst_enable_extensions = ["dollarmath", "amsmath", "colon_fence", "fieldlist"]

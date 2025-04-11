@@ -78,6 +78,7 @@ def setup_julia(target: Path, sysimage: Path):
         os.environ["JULIA_SSL_CA_ROOTS_PATH"] = ""
 
     # Setup Julia (checking if it "looks" valid).
+    sys.path.insert(0, target_fullpath)
     import juliapkg
 
     # Set Julia version.
@@ -143,7 +144,6 @@ def setup_julia(target: Path, sysimage: Path):
     logger.info("    Project: %s" % juliapkg.project())
 
     os.environ["PYTHON_JULIACALL_BINDIR"] = str(Path(juliapkg.executable()).parent)
-    sys.path.insert(0, target_fullpath)
 
     import juliacall
 

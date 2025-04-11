@@ -37,8 +37,10 @@ def add_package(f_add, name: str, config: str, target: str):
 
 
 def setup_julia():
-    target = str((Path(__file__).parent / "..").resolve())
-    logger.info(f"    Target for juliapkg: '{target}'")
+    target = Path().cwd() / ".iesopt"
+    target.mkdir(exist_ok=True)
+    target_fullpath = str(target.resolve())
+    logger.info(f"    Target for juliapkg: '{target_fullpath}'")
 
     logger.info("Checking Julia environment")
 
@@ -52,8 +54,8 @@ def setup_julia():
     if Path("juliapkg.json").exists():
         raise Exception("Found `juliapkg.json` file; remove it to prevent potential conflicts")
 
-    if (Path(__file__).parent / ".." / "juliapkg.json").exists():
-        (Path(__file__).parent / ".." / "juliapkg.json").unlink()
+    if (target / "juliapkg.json").exists():
+        (target / "juliapkg.json").unlink()
 
     # Check for local SSL certificate file, that can interfere with Julia setup.
     _ssl = None
@@ -80,17 +82,17 @@ def setup_julia():
     import juliapkg
 
     # Set Julia version.
-    juliapkg.require_julia(f"={Config.get('julia')}", target=target)
+    juliapkg.require_julia(f"={Config.get('julia')}", target=target_fullpath)
     # add_package(juliapkg.add, "pythoncall", "0.9.23", target)
 
     # Set versions of "core" packages.
-    add_package(juliapkg.add, "jump", Config.get("jump"), target)
-    add_package(juliapkg.add, "iesopt", Config.get("core"), target)
+    add_package(juliapkg.add, "jump", Config.get("jump"), target=target_fullpath)
+    add_package(juliapkg.add, "iesopt", Config.get("core"), target=target_fullpath)
 
     # Set versions of "solver" packages.
     for entry in Config.find("solver_"):
         name = entry[7:]
-        add_package(juliapkg.add, name, Config.get(entry), target)
+        add_package(juliapkg.add, name, Config.get(entry), target=target_fullpath)
 
     if not juliapkg.resolve(dry_run=True):
         logger.warning("The Julia environment is dirty and needs to be resolved, which can take some time")

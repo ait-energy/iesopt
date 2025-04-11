@@ -143,6 +143,7 @@ def setup_julia(target: Path, sysimage: Path):
     logger.info("    Project: %s" % juliapkg.project())
 
     os.environ["PYTHON_JULIACALL_BINDIR"] = str(Path(juliapkg.executable()).parent)
+    sys.path.insert(0, target_fullpath)
 
     import juliacall
 

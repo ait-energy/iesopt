@@ -9,7 +9,7 @@ __version__ = importlib.metadata.version("iesopt")
 __target__ = Path().cwd() / ".iesopt"
 
 # Set sysimage path.
-__sysimage__ = __target__ / "sysimage_v" + __version__.replace(".", "-") + ".so"
+__sysimage__ = __target__ / ("sysimage_v" + __version__.replace(".", "-") + ".so")
 
 # =======================================================================
 # Setup "module globals" that will be overwritten internally.
@@ -85,3 +85,22 @@ if not os.getenv("IESOPT_DOCS_NOEXEC"):
     jump_reduced_cost = _get_iesopt_module_attr("jump_reduced_cost")
     jump_shadow_price = _get_iesopt_module_attr("jump_shadow_price")
     get_jl_docstr = jl_docs
+
+
+def create_sysimage():
+    """Create a sysimage containing IESopt.jl and important dependencies."""
+    import iesopt
+    import juliacall
+    import juliapkg
+
+    iesopt.julia.Pkg.add("PackageCompiler")
+    iesopt.julia.seval("import PackageCompiler")
+
+    __target__.mkdir(exist_ok=True)
+
+    juliapkg.add("Pkg", "44cfe95a-1eb2-52ea-b672-e2afdf69b78f", target=str(__target__ / "juliapkg.json"))
+    juliapkg.resolve()
+
+    iesopt.julia.PackageCompiler.create_sysimage(
+        juliacall.convert(iesopt.julia.Vector, ["IESopt", "JuMP", "HiGHS", "Pkg"]), sysimage_path=__sysimage__
+    )

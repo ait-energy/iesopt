@@ -9,6 +9,7 @@ instructions in the [section on contributing](#contributing) below.
 ## List of references
 
 (references-projects-deriskdh)=
+
 ### DeRiskDH
 
 :**title**: DeRiskDH
@@ -19,7 +20,20 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
+(references-projects-ENABLE-DHC)=
+
+### ENABLE-DHC
+
+:**title**: ENABLE-DHC
+:**homepage**:
+:**funding**:
+:**description**:
+:**AIT contact**:
+
+---
+
 (references-projects-heathighway)=
+
 ### Heat Highway
 
 :**title**: Heat Highway
@@ -31,6 +45,7 @@ instructions in the [section on contributing](#contributing) below.
 ---
 
 (references-projects-heatminedh)=
+
 ### HeatMineDH
 
 :**title**: Low-Grade Renewable and Waste Heat Mapping and Investment Planning for Efficient District Heating
@@ -42,6 +57,7 @@ instructions in the [section on contributing](#contributing) below.
 ---
 
 (references-projects-hytechonomy)=
+
 ### HyTechonomy
 
 :**title**: Hydrogen Technologies for Sustainable Economies
@@ -56,8 +72,8 @@ instructions in the [section on contributing](#contributing) below.
 
 To contribute a new reference, either
 
-- fork the [iesopt](https://github.com/ait-energy/iesopt) repository, and directly add to the above list, or
-- open an issue with the reference details.
+-   fork the [iesopt](https://github.com/ait-energy/iesopt) repository, and directly add to the above list, or
+-   open an issue with the reference details.
 
 See the template below for the structure of a reference.
 
@@ -65,6 +81,7 @@ See the template below for the structure of a reference.
 
 ```markdown
 (references-projects-project-slug-title)=
+
 ### Project Slug Title
 
 :**title**: Full Project Title
@@ -78,6 +95,6 @@ See the template below for the structure of a reference.
 
 Consider the following:
 
-- If possible link to an `ait.ac.at` subpage for `homepage`.
-- Project slug might be `HyTechonomy`, with the full title being `Hydrogen Technologies for Sustainable Economies`, then the link target (the thing above the slug title `(references-projects-project-slug-title)=`) would then be `(references-projects-hytechonomy)=`.
-- Replace the `funding` information accordingly.
+-   If possible link to an `ait.ac.at` subpage for `homepage`.
+-   Project slug might be `HyTechonomy`, with the full title being `Hydrogen Technologies for Sustainable Economies`, then the link target (the thing above the slug title `(references-projects-project-slug-title)=`) would then be `(references-projects-hytechonomy)=`.
+-   Replace the `funding` information accordingly.

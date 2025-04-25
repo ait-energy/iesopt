@@ -19,6 +19,17 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
+(references-projects-ENABLE-DHC)=
+### ENABLE-DHC
+
+:**title**: ENABLE-DHC
+:**homepage**: [ait.ac.at](https://www.ait.ac.at/themen/flexibilitaet-geschaeftsmodelle/projekte/dekarbonisierungsstrategien-fuer-die-fernwaerme)
+:**funding**: [ec.euopa.eu](https://webgate.ec.europa.eu/life/publicWebsite/project/LIFE23-CET-ENABLE-DHC-101167576/enabling-strategies-and-investment-plans-for-efficient-multi-energy-and-digitalized-dhc)
+:**description**: ENABLE DHC aims to foster the switch of district heating and cooling (DHC) networks towards efficient DHC as defined in the Energy Efficiency Directive, by developing 9 case studies of investment plans in 7 European countries.
+:**AIT contact**: R. Schmidt
+
+---
+
 (references-projects-heathighway)=
 ### Heat Highway
 

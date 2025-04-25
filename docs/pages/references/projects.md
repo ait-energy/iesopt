@@ -90,6 +90,5 @@ See the template below for the structure of a reference.
 Consider the following:
 
 - If possible link to an `ait.ac.at` subpage for `homepage`.
-- test 
 - Project slug might be `HyTechonomy`, with the full title being `Hydrogen Technologies for Sustainable Economies`, then the link target (the thing above the slug title `(references-projects-project-slug-title)=`) would then be `(references-projects-hytechonomy)=`.
 - Replace the `funding` information accordingly.

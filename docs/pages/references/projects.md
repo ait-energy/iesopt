@@ -52,6 +52,17 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
+(references-projects-knowing)=
+### KNOWING
+
+:**title**: KNOWING
+:**homepage**: [knowing-climate.eu](https://knowing-climate.eu)
+:**funding**: [commission.europa.eu](https://commission.europa.eu/funding-tenders/find-funding/eu-funding-programmes/horizon-europe_en)
+:**description**: Modelling of electricity and district heating systems for a full decarbonisation path in 2050 for four demonstration regions: Tallinn, Granollers, Naples and South Westphalia.
+:**AIT contact**: K. Tovaas
+
+---
+
 ## Contributing
 
 To contribute a new reference, either

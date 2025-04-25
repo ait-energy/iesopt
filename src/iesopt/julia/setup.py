@@ -41,6 +41,14 @@ def setup_julia(target: Path, sysimage: Path):
     target_fullpath = str(target.resolve())
     logger.info(f"    Target for juliapkg: '{target_fullpath}'")
 
+    _pre_264_target = (Path(__file__).parent / ".." / "juliapkg.json").resolve()
+    if _pre_264_target.exists():
+        logger.warning(
+            "Found an old `juliapkg.json` file from previous version of `iesopt`, removing it to prevent potential"
+            " conflicts; you should only see this warning once after upgrading"
+        )
+        _pre_264_target.unlink()
+
     logger.info("Checking Julia environment")
 
     if "juliacall" in sys.modules:

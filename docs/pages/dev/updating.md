@@ -2,6 +2,20 @@
 
 This page collects information about updating the project between specific versions.
 
+## 2.6.3 to 2.6.4 or 2.6.5
+
+When upgrading from a version between `2.0.0` and `2.6.3` to either `2.6.4` or `2.6.5` you may run into an error looking similar to
+
+```python
+Exception: 'version' entries have empty intersection:
+- '=1.25.0' at <YOUR_PROJECT>/.iesopt/juliapkg.json
+- '=1.24.0' at <YOUR_PROJECT>/.venv/lib/site-packages/iesopt/juliapkg.json
+```
+
+where `<YOUR_PROJECT>` is the path to your project that uses iesopt.
+You can fix this manually by deleting the old file at `<YOUR_PROJECT>/.venv/lib/site-packages/iesopt/juliapkg.json`.
+If you upgrade to `2.6.6` or higher you will not run into this issue.
+
 ## 1.x.y to 2.0.0
 
 The `2.0.0` release follows the breaking change of `IESopt.jl` going to `v2.0.0`. This was mainly triggered by a proper rework of how addons work, including a new internal handling for more complex expressions (allowing more flexibility in configuring `conversion`, or `cost` settings), as well as better support around templates (e.g. the introduction of `Virtual`s). A few breaking changes that were planned for quite some time are part of this.

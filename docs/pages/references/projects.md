@@ -19,6 +19,17 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
+(references-projects-ENABLE-DHC)=
+### ENABLE-DHC
+
+:**title**: ENABLE-DHC
+:**homepage**: [ait.ac.at](https://www.ait.ac.at/themen/flexibilitaet-geschaeftsmodelle/projekte/dekarbonisierungsstrategien-fuer-die-fernwaerme)
+:**funding**: [ec.euopa.eu](https://webgate.ec.europa.eu/life/publicWebsite/project/LIFE23-CET-ENABLE-DHC-101167576/enabling-strategies-and-investment-plans-for-efficient-multi-energy-and-digitalized-dhc)
+:**description**: ENABLE DHC aims to foster the switch of district heating and cooling (DHC) networks towards efficient DHC as defined in the Energy Efficiency Directive, by developing 9 case studies of investment plans in 7 European countries.
+:**AIT contact**: R. Schmidt
+
+---
+
 (references-projects-goes)=
 ### GOES
 
@@ -71,6 +82,17 @@ instructions in the [section on contributing](#contributing) below.
 :**funding**: [ffg.at](https://projekte.ffg.at/projekt/3915332)
 :**description**: The overall scientific vision of the COMET-Project HyTechonomy is to provide the technological and strategic know-how basis for the substitution of the fossil energy carriers by renewable hydrogen.
 :**AIT contact**: S. Reuter
+
+---
+
+(references-projects-knowing)=
+### KNOWING
+
+:**title**: KNOWING
+:**homepage**: [knowing-climate.eu](https://knowing-climate.eu)
+:**funding**: [commission.europa.eu](https://commission.europa.eu/funding-tenders/find-funding/eu-funding-programmes/horizon-europe_en)
+:**description**: Modelling of electricity and district heating systems for a full decarbonisation path in 2050 for four demonstration regions: Tallinn, Granollers, Naples and South Westphalia.
+:**AIT contact**: K. Tovaas
 
 ---
 

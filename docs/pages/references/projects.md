@@ -9,7 +9,6 @@ instructions in the [section on contributing](#contributing) below.
 ## List of references
 
 (references-projects-deriskdh)=
-
 ### DeRiskDH
 
 :**title**: DeRiskDH
@@ -21,19 +20,17 @@ instructions in the [section on contributing](#contributing) below.
 ---
 
 (references-projects-ENABLE-DHC)=
-
 ### ENABLE-DHC
 
 :**title**: ENABLE-DHC
-:**homepage**:
-:**funding**:
-:**description**:
-:**AIT contact**:
+:**homepage**: [ait.ac.at](https://www.ait.ac.at/themen/flexibilitaet-geschaeftsmodelle/projekte/dekarbonisierungsstrategien-fuer-die-fernwaerme)
+:**funding**: [ec.euopa.eu](https://webgate.ec.europa.eu/life/publicWebsite/project/LIFE23-CET-ENABLE-DHC-101167576/enabling-strategies-and-investment-plans-for-efficient-multi-energy-and-digitalized-dhc)
+:**description**: ENABLE DHC aims to foster the switch of district heating and cooling (DHC) networks towards efficient DHC as defined in the Energy Efficiency Directive, by developing 9 case studies of investment plans in 7 European countries.
+:**AIT contact**: R. Schmidt
 
 ---
 
 (references-projects-heathighway)=
-
 ### Heat Highway
 
 :**title**: Heat Highway
@@ -45,7 +42,6 @@ instructions in the [section on contributing](#contributing) below.
 ---
 
 (references-projects-heatminedh)=
-
 ### HeatMineDH
 
 :**title**: Low-Grade Renewable and Waste Heat Mapping and Investment Planning for Efficient District Heating
@@ -57,7 +53,6 @@ instructions in the [section on contributing](#contributing) below.
 ---
 
 (references-projects-hytechonomy)=
-
 ### HyTechonomy
 
 :**title**: Hydrogen Technologies for Sustainable Economies
@@ -81,7 +76,6 @@ See the template below for the structure of a reference.
 
 ```markdown
 (references-projects-project-slug-title)=
-
 ### Project Slug Title
 
 :**title**: Full Project Title
@@ -95,6 +89,6 @@ See the template below for the structure of a reference.
 
 Consider the following:
 
--   If possible link to an `ait.ac.at` subpage for `homepage`.
--   Project slug might be `HyTechonomy`, with the full title being `Hydrogen Technologies for Sustainable Economies`, then the link target (the thing above the slug title `(references-projects-project-slug-title)=`) would then be `(references-projects-hytechonomy)=`.
--   Replace the `funding` information accordingly.
+- If possible link to an `ait.ac.at` subpage for `homepage`.
+- Project slug might be `HyTechonomy`, with the full title being `Hydrogen Technologies for Sustainable Economies`, then the link target (the thing above the slug title `(references-projects-project-slug-title)=`) would then be `(references-projects-hytechonomy)=`.
+- Replace the `funding` information accordingly.

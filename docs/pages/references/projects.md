@@ -67,8 +67,8 @@ instructions in the [section on contributing](#contributing) below.
 
 To contribute a new reference, either
 
--   fork the [iesopt](https://github.com/ait-energy/iesopt) repository, and directly add to the above list, or
--   open an issue with the reference details.
+- fork the [iesopt](https://github.com/ait-energy/iesopt) repository, and directly add to the above list, or
+- open an issue with the reference details.
 
 See the template below for the structure of a reference.
 

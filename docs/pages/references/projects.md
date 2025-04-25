@@ -19,6 +19,17 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
+(references-projects-goes)=
+### GOES
+
+:**title**: Geothermal based Optimized Energy Systems
+:**homepage**: [goes-project.info](https://www.goes-project.info/)
+:**funding**: [ffg.at](https://projekte.ffg.at/projekt/4448096)
+:**description**: The project GOES aims to develop a Platform-Based Design (PBD) framework to enable rapid and transferable innovations and implementations of geothermal coupled energy systems.
+:**AIT contact**: N. Marx
+
+---
+
 (references-projects-heathighway)=
 ### Heat Highway
 
@@ -41,6 +52,17 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
+(references-projects-hy2heat)=
+### HY2HEAT
+
+:**title**: Using electrolysis waste heat in district heating networks
+:**homepage**: [hytechonomy.com](https://energieinstitut-linz.at/en/project/using-electrolysis-waste-heat-in-district-heating-networks/)
+:**funding**: [iea-dhc.org](https://www.iea-dhc.org/the-research/annexes/annex-xiv/annex-xiv-project-06)
+:**description**: The aim of HY2HEAT is to analyse the techno-economic synergies of electrolysis waste heat integration in district heating systems (including the assessment of the role and expected volumes), to evaluate the best technical solutions for capturing and upgrading the electrolyser waste heat for utilisation in district heating networks, and to derive a practical guide for district heating operators for the pursuit of the potential and its technical integration.
+:**AIT contact**: N. Marx
+
+---
+
 (references-projects-hytechonomy)=
 ### HyTechonomy
 
@@ -49,6 +71,17 @@ instructions in the [section on contributing](#contributing) below.
 :**funding**: [ffg.at](https://projekte.ffg.at/projekt/3915332)
 :**description**: The overall scientific vision of the COMET-Project HyTechonomy is to provide the technological and strategic know-how basis for the substitution of the fossil energy carriers by renewable hydrogen.
 :**AIT contact**: S. Reuter
+
+---
+
+(references-projects-marktprämien2.0)=
+### Marktprämien 2.0
+
+:**title**: Further Development of Market Premium Support Including the Role of PPAs
+:**homepage**: [ait.ac.at](https://www.ait.ac.at/themen/flexibilitaet-geschaeftsmodelle/projekte/marktpraemien-20)
+:**funding**: [ffg.at](https://projekte.ffg.at/projekt/4805434)
+:**description**: The aim of the planned short study "Market premiums 2.0" is to promptly develop proposals for a substantive reform and further development of the market premium system recently established in Austria to promote the expansion of renewable energies in the domestic electricity market. 
+:**AIT contact**: C. Monsberger
 
 ---
 

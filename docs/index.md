@@ -91,9 +91,10 @@ documentation that can be helpful when creating your own models:
 system optimization models. Start here if you are new and have completed the {ref}`A first model` initial tutorial.
 2. **User guides** provide various concise how-to guides, that help you accomplish a certain task, correctly
 and safely. Consult these to remind yourself _how to do X_.
-3. **Reference** contains technical reference for `IESopt.jl` core components, the YAML syntax, APIs, and more
+3. **Manual** contains technical reference for `IESopt.jl` core components, the YAML syntax, APIs, and more
 internal details. It assumes that you already have a basic understanding of the core concepts of `iesopt`.
-4. **Developer documentation** can be consulted for tips on how to improve `iesopt`, its
+4. **References** lists publications and projects where IESopt was applied as part of the modeling approach. 
+5. **Developer documentation** can be consulted for tips on how to improve `iesopt`, its
 documentation, or other useful information related to developing `iesopt`. If you are only _using_ `iesopt` to develop
 your own tools / projects, this will not be necessary to check at all.
 

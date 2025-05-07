@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+
+<html :class="{'dark': darkMode === 'dark' || (darkMode === 'system' &amp;&amp; window.matchMedia('(prefers-color-scheme: dark)').matches)}" class="scroll-smooth" data-content_root="../" lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') || localStorage.setItem('darkMode', 'system'), activeSection: '' }" x-init="$watch('darkMode', val =&gt; localStorage.setItem('darkMode', val))">
+<head>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Extracting results: Part I | IESopt 2.6.7.dev0 documentation</title>
+<meta content="Extracting results: Part I | IESopt 2.6.7.dev0 documentation" property="og:title"/>
+<meta content="Extracting results: Part I | IESopt 2.6.7.dev0 documentation" name="twitter:title"/>
+<link href="../_static/pygments.css?v=2c5fd357" rel="stylesheet" type="text/css"/>
+<link href="../_static/theme.css?v=42baaae4" rel="stylesheet" type="text/css"/>
+<link href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" rel="stylesheet" type="text/css"/>
+<link href="../_static/togglebutton.css?v=13237357" rel="stylesheet" type="text/css"/>
+<link href="../_static/custom.css?v=89055611" rel="stylesheet" type="text/css"/>
+<link href="../_static/favicon.ico" rel="icon"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="custom_results_2.html" rel="next" title="Extracting results: Part II"/>
+<link href="../tocs/tutorials_extracting_results.html" rel="prev" title="Extracting results"/>
+<script>
+    <!-- Prevent Flash of wrong theme -->
+      const userPreference = localStorage.getItem('darkMode');
+      let mode;
+      if (userPreference === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        mode = 'dark';
+        document.documentElement.classList.add('dark');
+      } else {
+        mode = 'light';
+      }
+      if (!userPreference) {localStorage.setItem('darkMode', mode)}
+    </script>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border supports-backdrop-blur:bg-background/60 bg-background/95 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../index.html"><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">IESopt 2.6.7.dev0 documentation</span>
+</a><nav class="flex items-center space-x-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../index.html">Home</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/ait-energy/iesopt" rel="noopener nofollow">GitHub</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/ait-energy/IESopt.jl" rel="noopener nofollow">IESopt.jl</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 space-x-2 sm:space-x-4 md:justify-end">
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center space-x-1">
+<button @click="darkMode = darkMode === 'light' ? 'dark' : 'light'" aria-label="Color theme switcher" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../index.html"><span class="font-bold text-clip whitespace-nowrap">IESopt 2.6.7.dev0 documentation</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../index.html">Home</a>
+<a href="https://github.com/ait-energy/iesopt" rel="nofollow noopener">GitHub</a>
+<a href="https://github.com/ait-energy/IESopt.jl" rel="nofollow noopener">IESopt.jl</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<p class="caption" role="heading"><span class="caption-text">IESopt</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Getting started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="first_model.html">A first model</a></li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../tocs/tutorials_extracting_results.html">Extracting results<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Part I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_results_2.html">Part II</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../tocs/tutorials_templates.html">Templates<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pages/tutorials/templates_1.html">Part I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/tutorials/templates_2.html">Part II</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/tutorials/addons.html">Addons</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../tocs/examples.html">Examples<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="example_52.html">52</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_53.html">53</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_54.html">54</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_55.html">55</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pages/user_guides/index.html">Intro</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pages/user_guides/toc_general.html">General<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pages/user_guides/general/best_practice.html">Best practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/user_guides/general/linking_components.html">Linking components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/user_guides/general/common_errors.html">Common errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/user_guides/general/solvers.html">Solvers</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pages/user_guides/toc_qna.html">Q &amp; A<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pages/user_guides/qna/snapshot_duration.html">Time resolution &amp; power vs. energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/user_guides/qna/profiles_sign.html">Sign convention for time series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/user_guides/qna/dynamic_marginal_costs.html">Output-dependent marginal costs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/user_guides/qna/passive_charging.html">Passive charging of an underground heat storage</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Manual</span></p>
+<ul>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pages/manual/yaml/index.html">YAML<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pages/manual/yaml/top_level.html">Top-level config</a></li>
+<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pages/manual/yaml/core_components.html">Components<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l3"><a class="reference internal" href="../pages/manual/yaml/core/connection.html">Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pages/manual/yaml/core/decision.html">Decision</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pages/manual/yaml/core/node.html">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pages/manual/yaml/core/profile.html">Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pages/manual/yaml/core/unit.html">Unit</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pages/manual/python/index.html">Python<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pages/manual/python/configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/manual/python/model.html">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/manual/python/results.html">Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/manual/python/util.html">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/manual/python/jump.html">JuMP</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../pages/manual/julia/index.html">Julia<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../pages/manual/julia/assets.html">Assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/manual/julia/utilities.html">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/manual/julia/resultsduckdb.html">ResultsDuckDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pages/manual/julia/resultsjld2.html">ResultsJLD2</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pages/references/publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/references/projects.html">Projects</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../pages/dev/general.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/dev/core.html">IESopt.jl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pages/dev/updating.html">Updating</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../index.html">
+<span class="hidden md:inline">IESopt 2.6.7.dev0 documentation</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../tocs/tutorials_extracting_results.html">Extracting results</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Extracting results: Part I</span>
+</nav>
+<div id="content" role="main">
+<section class="tex2jax_ignore mathjax_ignore" id="extracting-results-part-i">
+<h1>Extracting results: Part I<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#extracting-results-part-i"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>This tutorial showcases how results can be extracted, including how user defined templates are able to create new result
+calculations.</p>
+<div class="cell tag_remove-stdout tag_remove-stderr docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kn">import</span><span class="w"> </span><span class="nn">iesopt</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">config_file</span> <span class="o">=</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">make_example</span><span class="p">(</span>
+</span><span id="line-2">    <span class="s2">"48_custom_results"</span><span class="p">,</span> <span class="n">dst_dir</span><span class="o">=</span><span class="s2">"ex_custom_results"</span><span class="p">,</span> <span class="n">dst_name</span><span class="o">=</span><span class="s2">"config"</span>
+</span><span id="line-3"><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">INFO:iesopt:Data folder for examples already exists; NOT copying ANY contents
+</span><span id="line-2">INFO:iesopt:Creating example ('48_custom_results') at: 'ex_custom_results/config.iesopt.yaml'
+</span><span id="line-3">INFO:iesopt:Set write permissions for example ('ex_custom_results/config.iesopt.yaml'), and data folder ('ex_custom_results/files')
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span> <span class="o">=</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="k">assert</span> <span class="n">model</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">ModelStatus</span><span class="o">.</span><span class="n">OPTIMAL</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<section id="accessing-model-results-objectives">
+<h2>Accessing model results: Objectives<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#accessing-model-results-objectives" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#accessing-model-results-objectives'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The objective of your model - after a successful solve - can be extracted using:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span><span class="o">.</span><span class="n">objective_value</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">981.1745152354571
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>It may however be the case, that you have registered multiple objective functions (which can be used for multi-objective
+algorithms, or even be useful just for analysis purposes). You can get their value by their name. The default objective
+is always called <code class="docutils literal notranslate"><span class="pre">total_cost</span></code> and is the only one guaranteed to always exist. We can check which objectives are registered:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">objectives</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">dict_keys(['total_cost'])
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>And get the value of <code class="docutils literal notranslate"><span class="pre">total_cost</span></code> (which should match the one obtained from <code class="docutils literal notranslate"><span class="pre">model.objective_value</span></code> for this example):</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">objectives</span><span class="p">[</span><span class="s2">"total_cost"</span><span class="p">]</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">981.1745152354571
+</span></code></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="accessing-model-results-variables">
+<h2>Accessing model results: Variables<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#accessing-model-results-variables" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#accessing-model-results-variables'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Three different ways to access the results of our custom storage component <code class="docutils literal notranslate"><span class="pre">storage</span></code>:</p>
+<section id="direct-access">
+<h3>Direct access<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#direct-access" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#direct-access'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">"storage"</span><span class="p">]</span><span class="o">.</span><span class="n">exp</span><span class="o">.</span><span class="n">setpoint</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,
+</span><span id="line-2">        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,
+</span><span id="line-3">       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,
+</span><span id="line-4">       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,
+</span><span id="line-5">        3.57894737,  3.47368421,  0.94736842,  0.52631579])
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<blockquote>
+<div><p>Accessing dual information:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">"grid"</span><span class="p">]</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">nodalbalance__dual</span>
+</span></code></pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="access-using-get">
+<h3>Access using <code class="docutils literal notranslate"><span class="pre">get(...)</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#access-using-get" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#access-using-get'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"component"</span><span class="p">,</span> <span class="s2">"storage"</span><span class="p">,</span> <span class="s2">"exp"</span><span class="p">,</span> <span class="s2">"setpoint"</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,
+</span><span id="line-2">        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,
+</span><span id="line-3">       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,
+</span><span id="line-4">       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,
+</span><span id="line-5">        3.57894737,  3.47368421,  0.94736842,  0.52631579])
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<blockquote>
+<div><p>Accessing dual information:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"component"</span><span class="p">,</span> <span class="s2">"grid"</span><span class="p">,</span> <span class="s2">"con"</span><span class="p">,</span> <span class="s2">"nodalbalance"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"dual"</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="collective-results">
+<h3>Collective results<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#collective-results" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#collective-results'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="using-to-dict">
+<h4>Using <code class="docutils literal notranslate"><span class="pre">to_dict(...)</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#using-to-dict"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">results</span><span class="p">[(</span><span class="s2">"storage"</span><span class="p">,</span> <span class="s2">"exp"</span><span class="p">,</span> <span class="s2">"setpoint"</span><span class="p">)]</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,
+</span><span id="line-2">        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,
+</span><span id="line-3">       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,
+</span><span id="line-4">       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,
+</span><span id="line-5">        3.57894737,  3.47368421,  0.94736842,  0.52631579])
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<blockquote>
+<div><p>Accessing dual information:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">results</span><span class="p">[(</span><span class="s2">"grid"</span><span class="p">,</span> <span class="s2">"con"</span><span class="p">,</span> <span class="s2">"nodalbalance__dual"</span><span class="p">)]</span>
+</span></code></pre></div>
+</div>
+</div></blockquote>
+<blockquote>
+<div><p>Note: You can filter the results returned by <code class="docutils literal notranslate"><span class="pre">to_dict(...)</span></code> in exactly the same way as when using <code class="docutils literal notranslate"><span class="pre">to_pandas(...)</span></code> (
+see below). However, this is uncommon to be useful, since you most likely want to work with tabular data anyways when
+using the filter function, which is why we skip it here.</p>
+</div></blockquote>
+</section>
+<section id="using-to-pandas">
+<h4>Using <code class="docutils literal notranslate"><span class="pre">to_pandas(...)</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#using-to-pandas"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">df</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+</span><span id="line-4">    <span class="p">(</span>
+</span><span id="line-5">        <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"component"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"storage"</span><span class="p">)</span>
+</span><span id="line-6">        <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"fieldtype"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"exp"</span><span class="p">)</span>
+</span><span id="line-7">        <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"field"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"setpoint"</span><span class="p">)</span>
+</span><span id="line-8">        <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">"mode"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"primal"</span><span class="p">)</span>
+</span><span id="line-9">    <span class="p">),</span>
+</span><span id="line-10">    <span class="s2">"value"</span><span class="p">,</span>
+</span><span id="line-11"><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,
+</span><span id="line-2">        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,
+</span><span id="line-3">       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,
+</span><span id="line-4">       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,
+</span><span id="line-5">        3.57894737,  3.47368421,  0.94736842,  0.52631579])
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">series</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(</span>
+</span><span id="line-2">    <span class="k">lambda</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">"storage"</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">==</span> <span class="s2">"exp"</span> <span class="ow">and</span> <span class="n">f</span> <span class="o">==</span> <span class="s2">"setpoint"</span>
+</span><span id="line-3"><span class="p">)</span>
+</span><span id="line-4"><span class="n">series</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">t1   -3.656510
+</span><span id="line-2">t2    3.473684
+</span><span id="line-3">t3   -0.997230
+</span><span id="line-4">t4    0.947368
+</span><span id="line-5">t5    0.000000
+</span><span id="line-6">Name: (storage, res, setpoint), dtype: float64
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>We could actually only filter for the component (<code class="docutils literal notranslate"><span class="pre">c</span> <span class="pre">==</span> <span class="pre">"storage"</span></code>), since this is the only result that it creates.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">series</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">"storage"</span><span class="p">)</span>
+</span><span id="line-2"><span class="n">series</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">t1   -3.656510
+</span><span id="line-2">t2    3.473684
+</span><span id="line-3">t3   -0.997230
+</span><span id="line-4">t4    0.947368
+</span><span id="line-5">t5    0.000000
+</span><span id="line-6">Name: (storage, res, setpoint), dtype: float64
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>This may however be dangerous, since a similar call</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">f</span><span class="p">:</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">"grid"</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>would then suddenly return a <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code>, since it contains two different results (try it out!) linked to the
+component <code class="docutils literal notranslate"><span class="pre">grid</span></code>.</p>
+<blockquote>
+<div><p>Accessing dual information (part I):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">f</span><span class="p">:</span> <span class="n">c</span> <span class="o">==</span> <span class="s2">"grid"</span> <span class="ow">and</span> <span class="n">t</span> <span class="o">==</span> <span class="s2">"con"</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>This works, since the model only contains a single result linked to constraints of the component <code class="docutils literal notranslate"><span class="pre">grid</span></code>. However, this
+may again be dangerous, which is why you could instead make use of something like</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">df</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span>
+</span><span id="line-2"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">"mode"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"dual"</span><span class="p">]</span>
+</span></code></pre></div>
+</div>
+<p><em>Note that this extracts ALL dual results, not only those for the component used above, but again <code class="docutils literal notranslate"><span class="pre">to_pandas(...)</span></code> is
+mostly there to extract more than one result at the same time (we cover “Which way should I use below?”).</em></p>
+</div></blockquote>
+<hr class="docutils"/>
+<p>You may now wonder - since it all looks the same - what <code class="docutils literal notranslate"><span class="pre">to_pandas(...)</span></code> could be useful for. It’s main usage is
+extracting more than one result in one call:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">df</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(</span><span class="n">field_types</span><span class="o">=</span><span class="s2">"exp"</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">"wide"</span><span class="p">)</span>
+</span><span id="line-2"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead tr th {
+        text-align: left;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr>
+<th></th>
+<th>storage.storage</th>
+<th>demand</th>
+<th>grid</th>
+<th>generator</th>
+</tr>
+<tr>
+<th></th>
+<th>exp</th>
+<th>exp</th>
+<th>exp</th>
+<th>exp</th>
+</tr>
+<tr>
+<th></th>
+<th>injection</th>
+<th>value</th>
+<th>injection</th>
+<th>out_electricity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>t1</th>
+<td>3.473684</td>
+<td>4.0</td>
+<td>4.440892e-16</td>
+<td>7.65651</td>
+</tr>
+<tr>
+<th>t2</th>
+<td>-3.473684</td>
+<td>4.0</td>
+<td>-1.110223e-16</td>
+<td>0.70000</td>
+</tr>
+<tr>
+<th>t3</th>
+<td>0.947368</td>
+<td>4.0</td>
+<td>2.220446e-16</td>
+<td>4.99723</td>
+</tr>
+<tr>
+<th>t4</th>
+<td>-0.947368</td>
+<td>4.0</td>
+<td>0.000000e+00</td>
+<td>3.10000</td>
+</tr>
+<tr>
+<th>t5</th>
+<td>0.000000</td>
+<td>4.0</td>
+<td>0.000000e+00</td>
+<td>4.00000</td>
+</tr>
+</tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+</section>
+<section id="which-result-extraction-should-i-use">
+<h3>Which result extraction should I use?<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#which-result-extraction-should-i-use" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#which-result-extraction-should-i-use'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>As a basic guide you can use the following logic to decide how to extract results. Are you:</p>
+<ol class="arabic simple">
+<li><p>Looking for a single result of a component? Extract it similar to <code class="docutils literal notranslate"><span class="pre">model.results.components["storage"].exp.setpoint</span></code>.</p></li>
+<li><p>Looking for multiple results of a component (e.g., all objective terms created by a single <code class="docutils literal notranslate"><span class="pre">Unit</span></code>), or similar results of multiple components (e.g., electricity generation of all generators)? Make use of <code class="docutils literal notranslate"><span class="pre">to_pandas(...)</span></code>, applying a specific filter, and either using <code class="docutils literal notranslate"><span class="pre">orientation</span> <span class="pre">=</span> <span class="pre">"long"</span></code> (the default), or <code class="docutils literal notranslate"><span class="pre">orientation</span> <span class="pre">=</span> <span class="pre">"wide"</span></code>.</p></li>
+</ol>
+<hr class="docutils"/>
+<p><strong>Advanced usage:</strong> <em>Looking for a single result of a component at a time, but doing it repeatedly for a single run (= extracting a single result from component <code class="docutils literal notranslate"><span class="pre">A</span></code>, then one from component <code class="docutils literal notranslate"><span class="pre">B</span></code>, and  so on)?</em></p>
+<p>Then use the <code class="docutils literal notranslate"><span class="pre">to_dict(...)</span></code> function and then extract your results similar to <code class="docutils literal notranslate"><span class="pre">model.to_dict()[("storage",</span> <span class="pre">"exp",</span> <span class="pre">"setpoint")]</span></code>. Compared to (1.) this has the advantage of caching results during the first call to <code class="docutils literal notranslate"><span class="pre">to_dict(...)</span></code>, and being able to only extract specific results if correctly filtered. **Pay attention to why, when, and how you use this, since improper usage may be way slower than directly accessing your results as explained above.</p>
+</section>
+</section>
+<section id="loading-results-from-file">
+<h2>Loading results from file<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#loading-results-from-file" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#loading-results-from-file'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>The example that we have used until now, does not write any results to a file. To load results from file in later
+program runs, we therefore need to enable writing to a file and re-solve the model.</p>
+<p>For that, edit the top-level config file, and change</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="c1"># ...</span>
+</span><span id="line-3"><span class="w">  </span><span class="nt">results</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="line-5"><span class="w">    </span><span class="nt">memory_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></code></pre></div>
+</div>
+<p>to</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="c1"># ...</span>
+</span><span id="line-3"><span class="w">  </span><span class="nt">results</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="line-5"><span class="w">    </span><span class="nt">memory_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span><span class="w">       </span><span class="c1"># &lt;-- change here!</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="l l-Scalar l-Scalar-Plain">Now run the model once more to create the result output file</span>
+</span></code></pre></div>
+</div>
+<div class="cell tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span> <span class="o">=</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">"ex_custom_results/config.iesopt.yaml"</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>This will create an IESopt result file <code class="docutils literal notranslate"><span class="pre">SomeScenario.iesopt.result.jld2</span></code> inside the
+<code class="docutils literal notranslate"><span class="pre">ex_custom_results/out/CustomResults/</span></code> folder, which contains all results. This can be used to analyse results at a
+later time. To prevent losing information it tries to extract <em><strong>all</strong></em> results - which may be time intensive, but
+ensures that you do not forget to extract something, to only realise later that you miss it.</p>
+<p>We can now load this file using</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">results</span> <span class="o">=</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">Results</span><span class="p">(</span>
+</span><span id="line-2">    <span class="n">file</span><span class="o">=</span><span class="s2">"ex_custom_results/out/CustomResults/SomeScenario.iesopt.result.jld2"</span>
+</span><span id="line-3"><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>Now, you can use exactly the same code that we have already walked through, c.f. <a class="reference internal" href="#accessing-model-results-variables"><span class="std std-ref">Accessing model results: Variables</span></a>, just by
+replacing every access to <code class="docutils literal notranslate"><span class="pre">model.results</span></code> by <code class="docutils literal notranslate"><span class="pre">results</span></code>.</p>
+<section id="file-results-direct-access">
+<h3>File results: Direct access<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#file-results-direct-access" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#file-results-direct-access'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># instead of</span>
+</span><span id="line-2"><span class="c1">#   `model.results.components["storage"].exp.setpoint`</span>
+</span><span id="line-3"><span class="c1"># we now use:</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">results</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">"storage"</span><span class="p">]</span><span class="o">.</span><span class="n">exp</span><span class="o">.</span><span class="n">setpoint</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,
+</span><span id="line-2">        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,
+</span><span id="line-3">       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,
+</span><span id="line-4">       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,
+</span><span id="line-5">        3.57894737,  3.47368421,  0.94736842,  0.52631579])
+</span></code></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="file-results-access-using-get">
+<h3>File results: Access using <code class="docutils literal notranslate"><span class="pre">get(...)</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#file-results-access-using-get" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#file-results-access-using-get'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"component"</span><span class="p">,</span> <span class="s2">"storage"</span><span class="p">,</span> <span class="s2">"exp"</span><span class="p">,</span> <span class="s2">"setpoint"</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,
+</span><span id="line-2">        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,
+</span><span id="line-3">       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,
+</span><span id="line-4">       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,
+</span><span id="line-5">        3.57894737,  3.47368421,  0.94736842,  0.52631579])
+</span></code></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="file-results-collective-results">
+<h3>File results: Collective results<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#file-results-collective-results" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#file-results-collective-results'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="file-results-using-to-dict">
+<h4>File results: Using <code class="docutils literal notranslate"><span class="pre">to_dict(...)</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#file-results-using-to-dict"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">result_dict</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</span><span id="line-2"><span class="n">result_dict</span><span class="p">[(</span><span class="s2">"storage"</span><span class="p">,</span> <span class="s2">"exp"</span><span class="p">,</span> <span class="s2">"setpoint"</span><span class="p">)]</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,
+</span><span id="line-2">        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,
+</span><span id="line-3">       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,
+</span><span id="line-4">       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,
+</span><span id="line-5">        3.57894737,  3.47368421,  0.94736842,  0.52631579])
+</span></code></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="file-results-using-to-pandas">
+<h4>File results: Using <code class="docutils literal notranslate"><span class="pre">to_pandas(...)</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#file-results-using-to-pandas"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">df</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">(</span><span class="n">field_types</span><span class="o">=</span><span class="s2">"exp"</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">"wide"</span><span class="p">)</span>
+</span><span id="line-2"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead tr th {
+        text-align: left;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr>
+<th></th>
+<th>storage.storage</th>
+<th>demand</th>
+<th>grid</th>
+<th>generator</th>
+</tr>
+<tr>
+<th></th>
+<th>exp</th>
+<th>exp</th>
+<th>exp</th>
+<th>exp</th>
+</tr>
+<tr>
+<th></th>
+<th>injection</th>
+<th>value</th>
+<th>injection</th>
+<th>out_electricity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>t1</th>
+<td>3.473684</td>
+<td>4.0</td>
+<td>4.440892e-16</td>
+<td>7.65651</td>
+</tr>
+<tr>
+<th>t2</th>
+<td>-3.473684</td>
+<td>4.0</td>
+<td>-1.110223e-16</td>
+<td>0.70000</td>
+</tr>
+<tr>
+<th>t3</th>
+<td>0.947368</td>
+<td>4.0</td>
+<td>2.220446e-16</td>
+<td>4.99723</td>
+</tr>
+<tr>
+<th>t4</th>
+<td>-0.947368</td>
+<td>4.0</td>
+<td>0.000000e+00</td>
+<td>3.10000</td>
+</tr>
+<tr>
+<th>t5</th>
+<td>0.000000</td>
+<td>4.0</td>
+<td>0.000000e+00</td>
+<td>4.00000</td>
+</tr>
+</tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+</section>
+</section>
+<section id="calling-into-julia">
+<h2>Calling into Julia<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#calling-into-julia" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#calling-into-julia'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>You should probably never need the following, but you can also manually access the <code class="docutils literal notranslate"><span class="pre">results</span></code> data <code class="docutils literal notranslate"><span class="pre">Struct</span></code> inside the
+Julia model to extract some results. For an optimized model (not for results loaded from a file!), this could be done
+using</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">my_result</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="line-2">    <span class="n">model</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">ext</span><span class="p">[</span><span class="n">iesopt</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="s2">"iesopt"</span><span class="p">)]</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">"storage"</span><span class="p">]</span><span class="o">.</span><span class="n">exp</span><span class="o">.</span><span class="n">setpoint</span>
+</span><span id="line-3"><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>Observe that</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nb">type</span><span class="p">(</span><span class="n">my_result</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">juliacall.VectorValue
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>which shows that the other modes of result extraction take care of a proper Julia-to-Python conversion for you already.
+Further, you can then</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">my_result</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">5-element view(::Vector{Float64}, 1:1:5) with eltype Float64:
+</span><span id="line-2"> -3.656509695290859
+</span><span id="line-3">  3.473684210526316
+</span><span id="line-4"> -0.997229916897507
+</span><span id="line-5">  0.9473684210526315
+</span><span id="line-6">  0.0
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>which, as you see, returns an actual <code class="docutils literal notranslate"><span class="pre">view</span></code> into the <code class="docutils literal notranslate"><span class="pre">Vector{Float64}</span></code>, indexed using the Julia range <code class="docutils literal notranslate"><span class="pre">1:1:5</span></code> (given by
+the Python range <code class="docutils literal notranslate"><span class="pre">:5</span></code>). But</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">my_result</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">5-element view(::Vector{Float64}, 1:1:5) with eltype Float64:
+</span><span id="line-2"> -3.656509695290859
+</span><span id="line-3">  3.473684210526316
+</span><span id="line-4"> -0.997229916897507
+</span><span id="line-5">  0.9473684210526315
+</span><span id="line-6">  0.0
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>makes it clear, that the wrapper we use automatically translates between 0-based (Python) and 1-based (Julia) indexing,
+which may become confusing and error-prone when thinking about a Julia <code class="docutils literal notranslate"><span class="pre">Vector</span></code> but accessing the first entry using</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">my_result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">-3.656509695290859
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<blockquote>
+<div><p>Accessing dual information (part I):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">ext</span><span class="p">[</span><span class="n">iesopt</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="s2">"iesopt"</span><span class="p">)]</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="s2">"grid"</span><span class="p">]</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">nodalbalance__dual</span>
+</span></code></pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#accessing-model-results-objectives'" class="reference internal" href="#accessing-model-results-objectives">Accessing model results: Objectives</a></li>
+<li><a :data-current="activeSection === '#accessing-model-results-variables'" class="reference internal" href="#accessing-model-results-variables">Accessing model results: Variables</a><ul>
+<li><a :data-current="activeSection === '#direct-access'" class="reference internal" href="#direct-access">Direct access</a></li>
+<li><a :data-current="activeSection === '#access-using-get'" class="reference internal" href="#access-using-get">Access using <code class="docutils literal notranslate"><span class="pre">get(...)</span></code></a></li>
+<li><a :data-current="activeSection === '#collective-results'" class="reference internal" href="#collective-results">Collective results</a><ul>
+<li><a :data-current="activeSection === '#using-to-dict'" class="reference internal" href="#using-to-dict">Using <code class="docutils literal notranslate"><span class="pre">to_dict(...)</span></code></a></li>
+<li><a :data-current="activeSection === '#using-to-pandas'" class="reference internal" href="#using-to-pandas">Using <code class="docutils literal notranslate"><span class="pre">to_pandas(...)</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#which-result-extraction-should-i-use'" class="reference internal" href="#which-result-extraction-should-i-use">Which result extraction should I use?</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#loading-results-from-file'" class="reference internal" href="#loading-results-from-file">Loading results from file</a><ul>
+<li><a :data-current="activeSection === '#file-results-direct-access'" class="reference internal" href="#file-results-direct-access">File results: Direct access</a></li>
+<li><a :data-current="activeSection === '#file-results-access-using-get'" class="reference internal" href="#file-results-access-using-get">File results: Access using <code class="docutils literal notranslate"><span class="pre">get(...)</span></code></a></li>
+<li><a :data-current="activeSection === '#file-results-collective-results'" class="reference internal" href="#file-results-collective-results">File results: Collective results</a><ul>
+<li><a :data-current="activeSection === '#file-results-using-to-dict'" class="reference internal" href="#file-results-using-to-dict">File results: Using <code class="docutils literal notranslate"><span class="pre">to_dict(...)</span></code></a></li>
+<li><a :data-current="activeSection === '#file-results-using-to-pandas'" class="reference internal" href="#file-results-using-to-pandas">File results: Using <code class="docutils literal notranslate"><span class="pre">to_pandas(...)</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#calling-into-julia'" class="reference internal" href="#calling-into-julia">Calling into Julia</a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© AIT Austrian Institute of Technology GmbH Built with <a class="font-medium underline underline-offset-4" href="https://www.sphinx-doc.org" rel="noreferrer">Sphinx 8.1.3</a></p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../_static/documentation_options.js?v=9e267fa5"></script>
+<script src="../_static/doctools.js?v=9bcbadda"></script>
+<script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+<script>let toggleHintShow = 'Click to show';</script>
+<script>let toggleHintHide = 'Click to hide';</script>
+<script>let toggleOpenOnPrint = 'true';</script>
+<script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+<script defer="defer" src="../_static/theme.js?v=073f68d9"></script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+</body>
+</html>

@@ -1,0 +1,960 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Extracting results: Part II\n",
+    "\n",
+    "This tutorial showcases more ways to handle and analyse results. Make sure that you've read the first part!\n",
+    "\n",
+    "We make use of the same example, and first just load and run it."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "tags": [
+     "remove-stdout",
+     "remove-stderr"
+    ]
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "INFO:iesopt:Setting up Julia ...\n",
+      "[ Info: Revise and Infiltrator loaded\n",
+      "INFO:iesopt:Julia setup successful\n",
+      "INFO:iesopt:Importing Julia module `IESoptLib`\n",
+      "INFO:iesopt:Importing Julia module `IESopt`\n",
+      "INFO:iesopt:Importing Julia module `JuMP`\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Detected IPython. Loading juliacall extension. See https://juliapy.github.io/PythonCall.jl/stable/compat/#IPython\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "INFO:iesopt:╔════════════════════════════════════════════════════════════════════════╗\n",
+      "INFO:iesopt:║            IESopt   «Integrated Energy System Optimization»            ║\n",
+      "INFO:iesopt:╟────────────────────────────────────────────────────────────────────────╢\n",
+      "INFO:iesopt:║   ╭────────────────────────────────────────────────────────────────╮   ║\n",
+      "INFO:iesopt:║   ├ authors: Stefan Strömer, Daniel Schwabeneder, and contributors │   ║\n",
+      "INFO:iesopt:║   ├ ©  2021: AIT Austrian Institute of Technology GmbH             │   ║\n",
+      "INFO:iesopt:║   ├    docs: https://ait-energy.github.io/iesopt                   │   ║\n",
+      "INFO:iesopt:║   ├ version: ┐                                                     │   ║\n",
+      "INFO:iesopt:║   │          ├─{ py  :: 1.0.1 }                                  │   ║\n",
+      "INFO:iesopt:║   │          ├─{ jl  :: 1.0.3 }                                  │   ║\n",
+      "INFO:iesopt:║   │          └─{ lib :: 0.2.0 }                                  │   ║\n",
+      "INFO:iesopt:║   ╰────────────────────────────────────────────────────────────────╯   ║\n",
+      "INFO:iesopt:╚════════════════════════════════════════════════════════════════════════╝\n",
+      "INFO:iesopt:Data folder for examples already exists; NOT copying ANY contents\n",
+      "INFO:iesopt:Creating example ('48_custom_results') at: 'ex_custom_results/config.iesopt.yaml'\n",
+      "INFO:iesopt:Set write permissions for example ('ex_custom_results/config.iesopt.yaml'), and data folder ('ex_custom_results/files')\n"
+     ]
+    }
+   ],
+   "source": [
+    "import iesopt\n",
+    "\n",
+    "config_file = iesopt.make_example(\n",
+    "    \"48_custom_results\", dst_dir=\"ex_custom_results\", dst_name=\"config\"\n",
+    ")\n",
+    "model = iesopt.run(config_file)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "> Remember that the most versatile way (for most tasks) is one that you already know: `df = model.results.to_pandas()`. This will give you **all** results as a single `pandas.DataFrame` that you can then filter, resample, analyse, etc. in any way you wish, with all functions that you are used to from `pandas`."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## What should I look at?\n",
+    "\n",
+    "If you are unsure which results are even available, you can make use of `query_available_results(...)` to find out:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[('var', 'state'), ('exp', 'injection')]"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.results.query_available_results(\"storage.storage\", mode=\"primal\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This shows you that two results exist for the component `storage.storage`: `var.state` (the level of the state of this Node) and `exp.injection` (the expression holding the injection into the Node).\n",
+    "\n",
+    "> More results are available when using `mode=\"dual\"`, or `mode=\"both\"` - try it out!\n",
+    "\n",
+    "If you'd be interested in seeing results for the first, then you could (check part I of this tutorial for different ways to access this) do:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([-0.        ,  4.42105263,  0.94736842,  0.94736842, -0.        ,\n",
+       "       -0.        , -0.        , -0.        ,  3.19552632,  6.80552632,\n",
+       "        6.90052632, 10.13052632,  6.65684211,  4.02526316,  3.70947368,\n",
+       "        3.28842105,  3.28842105,  3.28842105,  2.44631579,  4.72631579,\n",
+       "        8.52631579,  4.94736842,  1.47368421,  0.52631579])"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.results.get(\"component\", \"storage.storage\", \"var\", \"state\", mode=\"primal\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Finally, one hint: `query_available_results(...)` treats its first parameter as regular expression, so you can use any regex you want to look up more than one component at the same time! [regex.101](https://regex101.com/) is a good place to test your [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) that you wrote using any LLM (they are quite okay at that!)."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Looking at (a) specific component(s)\n",
+    "\n",
+    "If you are now interested in seeing all results for a single component, the DataFrame returned by `to_pandas(...)` can get overwhelming quickly. That's what `overview(...)` can be used for."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Temporal results\n",
+    "\n",
+    "Observe the following:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead tr th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th colspan=\"3\" halign=\"left\">storage.charging</th>\n",
+       "      <th colspan=\"3\" halign=\"left\">storage.discharging</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>con</th>\n",
+       "      <th colspan=\"2\" halign=\"left\">var</th>\n",
+       "      <th>con</th>\n",
+       "      <th colspan=\"2\" halign=\"left\">var</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>flow_lb</th>\n",
+       "      <th colspan=\"2\" halign=\"left\">flow</th>\n",
+       "      <th>flow_lb</th>\n",
+       "      <th colspan=\"2\" halign=\"left\">flow</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>dual</th>\n",
+       "      <th>dual</th>\n",
+       "      <th>primal</th>\n",
+       "      <th>dual</th>\n",
+       "      <th>dual</th>\n",
+       "      <th>primal</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>t1</th>\n",
+       "      <td>-0.000000</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>4.65374</td>\n",
+       "      <td>-1.026316</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-0.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t2</th>\n",
+       "      <td>-1.080332</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-0.00000</td>\n",
+       "      <td>-0.000000</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>3.473684</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t3</th>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-0.00000</td>\n",
+       "      <td>-1.026316</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-0.000000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t4</th>\n",
+       "      <td>-1.080332</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-0.00000</td>\n",
+       "      <td>-0.000000</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.947368</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t5</th>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-0.00000</td>\n",
+       "      <td>-1.026316</td>\n",
+       "      <td>0.0</td>\n",
+       "      <td>-0.000000</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   storage.charging               storage.discharging               \n",
+       "                con  var                          con  var          \n",
+       "            flow_lb flow                      flow_lb flow          \n",
+       "               dual dual   primal                dual dual    primal\n",
+       "t1        -0.000000  0.0  4.65374           -1.026316  0.0 -0.000000\n",
+       "t2        -1.080332  0.0 -0.00000           -0.000000  0.0  3.473684\n",
+       "t3         0.000000  0.0 -0.00000           -1.026316  0.0 -0.000000\n",
+       "t4        -1.080332  0.0 -0.00000           -0.000000  0.0  0.947368\n",
+       "t5         0.000000  0.0 -0.00000           -1.026316  0.0 -0.000000"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.results.overview(\"storage.*ing\", temporal=True, mode=\"both\").head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "As you can see:\n",
+    "\n",
+    "- The results are automatically given in wide format.\n",
+    "- The regular expression `\"storage.*ing\"` matched all components that (1) _start with \"storage\"_, but also (2) _end with \"ing\"_. Try changing that to `\"storage.\"` and see what other components get matched too.\n",
+    "- Since we passed `mode=\"both\"`, it returns both primal and dual results. Try passing `\"primal\"` or `\"dual\"` instead.\n",
+    "\n",
+    "Since we set `temporal=True`, we got results that are available for every Snapshot."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Non-temporal results\n",
+    "\n",
+    "Let's see what happens if we instead do:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "storage.storage  con  last_state_lb  dual        0.000000\n",
+       "                      last_state_ub  dual       -0.000000\n",
+       "generator        obj  marginal_cost  primal    981.174515\n",
+       "dtype: float64"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.results.overview(\".*\", temporal=False, mode=\"both\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Since all results are now non-temporal, we get back a `pandas.Series` instead.\n",
+    "\n",
+    "> Can you explain why this now contains the dual results of constraints constructed by `storage.storage`? The documentation of the core component Node may help... But - in any case, feel free to ask stuff like this (we are very happy to answer this).\n",
+    "\n",
+    "But, lets look at an example that contains more interesting results for something like this. First we pull a different example and solve it"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "INFO:iesopt:Data folder for examples already exists; NOT copying ANY contents\n",
+      "INFO:iesopt:Creating example ('08_basic_investment') at: 'ex_custom_results/config.iesopt.yaml'\n",
+      "INFO:iesopt:Set write permissions for example ('ex_custom_results/config.iesopt.yaml'), and data folder ('ex_custom_results/files')\n"
+     ]
+    }
+   ],
+   "source": [
+    "other_config = iesopt.make_example(\n",
+    "    \"08_basic_investment\", dst_dir=\"ex_custom_results\", dst_name=\"config\"\n",
+    ")\n",
+    "other_model = iesopt.run(other_config)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "... and then we take a look at the primal, non-temporal results:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "build_pipeline  var  value          primal      0.750000\n",
+       "                obj  value          primal    750.000000\n",
+       "build_gas       var  value          primal      0.607143\n",
+       "                obj  value          primal    303.571429\n",
+       "plant_gas       obj  marginal_cost  primal    917.000000\n",
+       "build_storage   var  value          primal      0.450714\n",
+       "                obj  value          primal     45.071429\n",
+       "dtype: float64"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "other_model.results.overview(\".*\", temporal=False, mode=\"primal\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This shows us the resulting values of all investment decisions in the model (e.g., `(build_pipeline, var, value)`), there associated costs (e.g., `(build_pipeline, obj, value)`), as well as the objective contribution of the marginal costs induced by operating `plant_gas`.\n",
+    "\n",
+    "To only see investment decisions, you could either take this series and further filter it, for example by doing\n",
+    "\n",
+    "```python\n",
+    "sr = other_model.results.overview(\".*\", temporal=False, mode=\"primal\")\n",
+    "\n",
+    "sr[sr.index.get_level_values(1) == \"var\"]\n",
+    "```\n",
+    "\n",
+    "which (un-)fortunately also hides the `obj` entries of the investment decisions.\n",
+    "\n",
+    "Or you could stick to an \"intelligent\" naming convention of your components (for example like we did in the example, naming all investment decisions `build_***`) and make use of the regular expression support of `overview(...)` by instead doing:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "build_pipeline  var  value  primal      0.750000\n",
+       "                obj  value  primal    750.000000\n",
+       "build_gas       var  value  primal      0.607143\n",
+       "                obj  value  primal    303.571429\n",
+       "build_storage   var  value  primal      0.450714\n",
+       "                obj  value  primal     45.071429\n",
+       "dtype: float64"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "other_model.results.overview(\"^build_.*$\", temporal=False, mode=\"primal\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "> Check out [regex101.com/r/GzgzG2/1](https://regex101.com/r/GzgzG2/1), and read through the \"Explanation\" section, to understand what `^build_.*$` actually achieves. Note: Using the intuitive way, `other_model.results.overview(\"build_\", ...)`, would have worked (here) as well. The difference is minimal and subtle, but ..."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Filtering components\n",
+    "\n",
+    "If you are not familiar with regular expressions, don't worry. The most commonly used \"filters\" work as expected. Let's switch back to temporal results and stick with the \"new\" example that we have just used."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Selecting a specific component"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead tr th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>pipeline</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>var</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>flow</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>primal</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>t1</th>\n",
+       "      <td>-0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t2</th>\n",
+       "      <td>-0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t3</th>\n",
+       "      <td>-0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t4</th>\n",
+       "      <td>-0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t5</th>\n",
+       "      <td>-0.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   pipeline\n",
+       "        var\n",
+       "       flow\n",
+       "     primal\n",
+       "t1     -0.0\n",
+       "t2     -0.0\n",
+       "t3     -0.0\n",
+       "t4     -0.0\n",
+       "t5     -0.0"
+      ]
+     },
+     "execution_count": 31,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "other_model.results.overview(\"pipeline\", temporal=True, mode=\"primal\").head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Selecting all components containing \"plant\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead tr th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th colspan=\"2\" halign=\"left\">plant_gas</th>\n",
+       "      <th colspan=\"2\" halign=\"left\">plant_solar</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>exp</th>\n",
+       "      <th>var</th>\n",
+       "      <th>exp</th>\n",
+       "      <th>var</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>out_electricity</th>\n",
+       "      <th>conversion</th>\n",
+       "      <th>out_electricity</th>\n",
+       "      <th>conversion</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>primal</th>\n",
+       "      <th>primal</th>\n",
+       "      <th>primal</th>\n",
+       "      <th>primal</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>t1</th>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.00</td>\n",
+       "      <td>-0.00</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t2</th>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.00</td>\n",
+       "      <td>-0.00</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t3</th>\n",
+       "      <td>0.034286</td>\n",
+       "      <td>0.034286</td>\n",
+       "      <td>0.02</td>\n",
+       "      <td>0.02</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t4</th>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.07</td>\n",
+       "      <td>0.07</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t5</th>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.16</td>\n",
+       "      <td>0.16</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "         plant_gas                plant_solar           \n",
+       "               exp        var             exp        var\n",
+       "   out_electricity conversion out_electricity conversion\n",
+       "            primal     primal          primal     primal\n",
+       "t1        0.000000   0.000000            0.00      -0.00\n",
+       "t2        0.000000   0.000000            0.00      -0.00\n",
+       "t3        0.034286   0.034286            0.02       0.02\n",
+       "t4        0.000000   0.000000            0.07       0.07\n",
+       "t5        0.000000   0.000000            0.16       0.16"
+      ]
+     },
+     "execution_count": 34,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "other_model.results.overview(\"plant\", temporal=True, mode=\"primal\").head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Selecting specific components"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Using `|`, you can select multiple specific components.\n",
+    "\n",
+    "> Note: You can use that multiple times. Try out passing `\"h2_south|h2_north|demand\"`! Can you explain why `h2_south` and `h2_north` return different types of results? If not - go ahead, ask us!"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead tr th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>elec</th>\n",
+       "      <th colspan=\"3\" halign=\"left\">electrolysis</th>\n",
+       "      <th>h2_south</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>exp</th>\n",
+       "      <th colspan=\"2\" halign=\"left\">exp</th>\n",
+       "      <th>var</th>\n",
+       "      <th>exp</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>injection</th>\n",
+       "      <th>in_electricity</th>\n",
+       "      <th>out_h2</th>\n",
+       "      <th>conversion</th>\n",
+       "      <th>injection</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>primal</th>\n",
+       "      <th>primal</th>\n",
+       "      <th>primal</th>\n",
+       "      <th>primal</th>\n",
+       "      <th>primal</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>t1</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>-0.000000</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t2</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>-0.000000</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t3</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.054286</td>\n",
+       "      <td>0.027143</td>\n",
+       "      <td>0.027143</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t4</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.070000</td>\n",
+       "      <td>0.035000</td>\n",
+       "      <td>0.035000</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t5</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.160000</td>\n",
+       "      <td>0.080000</td>\n",
+       "      <td>0.080000</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "        elec   electrolysis                       h2_south\n",
+       "         exp            exp                  var       exp\n",
+       "   injection in_electricity    out_h2 conversion injection\n",
+       "      primal         primal    primal     primal    primal\n",
+       "t1       0.0       0.000000  0.000000  -0.000000       0.0\n",
+       "t2       0.0       0.000000  0.000000  -0.000000       0.0\n",
+       "t3       0.0       0.054286  0.027143   0.027143       0.0\n",
+       "t4       0.0       0.070000  0.035000   0.035000       0.0\n",
+       "t5       0.0       0.160000  0.080000   0.080000       0.0"
+      ]
+     },
+     "execution_count": 37,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "other_model.results.overview(\"h2_south|elec\", temporal=True, mode=\"primal\").head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "But wait ... we did not want to get results for `electrolysis`. That's the disadvantage of being able to search for components containing `plant`, as shown before: Since `electrolysis` contains `elec` it matches this too.\n",
+    "\n",
+    "Let's fix this. Remember that we used `^build_.*$` before, without it being clear what this achieves? Let's see ..."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead tr th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>elec</th>\n",
+       "      <th>h2_south</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>exp</th>\n",
+       "      <th>exp</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>injection</th>\n",
+       "      <th>injection</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>primal</th>\n",
+       "      <th>primal</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>t1</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t2</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t3</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t4</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t5</th>\n",
+       "      <td>0.0</td>\n",
+       "      <td>0.0</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "        elec  h2_south\n",
+       "         exp       exp\n",
+       "   injection injection\n",
+       "      primal    primal\n",
+       "t1       0.0       0.0\n",
+       "t2       0.0       0.0\n",
+       "t3       0.0       0.0\n",
+       "t4       0.0       0.0\n",
+       "t5       0.0       0.0"
+      ]
+     },
+     "execution_count": 38,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "other_model.results.overview(\"h2_south|^elec$\", temporal=True, mode=\"primal\").head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "It works!\n",
+    "\n",
+    "_But why ... ?_\n",
+    "\n",
+    "As [regex101.com/r/GzgzG2/1](https://regex101.com/r/GzgzG2/1) explains:\n",
+    "\n",
+    "- `^` asserts position at start of a line\n",
+    "- `$` asserts position at the end of a line\n",
+    "\n",
+    "That means, instead of looking for any component that contains `elec`, we are looking for one that does not contain ANY characters before `elec` and also NONE after `elec`. In other words: It matches exactly `elec`."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "iesopt",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

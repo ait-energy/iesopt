@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+
+<html :class="{'dark': darkMode === 'dark' || (darkMode === 'system' &amp;&amp; window.matchMedia('(prefers-color-scheme: dark)').matches)}" class="scroll-smooth" data-content_root="../../../" lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') || localStorage.setItem('darkMode', 'system'), activeSection: '' }" x-init="$watch('darkMode', val =&gt; localStorage.setItem('darkMode', val))">
+<head>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Top-level config | IESopt 2.6.7.dev0 documentation</title>
+<meta content="Top-level config | IESopt 2.6.7.dev0 documentation" property="og:title"/>
+<meta content="Top-level config | IESopt 2.6.7.dev0 documentation" name="twitter:title"/>
+<link href="../../../_static/pygments.css?v=2c5fd357" rel="stylesheet" type="text/css"/>
+<link href="../../../_static/theme.css?v=42baaae4" rel="stylesheet" type="text/css"/>
+<link href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" rel="stylesheet" type="text/css"/>
+<link href="../../../_static/togglebutton.css?v=13237357" rel="stylesheet" type="text/css"/>
+<link href="../../../_static/custom.css?v=89055611" rel="stylesheet" type="text/css"/>
+<link href="../../../_static/favicon.ico" rel="icon"/>
+<link href="../../../search.html" rel="search" title="Search"/>
+<link href="../../../genindex.html" rel="index" title="Index"/>
+<link href="core_components.html" rel="next" title="Components"/>
+<link href="index.html" rel="prev" title="YAML"/>
+<script>
+    <!-- Prevent Flash of wrong theme -->
+      const userPreference = localStorage.getItem('darkMode');
+      let mode;
+      if (userPreference === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        mode = 'dark';
+        document.documentElement.classList.add('dark');
+      } else {
+        mode = 'light';
+      }
+      if (!userPreference) {localStorage.setItem('darkMode', mode)}
+    </script>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border supports-backdrop-blur:bg-background/60 bg-background/95 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../../../index.html"><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">IESopt 2.6.7.dev0 documentation</span>
+</a><nav class="flex items-center space-x-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../../../index.html">Home</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/ait-energy/iesopt" rel="noopener nofollow">GitHub</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/ait-energy/IESopt.jl" rel="noopener nofollow">IESopt.jl</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 space-x-2 sm:space-x-4 md:justify-end">
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../../../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center space-x-1">
+<button @click="darkMode = darkMode === 'light' ? 'dark' : 'light'" aria-label="Color theme switcher" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../../../index.html"><span class="font-bold text-clip whitespace-nowrap">IESopt 2.6.7.dev0 documentation</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../../../index.html">Home</a>
+<a href="https://github.com/ait-energy/iesopt" rel="nofollow noopener">GitHub</a>
+<a href="https://github.com/ait-energy/IESopt.jl" rel="nofollow noopener">IESopt.jl</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<p class="caption" role="heading"><span class="caption-text">IESopt</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Getting started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/first_model.html">A first model</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../../tocs/tutorials_extracting_results.html">Extracting results<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../../notebooks/custom_results_1.html">Part I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notebooks/custom_results_2.html">Part II</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../../tocs/tutorials_templates.html">Templates<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/templates_1.html">Part I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/templates_2.html">Part II</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/addons.html">Addons</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../../tocs/examples.html">Examples<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../../notebooks/example_52.html">52</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notebooks/example_53.html">53</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notebooks/example_54.html">54</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notebooks/example_55.html">55</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guides/index.html">Intro</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../user_guides/toc_general.html">General<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/general/best_practice.html">Best practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/general/linking_components.html">Linking components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/general/common_errors.html">Common errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/general/solvers.html">Solvers</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../user_guides/toc_qna.html">Q &amp; A<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/qna/snapshot_duration.html">Time resolution &amp; power vs. energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/qna/profiles_sign.html">Sign convention for time series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/qna/dynamic_marginal_costs.html">Output-dependent marginal costs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/qna/passive_charging.html">Passive charging of an underground heat storage</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Manual</span></p>
+<ul class="current">
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="index.html">YAML<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Top-level config</a></li>
+<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="core_components.html">Components<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l3"><a class="reference internal" href="core/connection.html">Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/decision.html">Decision</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/node.html">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/profile.html">Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core/unit.html">Unit</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../python/index.html">Python<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../python/configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/model.html">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/results.html">Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/util.html">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/jump.html">JuMP</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../julia/index.html">Julia<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../julia/assets.html">Assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../julia/utilities.html">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../julia/resultsduckdb.html">ResultsDuckDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../julia/resultsjld2.html">ResultsJLD2</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../references/publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references/projects.html">Projects</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/general.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/core.html">IESopt.jl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/updating.html">Updating</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../../../index.html">
+<span class="hidden md:inline">IESopt 2.6.7.dev0 documentation</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="index.html">YAML</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Top-level config</span>
+</nav>
+<div id="content" role="main">
+<section class="tex2jax_ignore mathjax_ignore" id="top-level-config">
+<h1>Top-level config<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#top-level-config"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>The top-level YAML configuration file, often named <code class="docutils literal notranslate"><span class="pre">config.iesopt.yaml</span></code>, is the main configuration file for the IESopt optimization model. It may contain the following main sections:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">parameters</span></code> (optional): General global parameters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">config</span></code>: General configuration settings for the optimization model.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">addons</span></code> (optional): Additional settings for specific addons.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">carriers</span></code>: Definition of all energy carriers.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">components</span></code> (and/or <code class="docutils literal notranslate"><span class="pre">load_components</span></code>): Definitions of core components.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As mentioned in the <a class="reference internal" href="index.html"><span class="std std-doc">intro section</span></a> of the YAML reference, dictionaries are considered to not guarantee order. Therefore, the order of the sections in the YAML file is not important - however, the order given above is recommended for readability.</p>
+</div>
+<p>This means a basic top-level configuration file could look like this:</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Rough outline of a simple <code class="docutils literal notranslate"><span class="pre">config.iesopt.yaml</span></code>.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">optimization</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">problem_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LP</span>
+</span><span id="line-4"><span class="w">    </span><span class="nt">snapshots</span><span class="p">:</span>
+</span><span id="line-5"><span class="w">      </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">24</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="nt">carriers</span><span class="p">:</span>
+</span><span id="line-8"><span class="w">  </span><span class="nt">electricity</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</span><span id="line-9">
+</span><span id="line-10"><span class="nt">components</span><span class="p">:</span>
+</span><span id="line-11"><span class="w">  </span><span class="nt">main_grid_node</span><span class="p">:</span>
+</span><span id="line-12"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Node</span>
+</span><span id="line-13"><span class="w">    </span><span class="nt">carrier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">electricity</span>
+</span></code></pre></div>
+</div>
+</div>
+<section id="parameters">
+<h2><code class="docutils literal notranslate"><span class="pre">parameters</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#parameters" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#parameters'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>General global parameters, that the whole model can access. Can be set from outside when, e.g., when calling <a class="reference internal" href="../python/index.html#iesopt.run" title="iesopt.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">iesopt.run()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section is optional and only needed if you want to global model parameters.</p>
+</div>
+<p>The base approach is passing a dictionary, with all global parameters and their default values:</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Example for a <code class="docutils literal notranslate"><span class="pre">dict</span></code>-based <code class="docutils literal notranslate"><span class="pre">parameters</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">parameters</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">ng_emission_factor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.202</span>
+</span><span id="line-3"><span class="w">  </span><span class="nt">co2_cost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">125</span>
+</span><span id="line-4"><span class="w">  </span><span class="nt">elec_cost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">elec_cost</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">null</span></code> - which is the equivalent of <code class="docutils literal notranslate"><span class="pre">None</span></code> (Python) or <code class="docutils literal notranslate"><span class="pre">nothing</span></code> (Julia). Either it is used internally for some setting that accepts <code class="docutils literal notranslate"><span class="pre">null</span></code> as a valid value, or it is meant to be set from outside.</p>
+<p>However, with a growing number of parameters, it might be more convenient to store them in a separate file. This can be done by passing the path to the file:</p>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Example for file-based <code class="docutils literal notranslate"><span class="pre">parameters</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id3"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">parameters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">global_params_scenarioHIGH.iesopt.param.yaml</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>The file <code class="docutils literal notranslate"><span class="pre">global_params_scenarioHIGH.iesopt.param.yaml</span></code> could then look like this:</p>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Example content of <code class="docutils literal notranslate"><span class="pre">global_params_scenarioHIGH.iesopt.param.yaml</span></code>.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id4"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">ng_emission_factor</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.202</span><span class="w">  </span><span class="c1"># t CO2 / MWh_ng</span>
+</span><span id="line-2"><span class="nt">co2_cost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">125</span><span class="w">              </span><span class="c1"># EUR / t CO2</span>
+</span><span id="line-3"><span class="nt">elec_cost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span><span class="w">            </span><span class="c1"># EUR / MWh_el</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Make sure to use comments to better explain the parameters and their units, and structure the file in a way that makes it easy to read and understand. Note: The same is true for the dictionary approach - use comments! - but the file approach is more likely to be used with a large number of parameters.</p>
+</div>
+</section>
+<section id="config">
+<h2><code class="docutils literal notranslate"><span class="pre">config</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#config" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#config'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>General configuration settings for the optimization model.</p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">config</span></code> section in the top-level YAML configuration file.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id5"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">general</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">version</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">      </span><span class="nt">core</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.1.0</span>
+</span><span id="line-5"><span class="w">      </span><span class="nt">python</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.4.7</span>
+</span><span id="line-6"><span class="w">    </span><span class="nt">name</span><span class="p">:</span>
+</span><span id="line-7"><span class="w">      </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FarayOptIndustry</span>
+</span><span id="line-8"><span class="w">      </span><span class="nt">scenario</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Base_2022_LOW</span>
+</span><span id="line-9"><span class="w">  </span><span class="nt">optimization</span><span class="p">:</span>
+</span><span id="line-10"><span class="w">    </span><span class="nt">problem_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LP</span>
+</span><span id="line-11"><span class="w">    </span><span class="nt">snapshots</span><span class="p">:</span>
+</span><span id="line-12"><span class="w">      </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">168</span>
+</span><span id="line-13"><span class="w">  </span><span class="nt">files</span><span class="p">:</span>
+</span><span id="line-14"><span class="w">    </span><span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inputs_2022.csv</span>
+</span><span id="line-15"><span class="w">  </span><span class="nt">results</span><span class="p">:</span>
+</span><span id="line-16"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="line-17"><span class="w">  </span><span class="nt">paths</span><span class="p">:</span>
+</span><span id="line-18"><span class="w">    </span><span class="nt">files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data/</span>
+</span><span id="line-19"><span class="w">    </span><span class="nt">templates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">templates/</span>
+</span><span id="line-20"><span class="w">    </span><span class="nt">components</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">model/</span>
+</span><span id="line-21"><span class="w">    </span><span class="nt">results</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">out/</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>The following subsections explain each part of the <code class="docutils literal notranslate"><span class="pre">config</span></code> section in more detail.</p>
+<section id="general">
+<h3><code class="docutils literal notranslate"><span class="pre">general</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#general" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#general'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>This contains general settings.</p>
+<section id="version">
+<h4><code class="docutils literal notranslate"><span class="pre">version</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#version"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>This section allows specifying various IESopt versions, which is important to ensure reproducibility and compatibility: Executing a model based on a <code class="docutils literal notranslate"><span class="pre">config.iesopt.yaml</span></code> file with a different version of IESopt might lead to <strong>unexpected results or errors</strong>.</p>
+<div class="literal-block-wrapper docutils container" id="id6">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">version</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id6"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">general</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">version</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">      </span><span class="nt">core</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.1.0</span>
+</span><span id="line-5"><span class="w">      </span><span class="nt">python</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.4.7</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>We try to stick to <a class="reference external" href="https://semver.org/" rel="nofollow noopener">semantic versioning<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>, which means that changes to the minor or patch version should not contain breaking changes, but:</p>
+<ol class="arabic simple">
+<li><p>A bug fix to <code class="docutils literal notranslate"><span class="pre">IESopt.jl</span></code> might lead to different results of your model, meaning every bug fix might be a breaking change “for you”.</p></li>
+<li><p>We might mess up and introduce a breaking change in a minor version, without intending it.</p></li>
+</ol>
+<p>Therefore: Make sure you <strong>KNOW</strong> what changes between versions, and <strong>TEST</strong> your models when upgrading.</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">core</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p>The version of the core IESopt framework (<code class="docutils literal notranslate"><span class="pre">IESopt.jl</span></code>).</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">python</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>The version of the Python interface (<code class="docutils literal notranslate"><span class="pre">iesopt</span></code>).</p>
+</dd>
+</dl>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You may add arbitrary versions to this section, e.g., for personal use in specific addons or other dependencies.</p>
+</div>
+</section>
+<section id="name">
+<h4><code class="docutils literal notranslate"><span class="pre">name</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#name"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>This section does not directly affect the model but can be used to store the name of the model and the scenario. This can be useful for logging and debugging purposes, as well as for the results output.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section is optional and only needed if you want to global model parameters.</p>
+</div>
+<dl class="myst field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">model</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p>Name of the model, e.g., a high-level description, or the name of the project.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">scenario</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>A specific scenario or case, e.g., the year, a specific set of parameters, or a version of input files.</p>
+</dd>
+</dl>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">scenario</span></code> setting supports dynamic placeholders. Currently, you can use <code class="docutils literal notranslate"><span class="pre">$TIME$</span></code> which will automatically be replaced by the timestamp of the model being built. This way, each result will have a unique scenario name, which prevents overwriting results.</p>
+</div>
+<p>Consider the following example for the <code class="docutils literal notranslate"><span class="pre">name</span></code> section:</p>
+<div class="literal-block-wrapper docutils container" id="id7">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">name</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id7"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">general</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">name</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">      </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FarayOptIndustry</span>
+</span><span id="line-5"><span class="w">      </span><span class="nt">scenario</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Base_2022_LOW_T-$TIME$</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>When running the model containing this configuration, the results will be stored in a folder structure that looks like this:</p>
+<div class="literal-block-wrapper docutils container" id="id8">
+<div class="code-block-caption"><span class="caption-text">Example folder structure for the results of the model run.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id8"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span><code><span id="line-1">.
+</span><span id="line-2">├── data/
+</span><span id="line-3">│   └── ...
+</span><span id="line-4">├── out/
+</span><span id="line-5">│   ├── FarayOptIndustry/
+</span><span id="line-6">│   │   ├── Base_2022_LOW_T-2024_09_11_09520837.iesopt.result.jld2
+</span><span id="line-7">│   │   ├── Base_2022_LOW_T-2024_09_11_09520837.iesopt.log
+</span><span id="line-8">│   │   ├── Base_2022_LOW_T-2024_09_11_09520837.highs.log
+</span><span id="line-9">│   │   └── ...
+</span><span id="line-10">│   └── FarayOptIndustry_Baseline/
+</span><span id="line-11">│       └── ...
+</span><span id="line-12">└── config.iesopt.yaml
+</span></code></pre></div>
+</div>
+</div>
+<p>In this example, the <code class="docutils literal notranslate"><span class="pre">$TIME$</span></code> placeholder was replaced by the current timestamp, which is <code class="docutils literal notranslate"><span class="pre">2024_09_11_09520837</span></code> in this case. You can see the top-level config file (<code class="docutils literal notranslate"><span class="pre">config.iesopt.yaml</span></code>), a data folder (<code class="docutils literal notranslate"><span class="pre">data/</span></code>; see the <a class="reference internal" href="#files">files</a> and <a class="reference internal" href="#paths">paths</a> sections), the results folder (<code class="docutils literal notranslate"><span class="pre">out/</span></code>; see the <a class="reference internal" href="#results">results</a> and <a class="reference internal" href="#paths">paths</a> sections). Inside the results folder, IESopt creates a folder for each “model name”. Each executed run creates its result files inside that, using the “scenario name” as base filename.</p>
+</section>
+<section id="verbosity">
+<h4><code class="docutils literal notranslate"><span class="pre">verbosity</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#verbosity"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>Controls the verbosity of various parts of a model run.</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">core</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>, default = <code class="docutils literal notranslate"><span class="pre">info</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Verbosity of the (Julia) core, <code class="docutils literal notranslate"><span class="pre">IESopt.jl</span></code>. Supports: <code class="docutils literal notranslate"><span class="pre">debug</span></code>, <code class="docutils literal notranslate"><span class="pre">info</span></code> (default), <code class="docutils literal notranslate"><span class="pre">warning</span></code>, <code class="docutils literal notranslate"><span class="pre">error</span></code>.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">progress</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether to show progress bars (<code class="docutils literal notranslate"><span class="pre">on</span></code> or <code class="docutils literal notranslate"><span class="pre">off</span></code>), defaults to <code class="docutils literal notranslate"><span class="pre">on</span></code> unless <code class="docutils literal notranslate"><span class="pre">core</span></code> is set to <code class="docutils literal notranslate"><span class="pre">error</span></code> - in that case it defaults to <code class="docutils literal notranslate"><span class="pre">off</span></code>.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">python</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Verbosity of the Python wrapper, <code class="docutils literal notranslate"><span class="pre">iesopt</span></code>. Supports: <code class="docutils literal notranslate"><span class="pre">debug</span></code>, <code class="docutils literal notranslate"><span class="pre">info</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code>, <code class="docutils literal notranslate"><span class="pre">error</span></code>. Defaults to the verbosity set in <code class="docutils literal notranslate"><span class="pre">core</span></code>.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">solver</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether to silence solver prints/outputs (<code class="docutils literal notranslate"><span class="pre">on</span></code> or <code class="docutils literal notranslate"><span class="pre">off</span></code>), defaults to <code class="docutils literal notranslate"><span class="pre">on</span></code> unless <code class="docutils literal notranslate"><span class="pre">core</span></code> is set to <code class="docutils literal notranslate"><span class="pre">error</span></code> - in that case it defaults to <code class="docutils literal notranslate"><span class="pre">off</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="performance">
+<h4><code class="docutils literal notranslate"><span class="pre">performance</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#performance"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>Controls various “performance” related settings of the model.</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">string_names</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>, default = <code class="docutils literal notranslate"><span class="pre">true</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Activates (or deactivates) “string names” for expressions, variables, and constraints. These make the model readable for humans, but cost (a lot of) performance. Refer to the <a class="reference external" href="https://jump.dev/JuMP.jl/stable/tutorials/getting_started/performance_tips/#Disable-string-names" rel="nofollow noopener"><code class="docutils literal notranslate"><span class="pre">JuMP.jl</span></code> documentation<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> and its <code class="docutils literal notranslate"><span class="pre">set_string_names_on_creation</span></code> function, or read upon how this upstream functionality originated from a discussion during the early stages of IESopt development (<a class="reference external" href="https://discourse.julialang.org/t/optimal-model-creation-and-garbage-collection/72619" rel="nofollow noopener">discourse.julialang<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>, <a class="reference external" href="https://github.com/jump-dev/JuMP.jl/issues/2817" rel="nofollow noopener">this issue<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>, and some time later <a class="reference external" href="https://github.com/jump-dev/JuMP.jl/pull/2978" rel="nofollow noopener">this PR<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>).</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">logfile</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>, default = <code class="docutils literal notranslate"><span class="pre">true</span></code>)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Controls whether or not to write an IESopt logfile (which captures everything even if verbosity prevents displaying it). While this does save a bit of time it also prevents tracking down errors, so disable it wisely. This is most important to disable in iterative solves of small models, where logging accounts for a larger portion of overall time.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">force_addon_reload</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>, default = <code class="docutils literal notranslate"><span class="pre">true</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>If set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, addons that have already been loaded once will not be reloaded. This can help with repeated solves of the same model. Be aware, that this might interfere with reloading changes to an addon’s code that you have made, so unless you need it (and understand it) it is best left as <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id9">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">performance</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id9"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">general</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">performance</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">      </span><span class="nt">string_names</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span id="line-5"><span class="w">      </span><span class="nt">logfile</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></code></pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="optimization">
+<h3><code class="docutils literal notranslate"><span class="pre">optimization</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#optimization" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#optimization'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="problem-type">
+<h4><code class="docutils literal notranslate"><span class="pre">problem_type</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#problem-type"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<dl class="myst field-list simple">
+<dt class="field-odd">Options<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">LP</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p>Restricted to (continuous) linear programming formulations.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">MILP</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>Enables mixed-integer linear programming formulations.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">MO</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p>Enables multi-objective optimization formulations.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">MGA</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>Enables modelling-to-generate-alternatives formulations.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">SDDP</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p>Enables stochastic dual dynamic programming formulations.</p>
+</dd>
+</dl>
+<p>Options can be combined using <code class="docutils literal notranslate"><span class="pre">+</span></code> (where applicable), e.g., <code class="docutils literal notranslate"><span class="pre">LP+MO</span></code>.</p>
+<div class="literal-block-wrapper docutils container" id="id10">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">problem_type</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id10"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">optimization</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">problem_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LP</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The options <code class="docutils literal notranslate"><span class="pre">MO</span></code>, <code class="docutils literal notranslate"><span class="pre">MGA</span></code>, and <code class="docutils literal notranslate"><span class="pre">SDDP</span></code> represent very advanced functionality. These are not fully documented, or may be partially broken in any given release. If you are interested in these features, please reach out to the developers.</p>
+</div>
+</section>
+<section id="solver">
+<h4><code class="docutils literal notranslate"><span class="pre">solver</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#solver"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<dl class="myst field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">name</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>, default = <code class="docutils literal notranslate"><span class="pre">highs</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>The solver to use for the optimization problem. If not set, the default solver (currently <a class="reference external" href="https://highs.dev/" rel="nofollow noopener">HiGHS<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>) is used.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">log</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>, default = <code class="docutils literal notranslate"><span class="pre">true</span></code>)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether to log the solver output to a file.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">attributes</span></code> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>, optional)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Additional attributes to pass to the solver.</p>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id11">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">solver</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id11"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">optimization</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">solver</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">highs</span>
+</span><span id="line-5"><span class="w">      </span><span class="nt">log</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</span><span id="line-6"><span class="w">      </span><span class="nt">attributes</span><span class="p">:</span>
+</span><span id="line-7"><span class="w">        </span><span class="nt">solver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ipm</span>
+</span></code></pre></div>
+</div>
+</div>
+</section>
+<section id="snapshots">
+<h4><code class="docutils literal notranslate"><span class="pre">snapshots</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#snapshots"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>Here we define the Snapshots (IESopt’s representation of time steps, including auxiliary information).</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">count</span></code> (<code class="docutils literal notranslate"><span class="pre">int</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of Snapshots to use in the optimization.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">names</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>, optional)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Linked column of a loaded file (using the usual <code class="docutils literal notranslate"><span class="pre">col@file</span></code> syntax) that contains the names of the Snapshots. These are purely for aesthetic purposes (e.g., result data frames) and are not used in the optimization.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">weights</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>, default = <code class="docutils literal notranslate"><span class="pre">1</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>The duration of each Snapshot in hours. Values below <code class="docutils literal notranslate"><span class="pre">1</span></code> are interpreted as fractions of an hour, e.g., <code class="docutils literal notranslate"><span class="pre">0.25</span></code> for 15 minutes.</p>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id12">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">snapshots</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id12"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">optimization</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">snapshots</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">      </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">24</span>
+</span><span id="line-5"><span class="w">      </span><span class="nt">weights</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+</span></code></pre></div>
+</div>
+</div>
+</section>
+<section id="objectives">
+<h4><code class="docutils literal notranslate"><span class="pre">objectives</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#objectives"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This setting is part of advanced functionality. It is not fully documented, or may be partially broken in any given release. If you are interested in this feature, please reach out to the developers.</p>
+</div>
+<p>This allows defining custom objective expressions for the optimization problem. This can be useful if you want to optimize for a specific objective that is not directly supported by IESopt. Per default, IESopt is optimizing the only base objective expression, which is the model’s total cost (called <code class="docutils literal notranslate"><span class="pre">total_cost</span></code>).</p>
+<div class="literal-block-wrapper docutils container" id="id13">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">objectives</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id13"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">optimization</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">objectives</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">      </span><span class="nt">emissions</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">co2_emissions.exp.value</span><span class="p p-Indicator">]</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>The above constructs a new objective expression that only consists of <code class="docutils literal notranslate"><span class="pre">co2_emissions.exp.value</span></code>. It may also be initialized empty (<code class="docutils literal notranslate"><span class="pre">[]</span></code>), in which case you can add terms later on in the model definition.</p>
+</section>
+<section id="multiobjective">
+<h4><code class="docutils literal notranslate"><span class="pre">multiobjective</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#multiobjective"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This setting is part of advanced functionality. It is not fully documented, or may be partially broken in any given release. If you are interested in this feature, please reach out to the developers.</p>
+</div>
+<dl class="myst field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">mode</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>The mode to use for multi-objective optimization, currently supported modes are: <code class="docutils literal notranslate"><span class="pre">EpsilonConstraint</span></code>, <code class="docutils literal notranslate"><span class="pre">Lexicographic</span></code>, <code class="docutils literal notranslate"><span class="pre">Hierarchical</span></code>.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">terms</span></code> (<code class="docutils literal notranslate"><span class="pre">list[str]</span></code>)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of objectives to optimize.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">settings</span></code> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Settings for the multi-objective optimization, refer to the documentation of <a class="reference external" href="https://github.com/jump-dev/MultiObjectiveAlgorithms.jl" rel="nofollow noopener">MultiObjectiveAlgorithms.jl<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> for more information.</p>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id14">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">multiobjective</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id14"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">optimization</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">multiobjective</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">      </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">EpsilonConstraint</span>
+</span><span id="line-5"><span class="w">      </span><span class="nt">terms</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">total_cost</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">emissions</span><span class="p p-Indicator">]</span>
+</span><span id="line-6"><span class="w">      </span><span class="nt">settings</span><span class="p">:</span>
+</span><span id="line-7"><span class="w">        </span><span class="nt">MOA.SolutionLimit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Refer to the related example models for more information on how to use multi-objective optimization in IESopt.</p>
+</div>
+</section>
+<section id="soft-constraints">
+<h4><code class="docutils literal notranslate"><span class="pre">soft_constraints</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#soft-constraints"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>This was called <code class="docutils literal notranslate"><span class="pre">constraint_safety</span></code> in all versions previous to <code class="docutils literal notranslate"><span class="pre">v2.0.0</span></code>. It controls if and how certain constraints of the model are relaxed to allow penalized violation of said constraints. This can be helpful, e.g., if your model is infeasible for certain external settings and you might want to ensure getting an approximate solution.</p>
+<div class="literal-block-wrapper docutils container" id="id15">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">soft_constraints</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id15"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">optimization</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">soft_constraints</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">      </span><span class="nt">active</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="line-5"><span class="w">      </span><span class="nt">penalty</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1e6</span>
+</span></code></pre></div>
+</div>
+</div>
+<dl class="myst field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">active</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Activate the feature.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">penalty</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Penalty that is used to penalize constraint violations.</p>
+</dd>
+</dl>
+</section>
+</section>
+<section id="files">
+<h3><code class="docutils literal notranslate"><span class="pre">files</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#files" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#files'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>This can be used to define input files that are later referenced in the configuration file. Each filename (possibly including a path) is linked to a name that can be used to reference the file later on.</p>
+<div class="literal-block-wrapper docutils container" id="id16">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">files</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id16"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">files</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">data</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inputs_2023_base.csv</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>In the above example, the file <code class="docutils literal notranslate"><span class="pre">inputs_2023_base.csv</span></code> is linked to the name <code class="docutils literal notranslate"><span class="pre">data</span></code>. This means that the file can be referenced in the configuration file using <code class="docutils literal notranslate"><span class="pre">data</span></code>, accessing a column - e.g., “pv_generation” - using <code class="docutils literal notranslate"><span class="pre">pv_generation@data</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Assuming that, in the above example, we call <code class="docutils literal notranslate"><span class="pre">data</span></code> the file’s “descriptor” and <code class="docutils literal notranslate"><span class="pre">inputs_2023_base.csv</span></code> the file’s “name”, then make sure that <strong>the descriptor does not start with an underscore</strong>, and further only uses alphanumeric characters and underscores (so no <code class="docutils literal notranslate"><span class="pre">!</span></code>, <code class="docutils literal notranslate"><span class="pre">~</span></code>, or other “unexpected” special characters).</p>
+</div>
+<section id="csv-config">
+<h4><code class="docutils literal notranslate"><span class="pre">_csv_config</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#csv-config"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>This feature is experimental and can change, break, or be discontinued at any time.</p>
+</div>
+<p>You can configure the behavior of the CSV reader by adding a <code class="docutils literal notranslate"><span class="pre">_csv_config</span></code> section to the <code class="docutils literal notranslate"><span class="pre">files</span></code> section.</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">comment</span></code> (<code class="docutils literal notranslate"><span class="pre">string</span></code>, default = <code class="docutils literal notranslate"><span class="pre">null</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>If empty/not-given, no “comments” are recognized. If set to any string, all lines starting with this string are considered comments and ignored. Common options are <code class="docutils literal notranslate"><span class="pre">#</span></code> or <code class="docutils literal notranslate"><span class="pre">;</span></code>. Make sure to properly escape the string if needed, e.g., <code class="docutils literal notranslate"><span class="pre">comment:</span> <span class="pre">"#"</span></code>.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">delim</span></code> (<code class="docutils literal notranslate"><span class="pre">char</span></code>, default = <code class="docutils literal notranslate"><span class="pre">,</span></code>)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The delimiter used in the CSV file. Common options are <code class="docutils literal notranslate"><span class="pre">,</span></code> (EN locale), <code class="docutils literal notranslate"><span class="pre">;</span></code> (DE locale), or <code class="docutils literal notranslate"><span class="pre">\t</span></code> (tab-separated).</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">decimal</span></code> (<code class="docutils literal notranslate"><span class="pre">char</span></code>, default = <code class="docutils literal notranslate"><span class="pre">.</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>The decimal separator used in the CSV file. Common options are <code class="docutils literal notranslate"><span class="pre">.</span></code> (EN locale) or <code class="docutils literal notranslate"><span class="pre">,</span></code> (DE locale). Make sure this is set correctly in conjunction with the <code class="docutils literal notranslate"><span class="pre">delim</span></code> setting.</p>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id17">
+<div class="code-block-caption"><span class="caption-text">Ignore comment rows in input CSVs.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id17"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">files</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">_csv_config</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">      </span><span class="nt">comment</span><span class="p">:</span><span class="w"> </span><span class="s">"#"</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id18">
+<div class="code-block-caption"><span class="caption-text">Switch to a format often used on German systems.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id18"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">files</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">_csv_config</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">      </span><span class="nt">delim</span><span class="p">:</span><span class="w"> </span><span class="s">";"</span>
+</span><span id="line-5"><span class="w">      </span><span class="nt">decimal</span><span class="p">:</span><span class="w"> </span><span class="s">","</span>
+</span></code></pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="results">
+<h3><code class="docutils literal notranslate"><span class="pre">results</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#results" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#results'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Settings for the results output. Details to be added.</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">enabled</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>, default = <code class="docutils literal notranslate"><span class="pre">true</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Whether to enable the automatic extraction of results. If this is set to <code class="docutils literal notranslate"><span class="pre">false</span></code>, no results will read from the solver after optimizing the model - you can however still access the solver results directly, see for example <a class="reference internal" href="../python/jump.html#iesopt.jump_value" title="iesopt.jump_value"><code class="xref py py-func docutils literal notranslate"><span class="pre">iesopt.jump_value()</span></code></a>.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">memory_only</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>, default = <code class="docutils literal notranslate"><span class="pre">true</span></code>)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether to store the results in memory only, without writing them to disk. This can be useful if you plan to access and further process the results directly in Python or Julia, or only want to store specific results.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">compress</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>, default = <code class="docutils literal notranslate"><span class="pre">false</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Whether to compress the results when writing them to disk. This can save disk space but might increase the time needed to write and read the results. Refer to <a class="reference external" href="https://github.com/JuliaIO/JLD2.jl" rel="nofollow noopener">JLD2.jl<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> for more information about compression.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">include</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>, default = <code class="docutils literal notranslate"><span class="pre">none</span></code> or <code class="docutils literal notranslate"><span class="pre">nput+log</span></code>)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of result extraction modes to activate, see below for more details. The default depends on the setting of <code class="docutils literal notranslate"><span class="pre">memory_only</span></code>: If <code class="docutils literal notranslate"><span class="pre">memory_only</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code>, the default is <code class="docutils literal notranslate"><span class="pre">none</span></code>, otherwise it is <code class="docutils literal notranslate"><span class="pre">input+log</span></code>. You can use <code class="docutils literal notranslate"><span class="pre">all</span></code> to activate all possible settings.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">backend</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>, default = <code class="docutils literal notranslate"><span class="pre">jld2</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>Backend to use in the result extraction. Currently <code class="docutils literal notranslate"><span class="pre">jld2</span></code> is the main/working one, while we are trying to improve the <code class="docutils literal notranslate"><span class="pre">duckdb</span></code> backend.</p>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id19">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">results</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id19"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">results</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="line-4"><span class="w">    </span><span class="nt">memory_only</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="admonition-details-result-extraction-modes admonition">
+<p class="admonition-title">Details: Result extraction modes</p>
+<p>Currently the following options exist for the <code class="docutils literal notranslate"><span class="pre">include</span></code> setting:</p>
+<dl class="myst field-list simple">
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">input</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>Add information about the model’s input data to the results.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">git</span></code><span class="colon">:</span></dt>
+<dd class="field-even"><p>Add information about the status of any git setup that exists in the model’s folder.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">log</span></code><span class="colon">:</span></dt>
+<dd class="field-odd"><p>Add IESopt’s full log of the optimization run to the results.</p>
+</dd>
+</dl>
+<p>These modes can be combined using <code class="docutils literal notranslate"><span class="pre">+</span></code>. For example, <code class="docutils literal notranslate"><span class="pre">input+git</span></code> will include both the input data and the git information in the results. If <code class="docutils literal notranslate"><span class="pre">include</span></code> is set to <code class="docutils literal notranslate"><span class="pre">all</span></code>, all modes are included. If <code class="docutils literal notranslate"><span class="pre">include</span></code> is set to <code class="docutils literal notranslate"><span class="pre">none</span></code>, no modes are included.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Refer to the <a class="reference internal" href="#name"><span class="xref myst">name</span></a> section for information on how the model and scenario names are used in the results output.</p>
+</div>
+</section>
+<section id="paths">
+<h3><code class="docutils literal notranslate"><span class="pre">paths</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#paths" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#paths'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>This section as a whole, or the individual paths, are optional - defaults will be used for those not set.</p>
+<dl class="myst field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">files</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>, default = <code class="docutils literal notranslate"><span class="pre">./files/</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path to the directory where input files are stored.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">templates</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>, default = <code class="docutils literal notranslate"><span class="pre">./templates/</span></code>)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The path to the directory where templates are stored.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">components</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>, default = <code class="docutils literal notranslate"><span class="pre">./model/</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path to the directory where model topology files are stored. These allow loading a large number of components at once. Refer to the <a class="reference internal" href="#components">components</a> section for more information.</p>
+</dd>
+<dt class="field-odd"><code class="docutils literal notranslate"><span class="pre">addons</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>, default = <code class="docutils literal notranslate"><span class="pre">./addons/</span></code>)<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The path to the directory where addons (<code class="docutils literal notranslate"><span class="pre">*.jl</span></code> files) are stored.</p>
+</dd>
+<dt class="field-even"><code class="docutils literal notranslate"><span class="pre">results</span></code> (<code class="docutils literal notranslate"><span class="pre">str</span></code>, default = <code class="docutils literal notranslate"><span class="pre">./out/</span></code>)<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path to the directory where results should be stored.</p>
+</dd>
+</dl>
+<div class="literal-block-wrapper docutils container" id="id20">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">paths</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id20"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">paths</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">files</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data/</span>
+</span><span id="line-4"><span class="w">    </span><span class="nt">templates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">templates/</span>
+</span><span id="line-5"><span class="w">    </span><span class="nt">components</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">model/</span>
+</span><span id="line-6"><span class="w">    </span><span class="nt">results</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">out/</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The paths are all relative to the location of the top-level configuration file.</p>
+</div>
+</section>
+</section>
+<section id="addons">
+<h2><code class="docutils literal notranslate"><span class="pre">addons</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#addons" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#addons'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Additional settings for specific addons.</p>
+<div class="literal-block-wrapper docutils container" id="id21">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">addons</span></code> section in the top-level YAML configuration file.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id21"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">addons</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">ModifyHeatStorages</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">alpha</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.93</span>
+</span><span id="line-4"><span class="w">    </span><span class="nt">temperature</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60.0</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section is optional and only needed if you want to use addons. The settings for the addons are specific to the addon.</p>
+</div>
+</section>
+<section id="carriers">
+<h2><code class="docutils literal notranslate"><span class="pre">carriers</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#carriers" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#carriers'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>Definition of all energy carriers.</p>
+<div class="literal-block-wrapper docutils container" id="id22">
+<div class="code-block-caption"><span class="caption-text">Example for the <code class="docutils literal notranslate"><span class="pre">carriers</span></code> section in the top-level YAML configuration file.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id22"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">carriers</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">electricity</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</span><span id="line-3"><span class="w">  </span><span class="nt">co2</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</span></code></pre></div>
+</div>
+</div>
+</section>
+<section id="components">
+<h2><code class="docutils literal notranslate"><span class="pre">components</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#components" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#components'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>This is the main section where all model components are defined (or loaded). There are two possibilities to define components: <code class="docutils literal notranslate"><span class="pre">components</span></code> and <code class="docutils literal notranslate"><span class="pre">load_components</span></code>. The former is used to define components directly in the top-level configuration file, while the latter is used to load components from a file. At least one of these sections must be present in the top-level configuration file - both can be used at the same time.</p>
+<div class="literal-block-wrapper docutils container" id="id23">
+<div class="code-block-caption"><span class="caption-text">Basic example for the <code class="docutils literal notranslate"><span class="pre">components</span></code> section.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id23"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">components</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">main_grid_node</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Node</span>
+</span><span id="line-4"><span class="w">    </span><span class="nt">carrier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">electricity</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>When using <code class="docutils literal notranslate"><span class="pre">load_components</span></code>, the easiest way is to pass a list of filenames. These files are then loaded from the <code class="docutils literal notranslate"><span class="pre">components</span></code> path (see the <a class="reference internal" href="#paths">paths</a> section) and the components are added to the model. Note that using <code class="docutils literal notranslate"><span class="pre">components</span></code> is not necessary when using <code class="docutils literal notranslate"><span class="pre">load_components</span></code>, and is only done here for demonstration purposes.</p>
+<div class="literal-block-wrapper docutils container" id="id24">
+<div class="code-block-caption"><span class="caption-text">Advanced example, utilizing <code class="docutils literal notranslate"><span class="pre">load_components</span></code>.</span><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id24"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">load_components</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">units.csv</span>
+</span><span id="line-3"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nodes.csv</span>
+</span><span id="line-4"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">profiles.csv</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="nt">components</span><span class="p">:</span>
+</span><span id="line-7"><span class="w">  </span><span class="nt">co2_emissions</span><span class="p">:</span>
+</span><span id="line-8"><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Profile</span>
+</span><span id="line-9"><span class="w">    </span><span class="nt">carrier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">co2</span>
+</span><span id="line-10"><span class="w">    </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">destroy</span>
+</span><span id="line-11"><span class="w">    </span><span class="nt">node_from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">total_co2</span>
+</span><span id="line-12"><span class="w">    </span><span class="nt">cost</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
+</span></code></pre></div>
+</div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">load_components</span></code> section allows more complex ways to read components from files: You can pass <code class="docutils literal notranslate"><span class="pre">.csv</span></code> as sole list entry to load all CSV files in the <code class="docutils literal notranslate"><span class="pre">components</span></code> path, or you can pass one, or multiple, regex patterns as list entries to load only specific files. For example, using</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">load_components</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">^09[/\\]((?!snapshots\.csv$).)*\.csv$</span>
+</span></code></pre></div>
+</div>
+<p>will load all CSV files in the <code class="docutils literal notranslate"><span class="pre">components</span></code> path that are in a subfolder <code class="docutils literal notranslate"><span class="pre">09</span></code> except for <code class="docutils literal notranslate"><span class="pre">snapshots.csv</span></code>.</p>
+<p><strong>Note:</strong> It is recommended to use <code class="docutils literal notranslate"><span class="pre">[/\\]</span></code> as path separators, like in the regex above, so the model can work on both UNIX and Windows systems.</p>
+</div>
+</section>
+</section>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#parameters'" class="reference internal" href="#parameters"><code class="docutils literal notranslate"><span class="pre">parameters</span></code></a></li>
+<li><a :data-current="activeSection === '#config'" class="reference internal" href="#config"><code class="docutils literal notranslate"><span class="pre">config</span></code></a><ul>
+<li><a :data-current="activeSection === '#general'" class="reference internal" href="#general"><code class="docutils literal notranslate"><span class="pre">general</span></code></a><ul>
+<li><a :data-current="activeSection === '#version'" class="reference internal" href="#version"><code class="docutils literal notranslate"><span class="pre">version</span></code></a></li>
+<li><a :data-current="activeSection === '#name'" class="reference internal" href="#name"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
+<li><a :data-current="activeSection === '#verbosity'" class="reference internal" href="#verbosity"><code class="docutils literal notranslate"><span class="pre">verbosity</span></code></a></li>
+<li><a :data-current="activeSection === '#performance'" class="reference internal" href="#performance"><code class="docutils literal notranslate"><span class="pre">performance</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#optimization'" class="reference internal" href="#optimization"><code class="docutils literal notranslate"><span class="pre">optimization</span></code></a><ul>
+<li><a :data-current="activeSection === '#problem-type'" class="reference internal" href="#problem-type"><code class="docutils literal notranslate"><span class="pre">problem_type</span></code></a></li>
+<li><a :data-current="activeSection === '#solver'" class="reference internal" href="#solver"><code class="docutils literal notranslate"><span class="pre">solver</span></code></a></li>
+<li><a :data-current="activeSection === '#snapshots'" class="reference internal" href="#snapshots"><code class="docutils literal notranslate"><span class="pre">snapshots</span></code></a></li>
+<li><a :data-current="activeSection === '#objectives'" class="reference internal" href="#objectives"><code class="docutils literal notranslate"><span class="pre">objectives</span></code></a></li>
+<li><a :data-current="activeSection === '#multiobjective'" class="reference internal" href="#multiobjective"><code class="docutils literal notranslate"><span class="pre">multiobjective</span></code></a></li>
+<li><a :data-current="activeSection === '#soft-constraints'" class="reference internal" href="#soft-constraints"><code class="docutils literal notranslate"><span class="pre">soft_constraints</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#files'" class="reference internal" href="#files"><code class="docutils literal notranslate"><span class="pre">files</span></code></a><ul>
+<li><a :data-current="activeSection === '#csv-config'" class="reference internal" href="#csv-config"><code class="docutils literal notranslate"><span class="pre">_csv_config</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#results'" class="reference internal" href="#results"><code class="docutils literal notranslate"><span class="pre">results</span></code></a></li>
+<li><a :data-current="activeSection === '#paths'" class="reference internal" href="#paths"><code class="docutils literal notranslate"><span class="pre">paths</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#addons'" class="reference internal" href="#addons"><code class="docutils literal notranslate"><span class="pre">addons</span></code></a></li>
+<li><a :data-current="activeSection === '#carriers'" class="reference internal" href="#carriers"><code class="docutils literal notranslate"><span class="pre">carriers</span></code></a></li>
+<li><a :data-current="activeSection === '#components'" class="reference internal" href="#components"><code class="docutils literal notranslate"><span class="pre">components</span></code></a></li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© AIT Austrian Institute of Technology GmbH Built with <a class="font-medium underline underline-offset-4" href="https://www.sphinx-doc.org" rel="noreferrer">Sphinx 8.1.3</a></p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../../../_static/documentation_options.js?v=9e267fa5"></script>
+<script src="../../../_static/doctools.js?v=9bcbadda"></script>
+<script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+<script>let toggleHintShow = 'Click to show';</script>
+<script>let toggleHintHide = 'Click to hide';</script>
+<script>let toggleOpenOnPrint = 'true';</script>
+<script src="../../../_static/togglebutton.js?v=4a39c7ea"></script>
+<script defer="defer" src="../../../_static/theme.js?v=073f68d9"></script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+</body>
+</html>

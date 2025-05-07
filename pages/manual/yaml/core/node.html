@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+
+<html :class="{'dark': darkMode === 'dark' || (darkMode === 'system' &amp;&amp; window.matchMedia('(prefers-color-scheme: dark)').matches)}" class="scroll-smooth" data-content_root="../../../../" lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') || localStorage.setItem('darkMode', 'system'), activeSection: '' }" x-init="$watch('darkMode', val =&gt; localStorage.setItem('darkMode', val))">
+<head>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Node | IESopt 2.6.7.dev0 documentation</title>
+<meta content="Node | IESopt 2.6.7.dev0 documentation" property="og:title"/>
+<meta content="Node | IESopt 2.6.7.dev0 documentation" name="twitter:title"/>
+<link href="../../../../_static/pygments.css?v=2c5fd357" rel="stylesheet" type="text/css"/>
+<link href="../../../../_static/theme.css?v=42baaae4" rel="stylesheet" type="text/css"/>
+<link href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" rel="stylesheet" type="text/css"/>
+<link href="../../../../_static/togglebutton.css?v=13237357" rel="stylesheet" type="text/css"/>
+<link href="../../../../_static/custom.css?v=89055611" rel="stylesheet" type="text/css"/>
+<link href="../../../../_static/favicon.ico" rel="icon"/>
+<link href="../../../../search.html" rel="search" title="Search"/>
+<link href="../../../../genindex.html" rel="index" title="Index"/>
+<link href="profile.html" rel="next" title="Profile"/>
+<link href="decision.html" rel="prev" title="Decision"/>
+<script>
+    <!-- Prevent Flash of wrong theme -->
+      const userPreference = localStorage.getItem('darkMode');
+      let mode;
+      if (userPreference === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        mode = 'dark';
+        document.documentElement.classList.add('dark');
+      } else {
+        mode = 'light';
+      }
+      if (!userPreference) {localStorage.setItem('darkMode', mode)}
+    </script>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border supports-backdrop-blur:bg-background/60 bg-background/95 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../../../../index.html"><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">IESopt 2.6.7.dev0 documentation</span>
+</a><nav class="flex items-center space-x-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../../../../index.html">Home</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/ait-energy/iesopt" rel="noopener nofollow">GitHub</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/ait-energy/IESopt.jl" rel="noopener nofollow">IESopt.jl</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 space-x-2 sm:space-x-4 md:justify-end">
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../../../../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center space-x-1">
+<button @click="darkMode = darkMode === 'light' ? 'dark' : 'light'" aria-label="Color theme switcher" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../../../../index.html"><span class="font-bold text-clip whitespace-nowrap">IESopt 2.6.7.dev0 documentation</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../../../../index.html">Home</a>
+<a href="https://github.com/ait-energy/iesopt" rel="nofollow noopener">GitHub</a>
+<a href="https://github.com/ait-energy/IESopt.jl" rel="nofollow noopener">IESopt.jl</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<p class="caption" role="heading"><span class="caption-text">IESopt</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">Getting started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/first_model.html">A first model</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../../../tocs/tutorials_extracting_results.html">Extracting results<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../../../notebooks/custom_results_1.html">Part I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../notebooks/custom_results_2.html">Part II</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../../../tocs/tutorials_templates.html">Templates<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/templates_1.html">Part I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/templates_2.html">Part II</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/addons.html">Addons</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../../../tocs/examples.html">Examples<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../../../notebooks/example_52.html">52</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../notebooks/example_53.html">53</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../notebooks/example_54.html">54</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../notebooks/example_55.html">55</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_guides/index.html">Intro</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../../user_guides/toc_general.html">General<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guides/general/best_practice.html">Best practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guides/general/linking_components.html">Linking components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guides/general/common_errors.html">Common errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guides/general/solvers.html">Solvers</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../../user_guides/toc_qna.html">Q &amp; A<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guides/qna/snapshot_duration.html">Time resolution &amp; power vs. energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guides/qna/profiles_sign.html">Sign convention for time series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guides/qna/dynamic_marginal_costs.html">Output-dependent marginal costs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user_guides/qna/passive_charging.html">Passive charging of an underground heat storage</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Manual</span></p>
+<ul class="current">
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../index.html">YAML<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../top_level.html">Top-level config</a></li>
+<li class="toctree-l2 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../core_components.html">Components<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul class="current" x-show="expanded">
+<li class="toctree-l3"><a class="reference internal" href="connection.html">Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="decision.html">Decision</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="profile.html">Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unit.html">Unit</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../python/index.html">Python<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../python/configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/model.html">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/results.html">Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/util.html">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python/jump.html">JuMP</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../julia/index.html">Julia<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../julia/assets.html">Assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../julia/utilities.html">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../julia/resultsduckdb.html">ResultsDuckDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../julia/resultsjld2.html">ResultsJLD2</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../references/publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references/projects.html">Projects</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/general.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/core.html">IESopt.jl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/updating.html">Updating</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../../../../index.html">
+<span class="hidden md:inline">IESopt 2.6.7.dev0 documentation</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../index.html">YAML</a>
+<div class="mr-1">/</div><a class="hover:text-foreground overflow-hidden text-ellipsis whitespace-nowrap" href="../core_components.html">Components</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Node</span>
+</nav>
+<div id="content" role="main">
+<section class="tex2jax_ignore mathjax_ignore" id="node">
+<h1>Node<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#node"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section of the documentation is auto-generated from the code of the Julia-based core model. Refer to <a class="reference external" href="https://github.com/ait-energy/IESopt.jl" rel="nofollow noopener">IESopt.jl<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> for any further details (which may require some familiarity with Julia).</p>
+<p><strong>If you spot incorrect math-mode rendering</strong>, or similar issues, please <a class="reference external" href="https://github.com/ait-energy/iesopt/issues" rel="nofollow noopener">file an issue<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a>, since rendering documentation from Julia to Python is not the easiest task.</p>
+</div>
+<section id="overview">
+<h2>Overview<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#overview" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#overview'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>A <code class="docutils literal notranslate"><span class="pre">Node</span></code> represents a basic intersection/hub for energy flows. This can for example be some sort of bus (for electrical systems). It enforces a nodal balance equation (= “energy that flows into it must flow out”) for every <a class="reference internal" href="#@ref"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">Snapshot</span></code></span></a>. Enabling the internal state of the <code class="docutils literal notranslate"><span class="pre">Node</span></code> allows it to act as energy storage, modifying the nodal balance equation. This allows using <code class="docutils literal notranslate"><span class="pre">Node</span></code>s for various storage tasks (like batteries, hydro reservoirs, heat storages, …).</p>
+<div class="dropdown admonition">
+<p class="admonition-title"><strong>Basic Examples</strong></p>
+<p>A <code class="docutils literal notranslate"><span class="pre">Node</span></code> that represents an electrical bus:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">bus</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Node</span>
+</span><span id="line-3"><span class="w">  </span><span class="nt">carrier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">electricity</span>
+</span></code></pre></div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">Node</span></code> that represents a simplified hydrogen storage:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">store</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Node</span>
+</span><span id="line-3"><span class="w">  </span><span class="nt">carrier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hydrogen</span>
+</span><span id="line-4"><span class="w">  </span><span class="nt">has_state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="line-5"><span class="w">  </span><span class="nt">state_lb</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+</span><span id="line-6"><span class="w">  </span><span class="nt">state_ub</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">50</span>
+</span></code></pre></div>
+</div>
+</div>
+</section>
+<section id="parameters">
+<h2>Parameters<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#parameters" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#parameters'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="carrier">
+<h3><code class="docutils literal notranslate"><span class="pre">carrier</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#carrier" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#carrier'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Carrier</span></code> of this <code class="docutils literal notranslate"><span class="pre">Node</span></code>. All connecting components need to respect that.</p>
+<ul class="simple">
+<li><p><strong>mandatory:</strong> yes</p></li>
+<li><p><strong>default:</strong> <span class="math notranslate nohighlight">\(-\)</span></p></li>
+<li><p><strong>values:</strong> string</p></li>
+<li><p><strong>unit:</strong> -</p></li>
+</ul>
+</section>
+<section id="has-state">
+<h3><code class="docutils literal notranslate"><span class="pre">has_state</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#has-state" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#has-state'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>If <code class="docutils literal notranslate"><span class="pre">true</span></code>, the <code class="docutils literal notranslate"><span class="pre">Node</span></code> is considered to have an internal state (“stateful <code class="docutils literal notranslate"><span class="pre">Node</span></code>”). This allows it to act as energy storage. Connect <code class="docutils literal notranslate"><span class="pre">Connection</span></code>s or <code class="docutils literal notranslate"><span class="pre">Unit</span></code>s to it, acting as charger/discharger.</p>
+<ul class="simple">
+<li><p><strong>mandatory:</strong> no</p></li>
+<li><p><strong>default:</strong> <span class="math notranslate nohighlight">\(false\)</span></p></li>
+<li><p><strong>values:</strong> <code class="docutils literal notranslate"><span class="pre">true</span></code>, <code class="docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><strong>unit:</strong> -</p></li>
+</ul>
+</section>
+<section id="state-lb">
+<h3><code class="docutils literal notranslate"><span class="pre">state_lb</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#state-lb" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#state-lb'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Lower bound of the internal state, requires <code class="docutils literal notranslate"><span class="pre">has_state</span> <span class="pre">=</span> <span class="pre">true</span></code>.</p>
+<ul class="simple">
+<li><p><strong>mandatory:</strong> no</p></li>
+<li><p><strong>default:</strong> <span class="math notranslate nohighlight">\(-\infty\)</span></p></li>
+<li><p><strong>values:</strong> numeric, <code class="docutils literal notranslate"><span class="pre">col@file</span></code>, <code class="docutils literal notranslate"><span class="pre">decision:value</span></code></p></li>
+<li><p><strong>unit:</strong> energy</p></li>
+</ul>
+</section>
+<section id="state-ub">
+<h3><code class="docutils literal notranslate"><span class="pre">state_ub</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#state-ub" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#state-ub'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Upper bound of the internal state, requires <code class="docutils literal notranslate"><span class="pre">has_state</span> <span class="pre">=</span> <span class="pre">true</span></code>.</p>
+<ul class="simple">
+<li><p><strong>mandatory:</strong> no</p></li>
+<li><p><strong>default:</strong> <span class="math notranslate nohighlight">\(+\infty\)</span></p></li>
+<li><p><strong>values:</strong> numeric, <code class="docutils literal notranslate"><span class="pre">col@file</span></code>, <code class="docutils literal notranslate"><span class="pre">decision:value</span></code></p></li>
+<li><p><strong>unit:</strong> energy</p></li>
+</ul>
+</section>
+<section id="state-cyclic">
+<h3><code class="docutils literal notranslate"><span class="pre">state_cyclic</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#state-cyclic" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#state-cyclic'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Controls how the state considers the boundary between last and first <code class="docutils literal notranslate"><span class="pre">Snapshot</span></code>. <code class="docutils literal notranslate"><span class="pre">disabled</span></code> disables cyclic behaviour of the state (see also <code class="docutils literal notranslate"><span class="pre">state_initial</span></code>), <code class="docutils literal notranslate"><span class="pre">eq</span></code> leads to the state at the end of the year being the initial state at the beginning of the year, while <code class="docutils literal notranslate"><span class="pre">geq</span></code> does the same while allowing the end-of-year state to be higher (= “allowing to destroy energy at the end of the year”).</p>
+<ul class="simple">
+<li><p><strong>mandatory:</strong> no</p></li>
+<li><p><strong>default:</strong> <span class="math notranslate nohighlight">\(eq\)</span></p></li>
+<li><p><strong>values:</strong> <code class="docutils literal notranslate"><span class="pre">eq</span></code>, <code class="docutils literal notranslate"><span class="pre">geq</span></code>, or <code class="docutils literal notranslate"><span class="pre">disabled</span></code></p></li>
+<li><p><strong>unit:</strong> -</p></li>
+</ul>
+</section>
+<section id="state-initial">
+<h3><code class="docutils literal notranslate"><span class="pre">state_initial</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#state-initial" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#state-initial'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Sets the initial state. If both <code class="docutils literal notranslate"><span class="pre">state_initial</span></code> and <code class="docutils literal notranslate"><span class="pre">state_final</span></code> are set, <code class="docutils literal notranslate"><span class="pre">state_cyclic</span> <span class="pre">=</span> <span class="pre">disabled</span></code> is required.</p>
+<ul class="simple">
+<li><p><strong>mandatory:</strong> no</p></li>
+<li><p><strong>default:</strong> <span class="math notranslate nohighlight">\(-\)</span></p></li>
+<li><p><strong>values:</strong> numeric, <code class="docutils literal notranslate"><span class="pre">decision:value</span></code></p></li>
+<li><p><strong>unit:</strong> energy</p></li>
+</ul>
+</section>
+<section id="state-final">
+<h3><code class="docutils literal notranslate"><span class="pre">state_final</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#state-final" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#state-final'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Sets the final state. If both <code class="docutils literal notranslate"><span class="pre">state_initial</span></code> and <code class="docutils literal notranslate"><span class="pre">state_final</span></code> are set, <code class="docutils literal notranslate"><span class="pre">state_cyclic</span> <span class="pre">=</span> <span class="pre">disabled</span></code> is required.</p>
+<ul class="simple">
+<li><p><strong>mandatory:</strong> no</p></li>
+<li><p><strong>default:</strong> <span class="math notranslate nohighlight">\(-\)</span></p></li>
+<li><p><strong>values:</strong> numeric, <code class="docutils literal notranslate"><span class="pre">decision:value</span></code></p></li>
+<li><p><strong>unit:</strong> energy</p></li>
+</ul>
+</section>
+<section id="state-percentage-loss">
+<h3><code class="docutils literal notranslate"><span class="pre">state_percentage_loss</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#state-percentage-loss" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#state-percentage-loss'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Per hour percentage loss of state (losing 1% should be set as <code class="docutils literal notranslate"><span class="pre">0.01</span></code>), will be scaled automatically for <code class="docutils literal notranslate"><span class="pre">Snapshot</span></code>s that are not one hour long.</p>
+<ul class="simple">
+<li><p><strong>mandatory:</strong> no</p></li>
+<li><p><strong>default:</strong> <span class="math notranslate nohighlight">\(0\)</span></p></li>
+<li><p><strong>values:</strong> <code class="docutils literal notranslate"><span class="pre">\in</span> <span class="pre">[0,</span> <span class="pre">1]</span></code></p></li>
+<li><p><strong>unit:</strong> -</p></li>
+</ul>
+</section>
+<section id="nodal-balance">
+<h3><code class="docutils literal notranslate"><span class="pre">nodal_balance</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#nodal-balance" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#nodal-balance'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Can only be used for <code class="docutils literal notranslate"><span class="pre">has_state</span> <span class="pre">=</span> <span class="pre">false</span></code>. <code class="docutils literal notranslate"><span class="pre">enforce</span></code> forces total injections to always be zero (similar to Kirchhoff’s current law), <code class="docutils literal notranslate"><span class="pre">create</span></code> allows “supply &lt; demand”, <code class="docutils literal notranslate"><span class="pre">destroy</span></code> allows “supply &gt; demand”, at this <code class="docutils literal notranslate"><span class="pre">Node</span></code>.</p>
+<ul class="simple">
+<li><p><strong>mandatory:</strong> no</p></li>
+<li><p><strong>default:</strong> <span class="math notranslate nohighlight">\(enforce\)</span></p></li>
+<li><p><strong>values:</strong> <code class="docutils literal notranslate"><span class="pre">enforce</span></code>, <code class="docutils literal notranslate"><span class="pre">destroy</span></code>, or <code class="docutils literal notranslate"><span class="pre">create</span></code></p></li>
+<li><p><strong>unit:</strong> -</p></li>
+</ul>
+</section>
+<section id="sum-window-size">
+<h3><code class="docutils literal notranslate"><span class="pre">sum_window_size</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sum-window-size" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sum-window-size'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>TODO.</p>
+<ul class="simple">
+<li><p><strong>mandatory:</strong> no</p></li>
+<li><p><strong>default:</strong> <span class="math notranslate nohighlight">\(-\)</span></p></li>
+<li><p><strong>values:</strong> integer</p></li>
+<li><p><strong>unit:</strong> -</p></li>
+</ul>
+</section>
+<section id="sum-window-step">
+<h3><code class="docutils literal notranslate"><span class="pre">sum_window_step</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#sum-window-step" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#sum-window-step'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>TODO.</p>
+<ul class="simple">
+<li><p><strong>mandatory:</strong> no</p></li>
+<li><p><strong>default:</strong> <span class="math notranslate nohighlight">\(1\)</span></p></li>
+<li><p><strong>values:</strong> integer</p></li>
+<li><p><strong>unit:</strong> -</p></li>
+</ul>
+</section>
+<section id="build-priority">
+<h3><code class="docutils literal notranslate"><span class="pre">build_priority</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#build-priority" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#build-priority'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Priority for the build order of components. Components with higher build_priority are built before. This can be useful for addons, that connect multiple components and rely on specific components being initialized before others.</p>
+<ul class="simple">
+<li><p><strong>mandatory:</strong> no</p></li>
+<li><p><strong>default:</strong> <span class="math notranslate nohighlight">\(0\)</span></p></li>
+<li><p><strong>values:</strong> numeric</p></li>
+<li><p><strong>unit:</strong> -</p></li>
+</ul>
+</section>
+</section>
+<section id="detailed-reference">
+<h2>Detailed reference<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#detailed-reference" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#detailed-reference'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="expressions">
+<h3>Expressions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#expressions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#expressions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="injection">
+<h4><code class="docutils literal notranslate"><span class="pre">injection</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#injection"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="dropdown admonition">
+<p class="admonition-title">How to access this expression?</p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c"># Using Julia (`IESopt.jl`):</span>
+</span><span id="line-2"><span class="k">import</span><span class="w"> </span><span class="n">IESopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IESopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="w">  </span><span class="c"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">IESopt</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">exp</span><span class="o">.</span><span class="n">injection</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># Using Python (`iesopt`):</span>
+</span><span id="line-2"><span class="kn">import</span><span class="w"> </span><span class="nn">iesopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span> <span class="o">=</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">model</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="s2">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">exp</span><span class="o">.</span><span class="n">injection</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>Full implementation and all details: <a class="reference external" href="https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/exp_injection.jl" rel="nofollow noopener"><code class="docutils literal notranslate"><span class="pre">node/exp_injection</span> <span class="pre">@</span> <span class="pre">IESopt.jl</span></code><svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a></p>
+<blockquote>
+<div><p>Add an empty (<code class="docutils literal notranslate"><span class="pre">JuMP.AffExpr(0)</span></code>) expression to the <code class="docutils literal notranslate"><span class="pre">node</span></code> that keeps track of feed-in and withdrawal of energy.</p>
+<p> </p>
+<p>This constructs the expression <span class="math notranslate nohighlight">\(\text{injection}_t, \forall t \in T\)</span> that is utilized in <code class="docutils literal notranslate"><span class="pre">node.con.nodalbalance</span></code>. Core components (<code class="docutils literal notranslate"><span class="pre">Connection</span></code>s, <code class="docutils literal notranslate"><span class="pre">Profile</span></code>s, and <code class="docutils literal notranslate"><span class="pre">Unit</span></code>s) that feed energy into this node add to it, all others subtract from it. A stateless node forces this nodal balance to always equal <code class="docutils literal notranslate"><span class="pre">0</span></code> which essentially describes “generation = demand”.</p>
+</div></blockquote>
+</section>
+</section>
+<section id="variables">
+<h3>Variables<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#variables" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#variables'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="pf-theta">
+<h4><code class="docutils literal notranslate"><span class="pre">pf_theta</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pf-theta"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="dropdown admonition">
+<p class="admonition-title">How to access this variable?</p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c"># Using Julia (`IESopt.jl`):</span>
+</span><span id="line-2"><span class="k">import</span><span class="w"> </span><span class="n">IESopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IESopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="w">  </span><span class="c"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">IESopt</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">pf_theta</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># Using Python (`iesopt`):</span>
+</span><span id="line-2"><span class="kn">import</span><span class="w"> </span><span class="nn">iesopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span> <span class="o">=</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">model</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="s2">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">pf_theta</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>Full implementation and all details: <a class="reference external" href="https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/var_pf_theta.jl" rel="nofollow noopener"><code class="docutils literal notranslate"><span class="pre">node/var_pf_theta</span> <span class="pre">@</span> <span class="pre">IESopt.jl</span></code><svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a></p>
+<blockquote>
+<div><p>Construct the auxiliary phase angle variable for the <code class="docutils literal notranslate"><span class="pre">linear_angle</span></code> power flow algorithm.</p>
+<p> </p>
+<p>This needs the global <code class="docutils literal notranslate"><span class="pre">Powerflow</span></code> addon, configured with <code class="docutils literal notranslate"><span class="pre">mode:</span> <span class="pre">linear_angle</span></code>, and constructs a variable <code class="docutils literal notranslate"><span class="pre">var_pf_theta</span></code> for each <code class="docutils literal notranslate"><span class="pre">Snapshot</span></code>. If the <code class="docutils literal notranslate"><span class="pre">pf_slack</span></code> property of this <code class="docutils literal notranslate"><span class="pre">Node</span></code> is set to <code class="docutils literal notranslate"><span class="pre">true</span></code>, it does not add a variable but sets <code class="docutils literal notranslate"><span class="pre">var_pf_theta[t]</span> <span class="pre">=</span> <span class="pre">0</span></code> for each <code class="docutils literal notranslate"><span class="pre">Snapshot</span></code>. ```</p>
+</div></blockquote>
+</section>
+<section id="state">
+<h4><code class="docutils literal notranslate"><span class="pre">state</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#state"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="dropdown admonition">
+<p class="admonition-title">How to access this variable?</p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c"># Using Julia (`IESopt.jl`):</span>
+</span><span id="line-2"><span class="k">import</span><span class="w"> </span><span class="n">IESopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IESopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="w">  </span><span class="c"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">IESopt</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">state</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># Using Python (`iesopt`):</span>
+</span><span id="line-2"><span class="kn">import</span><span class="w"> </span><span class="nn">iesopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span> <span class="o">=</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">model</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="s2">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">var</span><span class="o">.</span><span class="n">state</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>Full implementation and all details: <a class="reference external" href="https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/var_state.jl" rel="nofollow noopener"><code class="docutils literal notranslate"><span class="pre">node/var_state</span> <span class="pre">@</span> <span class="pre">IESopt.jl</span></code><svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a></p>
+<blockquote>
+<div><p>Add the variable representing the state of this <code class="docutils literal notranslate"><span class="pre">node</span></code> to <code class="docutils literal notranslate"><span class="pre">node.model</span></code>, if <code class="docutils literal notranslate"><span class="pre">node.has_state</span> <span class="pre">==</span> <span class="pre">true</span></code>. This can be accessed via <code class="docutils literal notranslate"><span class="pre">node.var.state[t]</span></code>.</p>
+<p> </p>
+<p>Additionally, if the state’s initial value is specified via <code class="docutils literal notranslate"><span class="pre">state_initial</span></code> the following gets added:</p>
+<p> </p>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[
+\text{state}_1 = \text{state}_{initial}
+\]</div>
+</section>
+</section>
+<section id="constraints">
+<h3>Constraints<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#constraints" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#constraints'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="first-state">
+<h4><code class="docutils literal notranslate"><span class="pre">first_state</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#first-state"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="dropdown admonition">
+<p class="admonition-title">How to access this constraint?</p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c"># Using Julia (`IESopt.jl`):</span>
+</span><span id="line-2"><span class="k">import</span><span class="w"> </span><span class="n">IESopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IESopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="w">  </span><span class="c"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">IESopt</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">first_state</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># Using Python (`iesopt`):</span>
+</span><span id="line-2"><span class="kn">import</span><span class="w"> </span><span class="nn">iesopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span> <span class="o">=</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">model</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="s2">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">first_state</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>Full implementation and all details: <a class="reference external" href="https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/con_first_state.jl" rel="nofollow noopener"><code class="docutils literal notranslate"><span class="pre">node/con_first_state</span> <span class="pre">@</span> <span class="pre">IESopt.jl</span></code><svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a></p>
+<blockquote>
+<div><p>Add the constraint for the <code class="docutils literal notranslate"><span class="pre">node</span></code>’s state at the first Snapshot to <code class="docutils literal notranslate"><span class="pre">node.model</span></code>, if <code class="docutils literal notranslate"><span class="pre">node.has_state</span> <span class="pre">==</span> <span class="pre">true</span></code> and <code class="docutils literal notranslate"><span class="pre">node.initial_state</span></code> is set.</p>
+</div></blockquote>
+</section>
+<section id="last-state">
+<h4><code class="docutils literal notranslate"><span class="pre">last_state</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#last-state"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="dropdown admonition">
+<p class="admonition-title">How to access this constraint?</p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c"># Using Julia (`IESopt.jl`):</span>
+</span><span id="line-2"><span class="k">import</span><span class="w"> </span><span class="n">IESopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IESopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="w">  </span><span class="c"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">IESopt</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">last_state</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># Using Python (`iesopt`):</span>
+</span><span id="line-2"><span class="kn">import</span><span class="w"> </span><span class="nn">iesopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span> <span class="o">=</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">model</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="s2">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">last_state</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>Full implementation and all details: <a class="reference external" href="https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/con_last_state.jl" rel="nofollow noopener"><code class="docutils literal notranslate"><span class="pre">node/con_last_state</span> <span class="pre">@</span> <span class="pre">IESopt.jl</span></code><svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a></p>
+<blockquote>
+<div><p>Add the constraint defining the bounds of the <code class="docutils literal notranslate"><span class="pre">node</span></code>’s state during the last Snapshot to <code class="docutils literal notranslate"><span class="pre">node.model</span></code>, if <code class="docutils literal notranslate"><span class="pre">node.has_state</span> <span class="pre">==</span> <span class="pre">true</span></code>.</p>
+<p> </p>
+<p>This is necessary since it could otherwise happen, that the state following the last Snapshot is actually not feasible (e.g. we could charge a storage by more than it’s state allows for). The equations are based on the construction of the overall state variable.</p>
+<p> </p>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp; \text{state}_{end} \cdot \text{factor}^\omega_t + \text{injection}_{end} \cdot \omega_t \geq \text{state}_{lb} \\ 
+&amp; \text{state}_{end} \cdot \text{factor}^\omega_t + \text{injection}_{end} \cdot \omega_t \leq \text{state}_{ub} 
+\end{aligned}
+\end{split}\]</div>
+<blockquote>
+<div><p> </p>
+<p>Here <span class="math notranslate nohighlight">\(\omega_t\)</span> is the <code class="docutils literal notranslate"><span class="pre">weight</span></code> of <code class="docutils literal notranslate"><span class="pre">Snapshot</span></code> <code class="docutils literal notranslate"><span class="pre">t</span></code>, and <span class="math notranslate nohighlight">\(\text{factor}\)</span> is either <code class="docutils literal notranslate"><span class="pre">1.0</span></code> (if there are now percentage losses configured), or <code class="docutils literal notranslate"><span class="pre">(1.0</span> <span class="pre">-</span> <span class="pre">node.state_percentage_loss)</span></code> otherwise.</p>
+<p> </p>
+</div></blockquote>
+<div class="note admonition">
+<p class="admonition-title"><strong>Constraint safety</strong></p>
+<p>The lower and upper bound constraint are subject to penalized slacks.</p>
+</div>
+</section>
+<section id="nodalbalance">
+<h4><code class="docutils literal notranslate"><span class="pre">nodalbalance</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#nodalbalance"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="dropdown admonition">
+<p class="admonition-title">How to access this constraint?</p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c"># Using Julia (`IESopt.jl`):</span>
+</span><span id="line-2"><span class="k">import</span><span class="w"> </span><span class="n">IESopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IESopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="w">  </span><span class="c"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">IESopt</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">nodalbalance</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># Using Python (`iesopt`):</span>
+</span><span id="line-2"><span class="kn">import</span><span class="w"> </span><span class="nn">iesopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span> <span class="o">=</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">model</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="s2">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">nodalbalance</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>Full implementation and all details: <a class="reference external" href="https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/con_nodalbalance.jl" rel="nofollow noopener"><code class="docutils literal notranslate"><span class="pre">node/con_nodalbalance</span> <span class="pre">@</span> <span class="pre">IESopt.jl</span></code><svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a></p>
+<blockquote>
+<div><p>Add the constraint describing the nodal balance to <code class="docutils literal notranslate"><span class="pre">node.model</span></code>.</p>
+<p> </p>
+<p>Depending on whether the <code class="docutils literal notranslate"><span class="pre">node</span></code> is stateful or not, this constructs different representations:</p>
+<p> </p>
+<p><code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">node.has_state</span> <span class="pre">==</span> <span class="pre">true</span></code></p>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp; \text{state}_t = \text{state}_{t-1} \cdot \text{factor}^\omega_{t-1} + \text{injection}_{t-1} \cdot \omega_{t-1}, \qquad \forall t \in T \setminus \{1\} \\
+\\
+&amp; \text{state}_1 = \text{state}_{end} \cdot \text{factor}^\omega_{end} + \text{injection}_{end} \cdot \omega_{end}
+\end{aligned}
+\end{split}\]</div>
+<blockquote>
+<div><p> </p>
+<p> </p>
+<p>Here <span class="math notranslate nohighlight">\(\omega_t\)</span> is the <code class="docutils literal notranslate"><span class="pre">weight</span></code> of <code class="docutils literal notranslate"><span class="pre">Snapshot</span></code> <code class="docutils literal notranslate"><span class="pre">t</span></code>, and <span class="math notranslate nohighlight">\(\text{factor}\)</span> is either <code class="docutils literal notranslate"><span class="pre">1.0</span></code> (if there are now percentage losses configured), or <code class="docutils literal notranslate"><span class="pre">(1.0</span> <span class="pre">-</span> <span class="pre">node.state_percentage_loss)</span></code> otherwise. <span class="math notranslate nohighlight">\(\text{injection}_{t}\)</span> describes the overall injection (all feed-ins minus all withdrawals). <span class="math notranslate nohighlight">\(end\)</span> indicates the last snapshot in <span class="math notranslate nohighlight">\(T\)</span>. Depending on the setting of <code class="docutils literal notranslate"><span class="pre">state_cyclic</span></code> the second constraint is written as <span class="math notranslate nohighlight">\(=\)</span> (<code class="docutils literal notranslate"><span class="pre">"eq"</span></code>) or <span class="math notranslate nohighlight">\(\leq\)</span> (<code class="docutils literal notranslate"><span class="pre">"leq"</span></code>). The latter allows the destruction of excess energy at the end of the total time period to help with feasibility.</p>
+<p> </p>
+<p><code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">node.has_state</span> <span class="pre">==</span> <span class="pre">false</span></code></p>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp; \text{injection}_{t} = 0, \qquad \forall t \in T \\
+\end{aligned}
+\end{split}\]</div>
+<blockquote>
+<div><p> </p>
+<p> </p>
+<p>This equation can further be configured using the <code class="docutils literal notranslate"><span class="pre">nodal_balance</span></code> parameter, which accepts <code class="docutils literal notranslate"><span class="pre">enforce</span></code> (resulting in <span class="math notranslate nohighlight">\(=\)</span>), <code class="docutils literal notranslate"><span class="pre">create</span></code> (resulting in <span class="math notranslate nohighlight">\(\leq\)</span>; allowing the creation of energy - or “negative injections”), and <code class="docutils literal notranslate"><span class="pre">destroy</span></code> ( resulting in <span class="math notranslate nohighlight">\(\geq\)</span>; allowing the destruction of energy - or “positive injections”). This can be used to model some form of energy that can either be sold (using a <code class="docutils literal notranslate"><span class="pre">destroy</span></code> <code class="docutils literal notranslate"><span class="pre">Profile</span></code> connected to this <code class="docutils literal notranslate"><span class="pre">Node</span></code>), or “wasted into the air” using the <code class="docutils literal notranslate"><span class="pre">destroy</span></code> setting of this <code class="docutils literal notranslate"><span class="pre">Node</span></code>.</p>
+</div></blockquote>
+</section>
+<section id="state-bounds">
+<h4><code class="docutils literal notranslate"><span class="pre">state_bounds</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#state-bounds"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="dropdown admonition">
+<p class="admonition-title">How to access this constraint?</p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c"># Using Julia (`IESopt.jl`):</span>
+</span><span id="line-2"><span class="k">import</span><span class="w"> </span><span class="n">IESopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IESopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="w">  </span><span class="c"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">IESopt</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">state_bounds</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># Using Python (`iesopt`):</span>
+</span><span id="line-2"><span class="kn">import</span><span class="w"> </span><span class="nn">iesopt</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="n">model</span> <span class="o">=</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># assuming this is your model</span>
+</span><span id="line-5"><span class="n">model</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="s2">"your_node"</span><span class="p">)</span><span class="o">.</span><span class="n">con</span><span class="o">.</span><span class="n">state_bounds</span>
+</span></code></pre></div>
+</div>
+</div>
+<p>Full implementation and all details: <a class="reference external" href="https://github.com/ait-energy/IESopt.jl/tree/main/src/core/node/con_state_bounds.jl" rel="nofollow noopener"><code class="docutils literal notranslate"><span class="pre">node/con_state_bounds</span> <span class="pre">@</span> <span class="pre">IESopt.jl</span></code><svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a></p>
+<blockquote>
+<div><p>Add the constraint defining the bounds of the <code class="docutils literal notranslate"><span class="pre">node</span></code>’s state to <code class="docutils literal notranslate"><span class="pre">node.model</span></code>, if <code class="docutils literal notranslate"><span class="pre">node.has_state</span> <span class="pre">==</span> <span class="pre">true</span></code>.</p>
+<p> </p>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{aligned}
+&amp; \text{state}_t \geq \text{state}_{lb}, \qquad \forall t \in T \\
+&amp; \text{state}_t \leq \text{state}_{ub}, \qquad \forall t \in T
+\end{aligned}
+\end{split}\]</div>
+<blockquote>
+<div><p> </p>
+</div></blockquote>
+<div class="note admonition">
+<p class="admonition-title"><strong>Constraint safety</strong></p>
+<p>The lower and upper bound constraint are subject to penalized slacks.</p>
+</div>
+</section>
+</section>
+<section id="objectives">
+<h3>Objectives<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#objectives" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#objectives'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+</section>
+</section>
+</section>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#overview'" class="reference internal" href="#overview">Overview</a></li>
+<li><a :data-current="activeSection === '#parameters'" class="reference internal" href="#parameters">Parameters</a><ul>
+<li><a :data-current="activeSection === '#carrier'" class="reference internal" href="#carrier"><code class="docutils literal notranslate"><span class="pre">carrier</span></code></a></li>
+<li><a :data-current="activeSection === '#has-state'" class="reference internal" href="#has-state"><code class="docutils literal notranslate"><span class="pre">has_state</span></code></a></li>
+<li><a :data-current="activeSection === '#state-lb'" class="reference internal" href="#state-lb"><code class="docutils literal notranslate"><span class="pre">state_lb</span></code></a></li>
+<li><a :data-current="activeSection === '#state-ub'" class="reference internal" href="#state-ub"><code class="docutils literal notranslate"><span class="pre">state_ub</span></code></a></li>
+<li><a :data-current="activeSection === '#state-cyclic'" class="reference internal" href="#state-cyclic"><code class="docutils literal notranslate"><span class="pre">state_cyclic</span></code></a></li>
+<li><a :data-current="activeSection === '#state-initial'" class="reference internal" href="#state-initial"><code class="docutils literal notranslate"><span class="pre">state_initial</span></code></a></li>
+<li><a :data-current="activeSection === '#state-final'" class="reference internal" href="#state-final"><code class="docutils literal notranslate"><span class="pre">state_final</span></code></a></li>
+<li><a :data-current="activeSection === '#state-percentage-loss'" class="reference internal" href="#state-percentage-loss"><code class="docutils literal notranslate"><span class="pre">state_percentage_loss</span></code></a></li>
+<li><a :data-current="activeSection === '#nodal-balance'" class="reference internal" href="#nodal-balance"><code class="docutils literal notranslate"><span class="pre">nodal_balance</span></code></a></li>
+<li><a :data-current="activeSection === '#sum-window-size'" class="reference internal" href="#sum-window-size"><code class="docutils literal notranslate"><span class="pre">sum_window_size</span></code></a></li>
+<li><a :data-current="activeSection === '#sum-window-step'" class="reference internal" href="#sum-window-step"><code class="docutils literal notranslate"><span class="pre">sum_window_step</span></code></a></li>
+<li><a :data-current="activeSection === '#build-priority'" class="reference internal" href="#build-priority"><code class="docutils literal notranslate"><span class="pre">build_priority</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#detailed-reference'" class="reference internal" href="#detailed-reference">Detailed reference</a><ul>
+<li><a :data-current="activeSection === '#expressions'" class="reference internal" href="#expressions">Expressions</a><ul>
+<li><a :data-current="activeSection === '#injection'" class="reference internal" href="#injection"><code class="docutils literal notranslate"><span class="pre">injection</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#variables'" class="reference internal" href="#variables">Variables</a><ul>
+<li><a :data-current="activeSection === '#pf-theta'" class="reference internal" href="#pf-theta"><code class="docutils literal notranslate"><span class="pre">pf_theta</span></code></a></li>
+<li><a :data-current="activeSection === '#state'" class="reference internal" href="#state"><code class="docutils literal notranslate"><span class="pre">state</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#constraints'" class="reference internal" href="#constraints">Constraints</a><ul>
+<li><a :data-current="activeSection === '#first-state'" class="reference internal" href="#first-state"><code class="docutils literal notranslate"><span class="pre">first_state</span></code></a></li>
+<li><a :data-current="activeSection === '#last-state'" class="reference internal" href="#last-state"><code class="docutils literal notranslate"><span class="pre">last_state</span></code></a></li>
+<li><a :data-current="activeSection === '#nodalbalance'" class="reference internal" href="#nodalbalance"><code class="docutils literal notranslate"><span class="pre">nodalbalance</span></code></a></li>
+<li><a :data-current="activeSection === '#state-bounds'" class="reference internal" href="#state-bounds"><code class="docutils literal notranslate"><span class="pre">state_bounds</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#objectives'" class="reference internal" href="#objectives">Objectives</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© AIT Austrian Institute of Technology GmbH Built with <a class="font-medium underline underline-offset-4" href="https://www.sphinx-doc.org" rel="noreferrer">Sphinx 8.1.3</a></p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../../../../_static/documentation_options.js?v=9e267fa5"></script>
+<script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+<script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+<script>let toggleHintShow = 'Click to show';</script>
+<script>let toggleHintHide = 'Click to hide';</script>
+<script>let toggleOpenOnPrint = 'true';</script>
+<script src="../../../../_static/togglebutton.js?v=4a39c7ea"></script>
+<script defer="defer" src="../../../../_static/theme.js?v=073f68d9"></script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+<script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

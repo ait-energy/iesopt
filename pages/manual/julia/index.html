@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+
+<html :class="{'dark': darkMode === 'dark' || (darkMode === 'system' &amp;&amp; window.matchMedia('(prefers-color-scheme: dark)').matches)}" class="scroll-smooth" data-content_root="../../../" lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') || localStorage.setItem('darkMode', 'system'), activeSection: '' }" x-init="$watch('darkMode', val =&gt; localStorage.setItem('darkMode', val))">
+<head>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="white" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="black" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Julia | IESopt 2.6.7.dev0 documentation</title>
+<meta content="Julia | IESopt 2.6.7.dev0 documentation" property="og:title"/>
+<meta content="Julia | IESopt 2.6.7.dev0 documentation" name="twitter:title"/>
+<link href="../../../_static/pygments.css?v=2c5fd357" rel="stylesheet" type="text/css"/>
+<link href="../../../_static/theme.css?v=42baaae4" rel="stylesheet" type="text/css"/>
+<link href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" rel="stylesheet" type="text/css"/>
+<link href="../../../_static/togglebutton.css?v=13237357" rel="stylesheet" type="text/css"/>
+<link href="../../../_static/custom.css?v=89055611" rel="stylesheet" type="text/css"/>
+<link href="../../../_static/favicon.ico" rel="icon"/>
+<link href="../../../search.html" rel="search" title="Search"/>
+<link href="../../../genindex.html" rel="index" title="Index"/>
+<link href="assets.html" rel="next" title="Assets"/>
+<link href="../python/jump.html" rel="prev" title="JuMP"/>
+<script>
+    <!-- Prevent Flash of wrong theme -->
+      const userPreference = localStorage.getItem('darkMode');
+      let mode;
+      if (userPreference === 'dark' || window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        mode = 'dark';
+        document.documentElement.classList.add('dark');
+      } else {
+        mode = 'light';
+      }
+      if (!userPreference) {localStorage.setItem('darkMode', mode)}
+    </script>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-sm border-border supports-backdrop-blur:bg-background/60 bg-background/95 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../../../index.html"><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">IESopt 2.6.7.dev0 documentation</span>
+</a><nav class="flex items-center space-x-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../../../index.html">Home</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/ait-energy/iesopt" rel="noopener nofollow">GitHub</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/ait-energy/IESopt.jl" rel="noopener nofollow">IESopt.jl</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 space-x-2 sm:space-x-4 md:justify-end">
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../../../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center space-x-1">
+<button @click="darkMode = darkMode === 'light' ? 'dark' : 'light'" aria-label="Color theme switcher" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full shrink-0 overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="!justify-start text-sm md:!hidden bg-background" href="../../../index.html"><span class="font-bold text-clip whitespace-nowrap">IESopt 2.6.7.dev0 documentation</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0 h-[calc(100vh-8rem)] md:h-auto">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../../../index.html">Home</a>
+<a href="https://github.com/ait-energy/iesopt" rel="nofollow noopener">GitHub</a>
+<a href="https://github.com/ait-energy/IESopt.jl" rel="nofollow noopener">IESopt.jl</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<p class="caption" role="heading"><span class="caption-text">IESopt</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Getting started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/first_model.html">A first model</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../../tocs/tutorials_extracting_results.html">Extracting results<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../../notebooks/custom_results_1.html">Part I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notebooks/custom_results_2.html">Part II</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../../tocs/tutorials_templates.html">Templates<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/templates_1.html">Part I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tutorials/templates_2.html">Part II</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/addons.html">Addons</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../../tocs/examples.html">Examples<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../../notebooks/example_52.html">52</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notebooks/example_53.html">53</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notebooks/example_54.html">54</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../notebooks/example_55.html">55</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guides/index.html">Intro</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../user_guides/toc_general.html">General<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/general/best_practice.html">Best practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/general/linking_components.html">Linking components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/general/common_errors.html">Common errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/general/solvers.html">Solvers</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../user_guides/toc_qna.html">Q &amp; A<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/qna/snapshot_duration.html">Time resolution &amp; power vs. energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/qna/profiles_sign.html">Sign convention for time series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/qna/dynamic_marginal_costs.html">Output-dependent marginal costs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user_guides/qna/passive_charging.html">Passive charging of an underground heat storage</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Manual</span></p>
+<ul class="current">
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../yaml/index.html">YAML<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../yaml/top_level.html">Top-level config</a></li>
+<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../yaml/core_components.html">Components<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l3"><a class="reference internal" href="../yaml/core/connection.html">Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../yaml/core/decision.html">Decision</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../yaml/core/node.html">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../yaml/core/profile.html">Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../yaml/core/unit.html">Unit</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../python/index.html">Python<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../python/configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/model.html">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/results.html">Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/util.html">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../python/jump.html">JuMP</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="current reference internal expandable" href="#">Julia<button @click.prevent.stop="expanded = !expanded" type="button"><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="assets.html">Assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utilities.html">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resultsduckdb.html">ResultsDuckDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resultsjld2.html">ResultsJLD2</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../references/publications.html">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references/projects.html">Projects</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/general.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/core.html">IESopt.jl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/updating.html">Updating</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../../../index.html">
+<span class="hidden md:inline">IESopt 2.6.7.dev0 documentation</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Julia</span>
+</nav>
+<div id="content" role="main">
+<section class="tex2jax_ignore mathjax_ignore" id="julia">
+<h1>Julia<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#julia"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<p>If you are interested in more details on how to use <a class="reference external" href="https://github.com/ait-energy/IESopt.jl" rel="nofollow noopener">IESopt.jl<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> directly, please refer to it’s source code.</p>
+<p>This page contains the docstrings of all things that are part of the public API of IESopt, except:</p>
+<ul class="simple">
+<li><p>All core components. Their full documentation is available in the <a class="reference internal" href="../yaml/core_components.html"><span class="std std-doc">components section</span></a>.</p></li>
+<li><p>The docstrings related to sub-modules of IESopt, e.g., <code class="docutils literal notranslate"><span class="pre">IESopt.Assets</span></code>. These can be found in the sub-pages of the current section.</p></li>
+</ul>
+<section id="notes">
+<h2>Notes<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#notes" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#notes'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<ul class="simple">
+<li><p>You can use <code class="docutils literal notranslate"><span class="pre">IESopt.IESU</span></code> as abbreviation for <code class="docutils literal notranslate"><span class="pre">IESopt.Utilities</span></code>, which allows using, e.g., <code class="docutils literal notranslate"><span class="pre">IESU.annuity(...)</span></code> after doing <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">IESopt</span></code> - which may be better to understand when reading the code instead of <code class="docutils literal notranslate"><span class="pre">IESopt.Utilities.annuity(...)</span></code> (when only importing), or <code class="docutils literal notranslate"><span class="pre">Utilities.annuity(...)</span></code> (which does not show any relation to IESopt).</p></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The public API of the Python wrapper was, as far as possible, designed to be almost identical to the one of the Julia package, so things should look similar.</p>
+<p>For example, the following Python code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kn">import</span><span class="w"> </span><span class="nn">iesopt</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">model</span> <span class="o">=</span> <span class="n">iesopt</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="s2">"config.iesopt.yaml"</span><span class="p">)</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">my_result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="s2">"turbine"</span><span class="p">)</span><span class="o">.</span><span class="n">exp</span><span class="o">.</span><span class="n">out_water</span>
+</span></code></pre></div>
+</div>
+<p>can be translated to Julia like this:</p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">import</span><span class="w"> </span><span class="n">IESopt</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IESopt</span><span class="o">.</span><span class="n">generate!</span><span class="p">(</span><span class="s">"config.iesopt.yaml"</span><span class="p">)</span>
+</span><span id="line-4">
+</span><span id="line-5"><span class="n">my_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IESopt</span><span class="o">.</span><span class="n">get_component</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s">"turbine"</span><span class="p">)</span><span class="o">.</span><span class="n">exp</span><span class="o">.</span><span class="n">out_water</span>
+</span></code></pre></div>
+</div>
+</div>
+
+</section>
+<section id="api-reference">
+<h2>API Reference<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#api-reference" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#api-reference'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="types">
+<h3>Types<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#types" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#types'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="carrier">
+<h4><code class="docutils literal notranslate"><span class="pre">Carrier</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#carrier"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">struct</span> <span class="kt">Carrier</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">name</span><span class="o">::</span><span class="kt">String</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">unit</span><span class="o">::</span><span class="kt">Union</span><span class="p">{</span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="kt">Nothing</span><span class="p">}</span>
+</span><span id="line-4"><span class="k">end</span>
+</span></code></pre></div>
+</div>
+<p>Represents a single (energy) carrier with a given <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+<p>This is mostly used to represent various commodities that (easily) represent some form of energy (e.g. gas, water, …),
+but also enables modelling commodities that are not (treated as) representing some type of energy (e.g. CO2). Specify
+<code class="docutils literal notranslate"><span class="pre">unit</span></code> to bind that carrier to an (arbitrary) unit that allows easier plotting and result analysis.</p>
+</section>
+<hr class="docutils"/>
+<section id="coretemplate">
+<h4><code class="docutils literal notranslate"><span class="pre">CoreTemplate</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#coretemplate"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">CoreTemplate</span>
+</span></code></pre></div>
+</div>
+<p>A struct to represent an IESopt.jl “Core Template”.</p>
+</section>
+<hr class="docutils"/>
+<section id="expression">
+<h4><code class="docutils literal notranslate"><span class="pre">Expression</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#expression"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">Expression</span>
+</span></code></pre></div>
+</div>
+<p>A mutable struct representing a general expression in the optimization model.</p>
+<p><em><strong>Fields</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model::JuMP.Model</span></code>: The IESopt model associated with the expression.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dirty::Bool</span></code>: A flag indicating if the expression is dirty (modified but not updated). Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">temporal::Bool</span></code>: A flag indicating if the expression is temporal. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">empty::Bool</span></code>: A flag indicating if the expression is empty. Defaults to <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value::Union{Nothing,</span> <span class="pre">JuMP.VariableRef,</span> <span class="pre">JuMP.AffExpr,</span> <span class="pre">Vector{JuMP.AffExpr},</span> <span class="pre">Float64,</span> <span class="pre">Vector{Float64}}</span></code>: The value of the expression, which can be a JuMP variable reference, affine expression, vector of affine expressions, float, or vector of floats. Defaults to <code class="docutils literal notranslate"><span class="pre">nothing</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">internal::Union{Nothing,</span> <span class="pre">NamedTuple}</span></code>: Internal data associated with the expression. Defaults to <code class="docutils literal notranslate"><span class="pre">nothing</span></code>.</p></li>
+</ul>
+<p><em><strong>Usage examples</strong></em></p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">if</span><span class="w"> </span><span class="o">!</span><span class="n">my_exp</span><span class="o">.</span><span class="n">empty</span>
+</span><span id="line-2"><span class="w">    </span><span class="c"># ... do something with `my_exp`, since it contains values ...</span>
+</span><span id="line-3"><span class="k">end</span>
+</span></code></pre></div>
+</div>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c"># Get the Expression's value at Snapshot `t`.</span>
+</span><span id="line-2"><span class="n">access</span><span class="p">(</span><span class="n">my_exp</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">)</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c"># Get the Expression's value - could be vector-valued.</span>
+</span><span id="line-5"><span class="n">access</span><span class="p">(</span><span class="n">my_exp</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Both ways to access the value can be used with a type assertion to get the value in a specific type:</p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c"># Get the Expression's value at Snapshot `t` as a Float64.</span>
+</span><span id="line-2"><span class="n">access</span><span class="p">(</span><span class="n">my_exp</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="kt">Float64</span><span class="p">)</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c"># Get the Expression's value as a Float64.</span>
+</span><span id="line-5"><span class="n">access</span><span class="p">(</span><span class="n">my_exp</span><span class="p">,</span><span class="w"> </span><span class="kt">Float64</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>If the value of <code class="docutils literal notranslate"><span class="pre">my_exp</span></code> is a vector of <code class="docutils literal notranslate"><span class="pre">Float64</span></code>, the first call will succeed, while the second will throw a type assertion error.</p>
+</section>
+<hr class="docutils"/>
+<section id="internaldata">
+<h4><code class="docutils literal notranslate"><span class="pre">InternalData</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#internaldata"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">InternalData</span>
+</span></code></pre></div>
+</div>
+<p>The internal data structure used by IESopt.jl to store all relevant information about the model, its components, and
+results.</p>
+</section>
+<hr class="docutils"/>
+<section id="nonemptyexpressionvalue">
+<h4><code class="docutils literal notranslate"><span class="pre">NonEmptyExpressionValue</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#nonemptyexpressionvalue"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>This constant defines a union type <code class="docutils literal notranslate"><span class="pre">NonEmptyExpressionValue</span></code> which describes any value type that an Expression can hold,
+guaranteeing that the Expression can not be empty.</p>
+</section>
+<hr class="docutils"/>
+<section id="nonemptynumericalexpressionvalue">
+<h4><code class="docutils literal notranslate"><span class="pre">NonEmptyNumericalExpressionValue</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#nonemptynumericalexpressionvalue"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>This constant defines a union type <code class="docutils literal notranslate"><span class="pre">NonEmptyNumericalExpressionValue</span></code> which describes any numerical value type that an
+Expression can hold, guaranteeing that the Expression can not be empty. <code class="docutils literal notranslate"><span class="pre">JuMP</span></code> objects are not included, and it can be
+either scalar or vector-valued.</p>
+</section>
+<hr class="docutils"/>
+<section id="nonemptyscalarexpressionvalue">
+<h4><code class="docutils literal notranslate"><span class="pre">NonEmptyScalarExpressionValue</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#nonemptyscalarexpressionvalue"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>This constant defines a union type <code class="docutils literal notranslate"><span class="pre">NonEmptyScalarExpressionValue</span></code> which describes any scalar-valued type that an
+Expression can hold, guaranteeing that the Expression can not be empty.</p>
+</section>
+<hr class="docutils"/>
+<section id="optionalscalarexpressionvalue">
+<h4><code class="docutils literal notranslate"><span class="pre">OptionalScalarExpressionValue</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#optionalscalarexpressionvalue"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>This constant defines a union type <code class="docutils literal notranslate"><span class="pre">OptionalScalarExpressionValue</span></code> which describes any scalar-valued value type that an
+Expression can hold. Due to <code class="docutils literal notranslate"><span class="pre">Optional</span></code> it also includes <code class="docutils literal notranslate"><span class="pre">nothing</span></code>.</p>
+</section>
+<hr class="docutils"/>
+<section id="snapshot">
+<h4><code class="docutils literal notranslate"><span class="pre">Snapshot</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#snapshot"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">struct</span> <span class="kt">Snapshot</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">name</span><span class="o">::</span><span class="kt">_String</span>
+</span><span id="line-3"><span class="w">    </span><span class="n">id</span><span class="o">::</span><span class="kt">_ID</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">weight</span><span class="o">::</span><span class="kt">_ScalarInput</span>
+</span><span id="line-5">
+</span><span id="line-6"><span class="w">    </span><span class="n">is_representative</span><span class="o">::</span><span class="kt">Bool</span>
+</span><span id="line-7"><span class="w">    </span><span class="n">representative</span><span class="o">::</span><span class="kt">_ID</span>
+</span><span id="line-8"><span class="k">end</span>
+</span></code></pre></div>
+</div>
+<p>Represent a specific timestamp, that can be tied to timeseries values.</p>
+<p>Each <code class="docutils literal notranslate"><span class="pre">Snapshot</span></code> expects a <code class="docutils literal notranslate"><span class="pre">name</span></code>, that can be used to hold a timestamp (as <code class="docutils literal notranslate"><span class="pre">String</span></code>; therefore supporting arbitrary
+formats). The <code class="docutils literal notranslate"><span class="pre">weight</span></code> (default = 1.0) specifies the “probabilistic weight” of this <code class="docutils literal notranslate"><span class="pre">Snapshot</span></code> or the length of the
+timeperiod that <strong>begins</strong> there (a <code class="docutils literal notranslate"><span class="pre">weight</span></code> of 2 can therefore represent a 2-hour-resolution; this also allows a
+variable temporal resolution throughout the year/month/…).</p>
+</section>
+<hr class="docutils"/>
+<section id="virtual">
+<h4><code class="docutils literal notranslate"><span class="pre">Virtual</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#virtual"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<p>A <code class="docutils literal notranslate"><span class="pre">Virtual</span></code> (component) is a component that does not exist in the model, but one that a user might expect to exist.
+These are “components” that refer to a template. If a user creates a component “my_storage_foo”, of type “Battery”, they
+might expect (and want) to be able to interact with “my_storage_foo”. Since the template is flattened into explicit
+<code class="docutils literal notranslate"><span class="pre">CoreComponent</span></code>s in the back, “my_storage_foo” does not actually exist - a problem that these <code class="docutils literal notranslate"><span class="pre">Virtual</span></code>s solve.</p>
+</section>
+</section>
+<hr class="docutils"/>
+<section id="macros">
+<h3>Macros<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#macros" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#macros'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="check">
+<h4><code class="docutils literal notranslate"><span class="pre">@check</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#check"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nd">@check</span>
+</span></code></pre></div>
+</div>
+<p>Check whether the passed expression passes an <code class="docutils literal notranslate"><span class="pre">ArgCheck.@check</span></code>, especially helpful to validate a Template’s parameters.</p>
+<p><em><strong>Example</strong></em></p>
+<p>A <code class="docutils literal notranslate"><span class="pre">validate</span></code> section added to a Template can make use of the <code class="docutils literal notranslate"><span class="pre">@check</span></code> macro to validate the parameters passed to the
+template. The macro will properly raise a descriptive error if the condition is not met.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">parameters</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">p</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="nt">functions</span><span class="p">:</span>
+</span><span id="line-5"><span class="w">  </span><span class="nt">validate</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="line-6"><span class="w">    </span><span class="no">@check this.get("p") isa Number</span>
+</span><span id="line-7"><span class="w">    </span><span class="no">@check this.get("p") &gt; 0</span>
+</span></code></pre></div>
+</div>
+<p>See [“Template Validation”](@ref manual_templates_validation) in the documentation for more information.</p>
+<p>!!! warning “Usage outside of Core Template validation”
+This requires <code class="docutils literal notranslate"><span class="pre">__component__</span></code> to be set to some <code class="docutils literal notranslate"><span class="pre">String</span></code> outside of calling the macro, since it accesses this to
+construct a proper error message.</p>
+</section>
+<hr class="docutils"/>
+<section id="config">
+<h4><code class="docutils literal notranslate"><span class="pre">@config</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#config"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nd">@config</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="n">type</span><span class="o">::</span><span class="kt">Union</span><span class="p">{</span><span class="kt">Symbol</span><span class="p">,</span><span class="w"> </span><span class="kt">Expr</span><span class="p">}</span><span class="o">=</span><span class="ss">:Any</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Returns or sets a configuration value in the <code class="docutils literal notranslate"><span class="pre">model</span></code>’s configuration dictionary.</p>
+<p>This macro is used to set and retrieve configuration values in the <code class="docutils literal notranslate"><span class="pre">model</span></code>’s configuration dictionary. This resolves the
+access properly during compile time. A type can be optionally specified to assert the type of the value.</p>
+<p><em><strong>Example</strong></em></p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c"># Setting a configuration value.</span>
+</span><span id="line-2"><span class="nd">@config</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">general</span><span class="o">.</span><span class="n">verbosity</span><span class="o">.</span><span class="n">core</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"info"</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c"># Getting a configuration value.</span>
+</span><span id="line-5"><span class="n">verbosity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nd">@config</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">general</span><span class="o">.</span><span class="n">verbosity</span><span class="o">.</span><span class="n">core</span><span class="p">,</span><span class="w"> </span><span class="kt">String</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</section>
+<hr class="docutils"/>
+<section id="critical">
+<h4><code class="docutils literal notranslate"><span class="pre">@critical</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#critical"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nd">@critical</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="n">args</span><span class="o">...</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>A macro that logs an error message and then throws an error with the same message. Use it in the same way you would use <code class="docutils literal notranslate"><span class="pre">@error</span></code>, or <code class="docutils literal notranslate"><span class="pre">@info</span></code>, etc.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">msg</span></code>: The main error message to be logged and thrown.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">args...</span></code>: Additional arguments to be included in the error log.</p></li>
+</ul>
+</section>
+<hr class="docutils"/>
+<section id="profile">
+<h4><code class="docutils literal notranslate"><span class="pre">@profile</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#profile"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nd">@profile</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span><span class="w"> </span><span class="n">arg2</span><span class="o">=</span><span class="nb">nothing</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>This macro is used to profile the execution of a function. It captures the time, memory allocation, and number of calls
+of the function. The profiling data is stored in the <code class="docutils literal notranslate"><span class="pre">_profiling</span></code> field of the <code class="docutils literal notranslate"><span class="pre">_IESoptData</span></code> structure. The identifier
+passed to the macro is used to store the profiling data. If no identifier is provided, the function’s name is used as
+the identifier.</p>
+<p>Options to use this macro are:</p>
+<ul class="simple">
+<li><p>@profile model “identifier” foo()</p></li>
+<li><p>@profile model foo()</p></li>
+<li><p>@profile “identifier” foo(model)</p></li>
+<li><p>@profile foo(model)</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils"/>
+<section id="functions">
+<h3>Functions<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#functions" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#functions'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<section id="access">
+<h4><code class="docutils literal notranslate"><span class="pre">access</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#access"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">access</span><span class="p">(</span><span class="n">e</span><span class="o">::</span><span class="kt">Expression</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Access the value of an <code class="docutils literal notranslate"><span class="pre">Expression</span></code> object.</p>
+</section>
+<hr class="docutils"/>
+<section id="add-term-to-objective">
+<h4><code class="docutils literal notranslate"><span class="pre">add_term_to_objective!</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#add-term-to-objective"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">add_term_to_objective!</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span><span class="w"> </span><span class="n">objective</span><span class="o">::</span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="n">term</span><span class="o">::</span><span class="kt">Union</span><span class="p">{</span><span class="kt">JuMP</span><span class="o">.</span><span class="kt">AffExpr</span><span class="p">,</span><span class="w"> </span><span class="kt">JuMP</span><span class="o">.</span><span class="kt">VariableRef</span><span class="p">})</span>
+</span></code></pre></div>
+</div>
+<p>Add a term to an objective in the model, which can be used for dynamically creating objectives, e.g., in addons.</p>
+<p>The default objective (that always exists) is called “total_cost”. Other objectives can be dynamically registered using
+<code class="docutils literal notranslate"><span class="pre">register_objective!</span></code>, or they can be added based on the YAML configuration.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model::JuMP.Model</span></code>: The model to add the term to.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">objective::String</span></code>: The name of the objective to add the term to.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">term::Union{JuMP.AffExpr,</span> <span class="pre">JuMP.VariableRef}</span></code>: The term to add to the objective.</p></li>
+</ul>
+<p><em><strong>Example</strong></em></p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">add_term_to_objective!</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s">"my_obj"</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</section>
+<hr class="docutils"/>
+<section id="build">
+<h4><code class="docutils literal notranslate"><span class="pre">build!</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#build"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">build!</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Builds and prepares the given IESopt model. This function performs the following steps:</p>
+<ol class="arabic simple">
+<li><p>Prepares the model by ensuring necessary conversions before performing consistency checks.</p></li>
+<li><p>Checks the consistency of all parsed components in the model.</p></li>
+<li><p>If any component fails the consistency check, an error is raised.</p></li>
+<li><p>Builds the model if all components pass the consistency checks.</p></li>
+<li><p>Logs profiling results after the build process, displaying the top 5 profiling results.</p></li>
+</ol>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model::JuMP.Model</span></code>: The IESopt model to be built and prepared.</p></li>
+</ul>
+<p><em><strong>Errors</strong></em></p>
+<ul class="simple">
+<li><p>Raises an error if any component does not pass the consistency check.</p></li>
+</ul>
+</section>
+<hr class="docutils"/>
+<section id="compute-iis">
+<h4><code class="docutils literal notranslate"><span class="pre">compute_IIS</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#compute-iis"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">function</span><span class="w"> </span><span class="n">compute_IIS</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">;</span><span class="w"> </span><span class="n">filename</span><span class="o">::</span><span class="kt">String</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">""</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Compute the IIS and print it. If <code class="docutils literal notranslate"><span class="pre">filename</span></code> is specified it will instead write all constraints to the given file. This
+will fail if the solver does not support IIS computation.</p>
+</section>
+<hr class="docutils"/>
+<section id="docify">
+<h4><code class="docutils literal notranslate"><span class="pre">docify</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#docify"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">docify</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span><span class="w"> </span><span class="n">filename</span><span class="o">::</span><span class="kt">String</span><span class="p">;</span><span class="w"> </span><span class="n">format</span><span class="o">::</span><span class="kt">String</span><span class="o">=</span><span class="s">"markdown"</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Document an IESopt model in the given format. Experimental feature, use with caution. Some formulations are currently
+not (or only partially) converted.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model::JuMP.Model</span></code>: The model to document.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">filename::String</span></code>: The filename to save the documentation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">format::String</span></code>: The format to save the documentation in. Default is “markdown”.</p></li>
+</ul>
+</section>
+<hr class="docutils"/>
+<section id="extract-result">
+<h4><code class="docutils literal notranslate"><span class="pre">extract_result</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#extract-result"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">extract_result</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">;</span><span class="w"> </span><span class="n">path</span><span class="o">::</span><span class="kt">String</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"./out"</span><span class="p">,</span><span class="w"> </span><span class="n">write_to_file</span><span class="o">::</span><span class="kt">Bool</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>DEPRECATED</p>
+</section>
+<hr class="docutils"/>
+<section id="generate">
+<h4><code class="docutils literal notranslate"><span class="pre">generate!</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#generate"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">generate!</span><span class="p">(</span><span class="n">filename</span><span class="o">::</span><span class="kt">String</span><span class="p">;</span><span class="w"> </span><span class="nd">@nospecialize</span><span class="p">(</span><span class="n">kwargs</span><span class="o">...</span><span class="p">))</span>
+</span></code></pre></div>
+</div>
+<p>Generate an IESopt model based on the top-level config in <code class="docutils literal notranslate"><span class="pre">filename</span></code>.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">filename::String</span></code>: The name of the file to load.</p></li>
+</ul>
+<p><em><strong>Keyword Arguments</strong></em><br/>
+To be documented.</p>
+<p><em><strong>Returns</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model::JuMP.Model</span></code>: The generated IESopt model.</p></li>
+</ul>
+</section>
+<hr class="docutils"/>
+<section id="get-t">
+<h4><code class="docutils literal notranslate"><span class="pre">get_T</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#get-t"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">get_T</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Retrieve the vector <code class="docutils literal notranslate"><span class="pre">T</span></code> from the IESopt model.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model::JuMP.Model</span></code>: The IESopt model from which to extract the vector <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p></li>
+</ul>
+<p><em><strong>Returns</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Vector{_ID}</span></code>: The vector <code class="docutils literal notranslate"><span class="pre">T</span></code>.</p></li>
+</ul>
+</section>
+<hr class="docutils"/>
+<section id="get-component">
+<h4><code class="docutils literal notranslate"><span class="pre">get_component</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#get-component"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">function</span><span class="w"> </span><span class="n">get_component</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span><span class="w"> </span><span class="n">component_name</span><span class="o">::</span><span class="kt">AbstractString</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Get the component <code class="docutils literal notranslate"><span class="pre">component_name</span></code> from <code class="docutils literal notranslate"><span class="pre">model</span></code>.</p>
+</section>
+<hr class="docutils"/>
+<section id="get-components">
+<h4><code class="docutils literal notranslate"><span class="pre">get_components</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#get-components"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">get_components</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">;</span><span class="w"> </span><span class="n">tagged</span><span class="o">::</span><span class="kt">Union</span><span class="p">{</span><span class="kt">Nothing</span><span class="p">,</span><span class="w"> </span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="kt">Vector</span><span class="p">{</span><span class="kt">String</span><span class="p">}}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nothing</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Retrieve components from a given IESopt model.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model::JuMP.Model</span></code>: The IESopt model from which to retrieve components.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tagged::Union{Nothing,</span> <span class="pre">String,</span> <span class="pre">Vector{String}}</span></code>: Optional argument to specify tagged components to retrieve.
+If <code class="docutils literal notranslate"><span class="pre">nothing</span></code>, all components are retrieved. If a <code class="docutils literal notranslate"><span class="pre">String</span></code> or <code class="docutils literal notranslate"><span class="pre">Vector{String}</span></code>, only components with the specified tags are retrieved.</p></li>
+</ul>
+<p><em><strong>Returns</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Vector{_CoreComponent}</span></code>: A subset of components from the model.</p></li>
+</ul>
+</section>
+<hr class="docutils"/>
+<section id="get-global">
+<h4><code class="docutils literal notranslate"><span class="pre">get_global</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#get-global"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">get_global</span><span class="p">(</span><span class="n">type</span><span class="o">::</span><span class="kt">String</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Get a global setting for IESopt.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">type::String</span></code>: The type of global setting. Currently supports: “parameters”, “config”, “addons”, “carriers”, “components”, “load_components”, “skip_validation”.</p></li>
+</ul>
+<p><em><strong>Returns</strong></em></p>
+<ul class="simple">
+<li><p>The global setting.</p></li>
+</ul>
+<p><em><strong>Example</strong></em></p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">using</span><span class="w"> </span><span class="n">IESopt</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">get_global</span><span class="p">(</span><span class="s">"skip_validation"</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</section>
+<hr class="docutils"/>
+<section id="get-value-at">
+<h4><code class="docutils literal notranslate"><span class="pre">get_value_at</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#get-value-at"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">get_value_at</span><span class="p">(</span><span class="n">x</span><span class="o">::</span><span class="kt">T</span><span class="p">,</span><span class="w"> </span><span class="o">::</span><span class="kt">_ID</span><span class="p">)</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="p">{</span><span class="kt">T</span><span class="w"> </span><span class="o">&lt;:</span><span class="w"> </span><span class="kt">Union</span><span class="p">{</span><span class="kt">Nothing</span><span class="p">,</span><span class="w"> </span><span class="kt">Real</span><span class="p">,</span><span class="w"> </span><span class="kt">JuMP</span><span class="o">.</span><span class="kt">VariableRef</span><span class="p">,</span><span class="w"> </span><span class="kt">JuMP</span><span class="o">.</span><span class="kt">AffExpr</span><span class="p">}}</span>
+</span></code></pre></div>
+</div>
+<p>Returns the value of <code class="docutils literal notranslate"><span class="pre">x</span></code> at any Snapshot index <code class="docutils literal notranslate"><span class="pre">t</span></code>. Can be used to access variables without needing to handle whether
+they are vector-valued or not.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x::T</span></code>: The input value which can be of type <code class="docutils literal notranslate"><span class="pre">Nothing</span></code>, <code class="docutils literal notranslate"><span class="pre">Real</span></code>, <code class="docutils literal notranslate"><span class="pre">JuMP.VariableRef</span></code>, or <code class="docutils literal notranslate"><span class="pre">JuMP.AffExpr</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">::_ID</span></code>: Unused Snapshot index.</p></li>
+</ul>
+<p><em><strong>Returns</strong></em></p>
+<ul class="simple">
+<li><p>The value of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></li>
+</ul>
+</section>
+<hr class="docutils"/>
+<section id="get-version">
+<h4><code class="docutils literal notranslate"><span class="pre">get_version</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#get-version"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">get_version</span><span class="p">()</span>
+</span></code></pre></div>
+</div>
+<p>Get the current version of IESopt.jl.</p>
+<p><em><strong>Returns</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">String</span></code>: The current version of IESopt.jl.</p></li>
+</ul>
+</section>
+<hr class="docutils"/>
+<section id="internal">
+<h4><code class="docutils literal notranslate"><span class="pre">internal</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#internal"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">internal</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Retrieve the internal data structure from the JuMP model.</p>
+</section>
+<hr class="docutils"/>
+<section id="make-base-name">
+<h4><code class="docutils literal notranslate"><span class="pre">make_base_name</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#make-base-name"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">make_base_name</span><span class="p">(</span><span class="n">comp</span><span class="o">::</span><span class="kt">_CoreComponent</span><span class="p">,</span><span class="w"> </span><span class="n">str</span><span class="o">::</span><span class="kt">String</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Create a <code class="docutils literal notranslate"><span class="pre">JuMP</span></code> object (e.g., a variable) for a given component based on the component’s name and a user-defined string.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">comp</span></code>: The core component for which to create the base name.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str</span></code>: The user-defined string to append to the component’s name.</p></li>
+</ul>
+<p><em><strong>Returns</strong></em></p>
+<ul class="simple">
+<li><p>A string containing the base name for the object.</p></li>
+</ul>
+<p><em><strong>Example</strong></em></p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">JuMP</span><span class="o">.</span><span class="nd">@constraint</span><span class="p">(</span>
+</span><span id="line-2"><span class="w">    </span><span class="n">model</span><span class="p">,</span>
+</span><span id="line-3"><span class="w">    </span><span class="p">[</span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_T</span><span class="p">(</span><span class="n">model</span><span class="p">)],</span>
+</span><span id="line-4"><span class="w">    </span><span class="n">profile</span><span class="o">.</span><span class="n">exp</span><span class="o">.</span><span class="n">value</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+</span><span id="line-5"><span class="w">    </span><span class="n">base_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_base_name</span><span class="p">(</span><span class="n">profile</span><span class="p">,</span><span class="w"> </span><span class="s">"con_custom"</span><span class="p">),</span>
+</span><span id="line-6"><span class="w">    </span><span class="n">container</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">Array</span><span class="p">,</span>
+</span><span id="line-7"><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</section>
+<hr class="docutils"/>
+<section id="optimize">
+<h4><code class="docutils literal notranslate"><span class="pre">optimize!</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#optimize"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">optimize!</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">;</span><span class="w"> </span><span class="n">kwargs</span><span class="o">...</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Optimize the given IESopt model with optional keyword arguments.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model::JuMP.Model</span></code>: The IESopt model to be optimized.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kwargs...</span></code>: Additional keyword arguments to be passed to the <code class="docutils literal notranslate"><span class="pre">JuMP.optimize!</span></code> function.</p></li>
+</ul>
+<p><em><strong>Description</strong></em><br/>
+This function performs the following steps:</p>
+<ol class="arabic simple">
+<li><p>If there are constraint safety penalties, it relaxes the constraints based on these penalties.</p></li>
+<li><p>Sets the verbosity of the solver output based on the model’s configuration.</p></li>
+<li><p>Logs the solver output to a file if logging is enabled and supported by the solver.</p></li>
+<li><p>Calls <code class="docutils literal notranslate"><span class="pre">JuMP.optimize!</span></code> to solve the model.</p></li>
+<li><p>Checks the result count and termination status to log the optimization outcome.</p></li>
+<li><p>Analyzes the constraint safety results if there were any constraint safety penalties.</p></li>
+<li><p>Extracts and saves the results if the model is solved and feasible.</p></li>
+<li><p>Profiles the results after optimization.</p></li>
+</ol>
+<p><em><strong>Logging</strong></em></p>
+<ul class="simple">
+<li><p>Logs messages about the relaxation of constraints, solver output, and optimization status.</p></li>
+<li><p>Logs warnings if the safety constraint feature is triggered or if unexpected result counts are encountered.</p></li>
+<li><p>Logs errors if the solver log file setup fails, if no results are returned, or if extracting results is not possible.</p></li>
+</ul>
+<p><em><strong>Returns</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nothing</span></code>: This function does not return any value.</p></li>
+</ul>
+</section>
+<hr class="docutils"/>
+<section id="overview">
+<h4><code class="docutils literal notranslate"><span class="pre">overview</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#overview"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">overview</span><span class="p">(</span><span class="n">file</span><span class="o">::</span><span class="kt">String</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Extracts the most important information from an IESopt model file, and returns it as a dictionary.</p>
+</section>
+<hr class="docutils"/>
+<section id="pack">
+<h4><code class="docutils literal notranslate"><span class="pre">pack</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#pack"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">pack</span><span class="p">(</span><span class="n">file</span><span class="o">::</span><span class="kt">String</span><span class="p">;</span><span class="w"> </span><span class="n">out</span><span class="o">::</span><span class="kt">String</span><span class="o">=</span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="n">method</span><span class="o">=</span><span class="ss">:store</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Packs the IESopt model specified by the top-level config file <code class="docutils literal notranslate"><span class="pre">file</span></code> into single file.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">out</span></code> argument specifies the output file name. If not specified, a temporary file is created. Returns the output
+file name. The <code class="docutils literal notranslate"><span class="pre">method</span></code> argument specifies the compression method to use. The default is <code class="docutils literal notranslate"><span class="pre">:store</span></code>, which means no
+compression is used. The other option is <code class="docutils literal notranslate"><span class="pre">:deflate</span></code>, which uses the DEFLATE compression method. The default (<code class="docutils literal notranslate"><span class="pre">:auto</span></code>)
+applies <code class="docutils literal notranslate"><span class="pre">:store</span></code> to all files below 1 MB, <code class="docutils literal notranslate"><span class="pre">:deflate</span></code> otherwise.</p>
+</section>
+<hr class="docutils"/>
+<section id="parse">
+<h4><code class="docutils literal notranslate"><span class="pre">parse!</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#parse"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">parse!</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span><span class="w"> </span><span class="n">filename</span><span class="o">::</span><span class="kt">AbstractString</span><span class="p">;</span><span class="w"> </span><span class="n">kwargs</span><span class="o">...</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Parse the model configuration from a specified file and update the given <code class="docutils literal notranslate"><span class="pre">JuMP.Model</span></code> object.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model::JuMP.Model</span></code>: The JuMP model to be updated.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">filename::AbstractString</span></code>: The path to the configuration file. The file must have a <code class="docutils literal notranslate"><span class="pre">.iesopt.yaml</span></code> extension.</p></li>
+</ul>
+<p><em><strong>Keyword Arguments</strong></em><br/>
+To be documented.</p>
+<p><em><strong>Returns</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Bool</span></code>: Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the model was successfully parsed.</p></li>
+</ul>
+<p><em><strong>Errors</strong></em></p>
+<ul class="simple">
+<li><p>Logs a critical error if the file does not have the <code class="docutils literal notranslate"><span class="pre">.iesopt.yaml</span></code> extension or if there is an error while parsing the model.</p></li>
+</ul>
+</section>
+<hr class="docutils"/>
+<section id="register-objective">
+<h4><code class="docutils literal notranslate"><span class="pre">register_objective!</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#register-objective"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">register_objective!</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span><span class="w"> </span><span class="n">objective</span><span class="o">::</span><span class="kt">String</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Register a new objective in the model, which can for dynamically creating objectives, e.g., in addons.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model::JuMP.Model</span></code>: The model to register the objective in.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">objective::String</span></code>: The name of the objective to register.</p></li>
+</ul>
+<p><em><strong>Example</strong></em></p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">register_objective!</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s">"my_obj"</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>which is equivalent to:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="nt">config</span><span class="p">:</span>
+</span><span id="line-2"><span class="w">  </span><span class="nt">optimization</span><span class="p">:</span>
+</span><span id="line-3"><span class="w">    </span><span class="nt">objectives</span><span class="p">:</span>
+</span><span id="line-4"><span class="w">      </span><span class="nt">my_obj</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+</span></code></pre></div>
+</div>
+</section>
+<hr class="docutils"/>
+<section id="run">
+<h4><code class="docutils literal notranslate"><span class="pre">run</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#run"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">run</span><span class="p">(</span><span class="n">filename</span><span class="o">::</span><span class="kt">String</span><span class="p">;</span><span class="w"> </span><span class="n">kwargs</span><span class="o">...</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Build, optimize, and return a model.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">filename::String</span></code>: The path to the top-level configuration file.</p></li>
+</ul>
+<p><em><strong>Keyword Arguments</strong></em></p>
+<p>Keyword arguments are passed to the <code class="docutils literal notranslate"><span class="pre">generate!(...)</span></code> function.</p>
+</section>
+<hr class="docutils"/>
+<section id="safe-close-filelogger">
+<h4><code class="docutils literal notranslate"><span class="pre">safe_close_filelogger</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#safe-close-filelogger"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">safe_close_filelogger</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Safely closes the file logger’s iostream if it is open. This function checks if the logger associated with the given <code class="docutils literal notranslate"><span class="pre">model</span></code> is a <code class="docutils literal notranslate"><span class="pre">LoggingExtras.TeeLogger</span></code> and if it contains a <code class="docutils literal notranslate"><span class="pre">IESopt._FileLogger</span></code> as one of its loggers. If the file logger’s stream is open, it will be closed.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model::JuMP.Model</span></code>: The IESopt model which contains the logger to be closed.</p></li>
+</ul>
+<p><em><strong>Returns</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nothing</span></code>: This function does not return any value.</p></li>
+</ul>
+<p><em><strong>Notes</strong></em></p>
+<ul class="simple">
+<li><p>The function includes a <code class="docutils literal notranslate"><span class="pre">try-catch</span></code> block to handle any potential errors during the closing process. Currently, the catch block does not perform any actions.</p></li>
+</ul>
+</section>
+<hr class="docutils"/>
+<section id="set-global">
+<h4><code class="docutils literal notranslate"><span class="pre">set_global!</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#set-global"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">set_global!</span><span class="p">(</span><span class="n">type</span><span class="o">::</span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="o">::</span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="nd">@nospecialize</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+</span></code></pre></div>
+</div>
+<p>Set a global setting for IESopt. These will be used as defaults for every subsequent function call (that supports
+these). User passed settings will override these defaults.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">type::String</span></code>: The type of global setting. Currently supports: “parameters”, “config”, “addons”, “carriers”, “components”, “load_components”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">key::String</span></code>: The key of the global setting.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code>: The value of the global setting.</p></li>
+</ul>
+<p><em><strong>Example</strong></em></p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">using</span><span class="w"> </span><span class="n">IESopt</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">set_global!</span><span class="p">(</span><span class="s">"config"</span><span class="p">,</span><span class="w"> </span><span class="s">"general.verbosity.core"</span><span class="p">,</span><span class="w"> </span><span class="s">"error"</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</section>
+<hr class="docutils"/>
+<section id="to-table">
+<h4><code class="docutils literal notranslate"><span class="pre">to_table</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#to-table"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">function</span><span class="w"> </span><span class="n">to_table</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">;</span><span class="w"> </span><span class="n">path</span><span class="o">::</span><span class="kt">String</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"./out"</span><span class="p">,</span><span class="w"> </span><span class="n">write_to_file</span><span class="o">::</span><span class="kt">Bool</span><span class="o">=</span><span class="nb">true</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Turn <code class="docutils literal notranslate"><span class="pre">model</span></code> into a set of CSV files containing all core components that represent the model.</p>
+<p>This can be useful by running</p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">IESopt</span><span class="o">.</span><span class="n">parse!</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="n">filename</span><span class="p">)</span>
+</span><span id="line-2"><span class="n">IESopt</span><span class="o">.</span><span class="n">to_table</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>which will parse the model given by <code class="docutils literal notranslate"><span class="pre">filename</span></code>, without actually building it (which saves a lot of time), and will
+output a complete “description” in core components (that are the resolved version of all non-core components).</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">write_to_file</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code> it will instead return a dictionary of all DataFrames.</p>
+</section>
+<hr class="docutils"/>
+<section id="unpack">
+<h4><code class="docutils literal notranslate"><span class="pre">unpack</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#unpack"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">unpack</span><span class="p">(</span><span class="n">file</span><span class="o">::</span><span class="kt">String</span><span class="p">;</span><span class="w"> </span><span class="n">out</span><span class="o">::</span><span class="kt">String</span><span class="o">=</span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="n">force_overwrite</span><span class="o">::</span><span class="kt">Bool</span><span class="o">=</span><span class="nb">false</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Unpacks the IESopt model specified by <code class="docutils literal notranslate"><span class="pre">file</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">out</span></code> argument specifies the output directory. If not specified, a temporary directory is created. Returns the
+path to the top-level config file. The <code class="docutils literal notranslate"><span class="pre">force_overwrite</span></code> argument specifies whether to overwrite existing files.</p>
+</section>
+<hr class="docutils"/>
+<section id="validate">
+<h4><code class="docutils literal notranslate"><span class="pre">validate</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#validate"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">validate</span><span class="p">(</span><span class="n">toplevel_config_file</span><span class="o">::</span><span class="kt">String</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Validate the model description bsaed on the given top-level configuration file. This function checks the top-level
+configuration file and all referenced files for validity. The function returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the model description is valid,
+and <code class="docutils literal notranslate"><span class="pre">false</span></code> otherwise. If the model description is invalid, the function will print an error message.</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">toplevel_config_file::String</span></code>: The path to the top-level configuration file.</p></li>
+</ul>
+<p><em><strong>Returns</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">valid::Bool</span></code>: Whether the model description is valid (true), or not (false).</p></li>
+</ul>
+</section>
+<hr class="docutils"/>
+<section id="write-to-file">
+<h4><code class="docutils literal notranslate"><span class="pre">write_to_file</span></code><a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#write-to-file"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h4>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">write_to_file</span><span class="p">(</span><span class="n">model</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span><span class="w"> </span><span class="n">filename</span><span class="o">::</span><span class="kt">String</span><span class="p">;</span><span class="w"> </span><span class="n">format</span><span class="o">::</span><span class="kt">JuMP</span><span class="o">.</span><span class="n">MOI</span><span class="o">.</span><span class="n">FileFormats</span><span class="o">.</span><span class="n">FileFormat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">JuMP</span><span class="o">.</span><span class="n">MOI</span><span class="o">.</span><span class="n">FileFormats</span><span class="o">.</span><span class="n">FORMAT_AUTOMATIC</span><span class="p">,</span><span class="w"> </span><span class="n">kwargs</span><span class="o">...</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Write the given IESopt model to a file with the specified filename and format.</p>
+<p>Be aware, that this function will overwrite any existing file with the same name!</p>
+<p><em><strong>Arguments</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model::JuMP.Model</span></code>: The IESopt model to be written to a file.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">filename::String</span></code>: The name of the file to which the model should be written. Note that if the format is set to
+<code class="docutils literal notranslate"><span class="pre">FORMAT_AUTOMATIC</span></code>, the the file extension will be forced to lower case to allow detection.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">format::JuMP.MOI.FileFormats.FileFormat</span></code> (optional): The format in which the model should be written. The default is
+<code class="docutils literal notranslate"><span class="pre">JuMP.MOI.FileFormats.FORMAT_AUTOMATIC</span></code>; if left as that, it will try to automatically determine the format based on
+the file extension.</p></li>
+</ul>
+<p>All additional keyword arguments are passed to the <code class="docutils literal notranslate"><span class="pre">JuMP.write_to_file</span></code> function.</p>
+<p><em><strong>Returns</strong></em></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">String</span></code>: The absolute path to the file to which the model was written.</p></li>
+</ul>
+<p><em><strong>Example</strong></em></p>
+<div class="highlight-julia notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="k">import</span><span class="w"> </span><span class="n">IESopt</span>
+</span><span id="line-2">
+</span><span id="line-3"><span class="n">model</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IESopt</span><span class="o">.</span><span class="n">generate!</span><span class="p">(</span><span class="s">"config.iesopt.yaml"</span><span class="p">)</span>
+</span><span id="line-4"><span class="n">IESopt</span><span class="o">.</span><span class="n">write_to_file</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="w"> </span><span class="s">"model.lp"</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<hr class="docutils"/>
+</section>
+</section>
+</section>
+</section>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#notes'" class="reference internal" href="#notes">Notes</a></li>
+<li><a :data-current="activeSection === '#api-reference'" class="reference internal" href="#api-reference">API Reference</a><ul>
+<li><a :data-current="activeSection === '#types'" class="reference internal" href="#types">Types</a><ul>
+<li><a :data-current="activeSection === '#carrier'" class="reference internal" href="#carrier"><code class="docutils literal notranslate"><span class="pre">Carrier</span></code></a></li>
+<li><a :data-current="activeSection === '#coretemplate'" class="reference internal" href="#coretemplate"><code class="docutils literal notranslate"><span class="pre">CoreTemplate</span></code></a></li>
+<li><a :data-current="activeSection === '#expression'" class="reference internal" href="#expression"><code class="docutils literal notranslate"><span class="pre">Expression</span></code></a></li>
+<li><a :data-current="activeSection === '#internaldata'" class="reference internal" href="#internaldata"><code class="docutils literal notranslate"><span class="pre">InternalData</span></code></a></li>
+<li><a :data-current="activeSection === '#nonemptyexpressionvalue'" class="reference internal" href="#nonemptyexpressionvalue"><code class="docutils literal notranslate"><span class="pre">NonEmptyExpressionValue</span></code></a></li>
+<li><a :data-current="activeSection === '#nonemptynumericalexpressionvalue'" class="reference internal" href="#nonemptynumericalexpressionvalue"><code class="docutils literal notranslate"><span class="pre">NonEmptyNumericalExpressionValue</span></code></a></li>
+<li><a :data-current="activeSection === '#nonemptyscalarexpressionvalue'" class="reference internal" href="#nonemptyscalarexpressionvalue"><code class="docutils literal notranslate"><span class="pre">NonEmptyScalarExpressionValue</span></code></a></li>
+<li><a :data-current="activeSection === '#optionalscalarexpressionvalue'" class="reference internal" href="#optionalscalarexpressionvalue"><code class="docutils literal notranslate"><span class="pre">OptionalScalarExpressionValue</span></code></a></li>
+<li><a :data-current="activeSection === '#snapshot'" class="reference internal" href="#snapshot"><code class="docutils literal notranslate"><span class="pre">Snapshot</span></code></a></li>
+<li><a :data-current="activeSection === '#virtual'" class="reference internal" href="#virtual"><code class="docutils literal notranslate"><span class="pre">Virtual</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#macros'" class="reference internal" href="#macros">Macros</a><ul>
+<li><a :data-current="activeSection === '#check'" class="reference internal" href="#check"><code class="docutils literal notranslate"><span class="pre">@check</span></code></a></li>
+<li><a :data-current="activeSection === '#config'" class="reference internal" href="#config"><code class="docutils literal notranslate"><span class="pre">@config</span></code></a></li>
+<li><a :data-current="activeSection === '#critical'" class="reference internal" href="#critical"><code class="docutils literal notranslate"><span class="pre">@critical</span></code></a></li>
+<li><a :data-current="activeSection === '#profile'" class="reference internal" href="#profile"><code class="docutils literal notranslate"><span class="pre">@profile</span></code></a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#functions'" class="reference internal" href="#functions">Functions</a><ul>
+<li><a :data-current="activeSection === '#access'" class="reference internal" href="#access"><code class="docutils literal notranslate"><span class="pre">access</span></code></a></li>
+<li><a :data-current="activeSection === '#add-term-to-objective'" class="reference internal" href="#add-term-to-objective"><code class="docutils literal notranslate"><span class="pre">add_term_to_objective!</span></code></a></li>
+<li><a :data-current="activeSection === '#build'" class="reference internal" href="#build"><code class="docutils literal notranslate"><span class="pre">build!</span></code></a></li>
+<li><a :data-current="activeSection === '#compute-iis'" class="reference internal" href="#compute-iis"><code class="docutils literal notranslate"><span class="pre">compute_IIS</span></code></a></li>
+<li><a :data-current="activeSection === '#docify'" class="reference internal" href="#docify"><code class="docutils literal notranslate"><span class="pre">docify</span></code></a></li>
+<li><a :data-current="activeSection === '#extract-result'" class="reference internal" href="#extract-result"><code class="docutils literal notranslate"><span class="pre">extract_result</span></code></a></li>
+<li><a :data-current="activeSection === '#generate'" class="reference internal" href="#generate"><code class="docutils literal notranslate"><span class="pre">generate!</span></code></a></li>
+<li><a :data-current="activeSection === '#get-t'" class="reference internal" href="#get-t"><code class="docutils literal notranslate"><span class="pre">get_T</span></code></a></li>
+<li><a :data-current="activeSection === '#get-component'" class="reference internal" href="#get-component"><code class="docutils literal notranslate"><span class="pre">get_component</span></code></a></li>
+<li><a :data-current="activeSection === '#get-components'" class="reference internal" href="#get-components"><code class="docutils literal notranslate"><span class="pre">get_components</span></code></a></li>
+<li><a :data-current="activeSection === '#get-global'" class="reference internal" href="#get-global"><code class="docutils literal notranslate"><span class="pre">get_global</span></code></a></li>
+<li><a :data-current="activeSection === '#get-value-at'" class="reference internal" href="#get-value-at"><code class="docutils literal notranslate"><span class="pre">get_value_at</span></code></a></li>
+<li><a :data-current="activeSection === '#get-version'" class="reference internal" href="#get-version"><code class="docutils literal notranslate"><span class="pre">get_version</span></code></a></li>
+<li><a :data-current="activeSection === '#internal'" class="reference internal" href="#internal"><code class="docutils literal notranslate"><span class="pre">internal</span></code></a></li>
+<li><a :data-current="activeSection === '#make-base-name'" class="reference internal" href="#make-base-name"><code class="docutils literal notranslate"><span class="pre">make_base_name</span></code></a></li>
+<li><a :data-current="activeSection === '#optimize'" class="reference internal" href="#optimize"><code class="docutils literal notranslate"><span class="pre">optimize!</span></code></a></li>
+<li><a :data-current="activeSection === '#overview'" class="reference internal" href="#overview"><code class="docutils literal notranslate"><span class="pre">overview</span></code></a></li>
+<li><a :data-current="activeSection === '#pack'" class="reference internal" href="#pack"><code class="docutils literal notranslate"><span class="pre">pack</span></code></a></li>
+<li><a :data-current="activeSection === '#parse'" class="reference internal" href="#parse"><code class="docutils literal notranslate"><span class="pre">parse!</span></code></a></li>
+<li><a :data-current="activeSection === '#register-objective'" class="reference internal" href="#register-objective"><code class="docutils literal notranslate"><span class="pre">register_objective!</span></code></a></li>
+<li><a :data-current="activeSection === '#run'" class="reference internal" href="#run"><code class="docutils literal notranslate"><span class="pre">run</span></code></a></li>
+<li><a :data-current="activeSection === '#safe-close-filelogger'" class="reference internal" href="#safe-close-filelogger"><code class="docutils literal notranslate"><span class="pre">safe_close_filelogger</span></code></a></li>
+<li><a :data-current="activeSection === '#set-global'" class="reference internal" href="#set-global"><code class="docutils literal notranslate"><span class="pre">set_global!</span></code></a></li>
+<li><a :data-current="activeSection === '#to-table'" class="reference internal" href="#to-table"><code class="docutils literal notranslate"><span class="pre">to_table</span></code></a></li>
+<li><a :data-current="activeSection === '#unpack'" class="reference internal" href="#unpack"><code class="docutils literal notranslate"><span class="pre">unpack</span></code></a></li>
+<li><a :data-current="activeSection === '#validate'" class="reference internal" href="#validate"><code class="docutils literal notranslate"><span class="pre">validate</span></code></a></li>
+<li><a :data-current="activeSection === '#write-to-file'" class="reference internal" href="#write-to-file"><code class="docutils literal notranslate"><span class="pre">write_to_file</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© AIT Austrian Institute of Technology GmbH Built with <a class="font-medium underline underline-offset-4" href="https://www.sphinx-doc.org" rel="noreferrer">Sphinx 8.1.3</a></p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../../../_static/documentation_options.js?v=9e267fa5"></script>
+<script src="../../../_static/doctools.js?v=9bcbadda"></script>
+<script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+<script>let toggleHintShow = 'Click to show';</script>
+<script>let toggleHintHide = 'Click to hide';</script>
+<script>let toggleOpenOnPrint = 'true';</script>
+<script src="../../../_static/togglebutton.js?v=4a39c7ea"></script>
+<script defer="defer" src="../../../_static/theme.js?v=073f68d9"></script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+</body>
+</html>

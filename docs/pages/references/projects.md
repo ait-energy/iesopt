@@ -128,6 +128,21 @@ The project GOES aims to develop a Platform-Based Design (PBD) framework to enab
 
 ---
 
+(references-projects-h2real)=
+### H2REAL
+
+| **Factsheet** |   |
+|-------------|---|
+| title       | Hydrogen Region East Austria goes Live |
+| homepage    | [ait.ac.at](https://www.ait.ac.at/themen/flexibilitaet-geschaeftsmodelle/projekte/h2real) |
+| funding     | [klimafonds.gv.at](https://www.klimafonds.gv.at/projekt/h2real/), [Vorzeigeregion Energie @ ffg.at](https://www.ffg.at/vorzeigeregionenergie) |
+| AIT contact | S. Reuter |
+
+**Description**  
+The project H2REAL aims to establish a Hydrogen Valley in Eastern Austria by integrating key regional stakeholders across the entire green hydrogen value chain to enable efficient demonstration and scalable deployment of hydrogen technologies.
+
+---
+
 (references-projects-heathighway)=
 ### Heat Highway
 

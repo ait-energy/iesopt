@@ -8,6 +8,39 @@ instructions in the [section on contributing](#contributing) below.
 
 ## List of references
 
+(references-projects-cells4energy)=
+### cells4.energy
+
+:**title**: Regional energy cells as multi-energy real laboratories for a rapid system transition
+:**homepage**: [ait.ac.at](https://www.ait.ac.at/themen/hybrid-power-plants/projekte/cells4energy)
+:**funding**: [ffg.at](https://projekte.ffg.at/projekt/4849884)
+:**description**: The cells4.energy project establishes living labs in diverse Austrian regions to develop, test, and scale a decentralized, digital, and cross-sectoral renewable energy system based on replicable energy cells, supporting the national energy transition through systemic, technological, and societal innovation.
+:**AIT contact**: B. Iglar
+
+---
+
+(references-projects-cleanheatselector)=
+### CleanHeatSelector
+
+:**title**: Development of a decision framework for the selection of priority areas for the implementation of sustainable heating technologies
+:**homepage**: [energieinstitut-linz.at](https://energieinstitut-linz.at/en/project/entwicklung-eines-entscheidungsrahmens-fuer-vorranggebiete-zur-implementierung-nachhaltiger-heizwaermetechnologien/) or [boku.ac.at](https://forschung.boku.ac.at/en/projects/15576)
+:**funding**: [ffg.at](https://projekte.ffg.at/projekt/4805453)
+:**description**: The CleanHeatSelector project aims to develop a decision-making framework for identifying priority areas for sustainable heating technologies by integrating technical, environmental, social, economic, and regulatory criteria into energy planning.
+:**AIT contact**: -
+
+---
+
+(references-projects-deriske)=
+### DeRisk-E
+
+:**title**: Derisking the Austrian Electricity Sector Transformation towards Decarbonisation
+:**homepage**: -
+:**funding**: [ffg.at](https://projekte.ffg.at/projekt/5124291)
+:**description**: DeRisk-E aims to support Austrian policymakers in derisking the future decarbonized electricity system by combining climate and power system modeling with uncertainty analysis to assess the joint impacts of climate change and geopolitical disruptions on energy resilience.
+:**AIT contact**: D. Suna
+
+---
+
 (references-projects-deriskdh)=
 ### DeRiskDH
 
@@ -27,6 +60,28 @@ instructions in the [section on contributing](#contributing) below.
 :**funding**: [ec.euopa.eu](https://webgate.ec.europa.eu/life/publicWebsite/project/LIFE23-CET-ENABLE-DHC-101167576/enabling-strategies-and-investment-plans-for-efficient-multi-energy-and-digitalized-dhc)
 :**description**: ENABLE DHC aims to foster the switch of district heating and cooling (DHC) networks towards efficient DHC as defined in the Energy Efficiency Directive, by developing 9 case studies of investment plans in 7 European countries.
 :**AIT contact**: R. Schmidt
+
+---
+
+(references-projects-fair-grid)=
+### Fair-Grid
+
+:**title**: Options for Fair Grid Charges to Enhance the Energy Transition in Austria
+:**homepage**: [wifo.ac.at](https://www.wifo.ac.at/project/271068/)
+:**funding**: [ffg.at](https://projekte.ffg.at/projekt/5124286)
+:**description**: The Fair-Grid project investigates equitable financing mechanisms for electricity grid expansion and maintenance in a renewable energy transition, ensuring economic efficiency and protecting low-income stakeholders.
+:**AIT contact**: -
+
+---
+
+(references-projects-fair-heat)=
+### Fair-Heat
+
+:**title**: A Comprehensive Analysis of Options for a Fair Heat Transition in Austria
+:**homepage**: [wifo.ac.at](https://fair-heat.wifo.ac.at/)
+:**funding**: [ffg.at](https://projekte.ffg.at/projekt/5124286)
+:**description**: The Fair-Heat project investigates how to achieve a socially equitable and technically feasible decarbonisation of Austria’s residential building sector by 2040 through model-based analysis of building upgrades, energy system integration, and policy mechanisms, with particular attention to investment needs, electricity interactions, and impacts on vulnerable households.
+:**AIT contact**: -
 
 ---
 
@@ -63,6 +118,17 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
+(references-projects-heatrock)=
+### HEATROCK
+
+:**title**: Cavern Thermal Energy Storage in Crystalline Rocks
+:**homepage**: [ait.ac.at](https://www.ait.ac.at/themen/waermenetze-und-kaeltenetze-fuer-stadt-und-industrie/projekte/entwicklung-von-kavernenwaermespeicher-in-oesterreich)
+:**funding**: [ffg.at](https://projekte.ffg.at/projekt/5126054)
+:**description**: The HEATROCK project aims to advance cavern thermal energy storage technology for urban district heating from TRL 2 to TRL 4, offering a cost-effective, space-efficient, and socially acceptable solution for seasonal heat storage to support Austria's transition to climate-neutral energy.
+:**AIT contact**: A. Dahash
+
+---
+
 (references-projects-hy2heat)=
 ### HY2HEAT
 
@@ -85,6 +151,17 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
+(references-projects-interstores)=
+### INTERSTORES
+
+:**title**: International Innovation Network for the Development of Cost- and Environmentally Efficient Seasonal Thermal Energy Storages
+:**homepage**: [interstores.eu](https://interstores.eu/)
+:**funding**: European Union, UK Research and Innovation, Federal Department EAER (Swiss Confederation)
+:**description**: INTERSTORES aims to demonstrate and validate two scalable seasonal thermal energy storage technologies to enhance the reliability, cost-effectiveness, and market readiness of renewable-based energy systems across Europe through full-scale implementation and interdisciplinary collaboration.
+:**AIT contact**: A. Dahash
+
+---
+
 (references-projects-knowing)=
 ### KNOWING
 
@@ -104,6 +181,17 @@ instructions in the [section on contributing](#contributing) below.
 :**funding**: [ffg.at](https://projekte.ffg.at/projekt/4805434)
 :**description**: The aim of the planned short study "Market premiums 2.0" is to promptly develop proposals for a substantive reform and further development of the market premium system recently established in Austria to promote the expansion of renewable energies in the domestic electricity market. 
 :**AIT contact**: C. Monsberger
+
+---
+
+(references-projects-renew)=
+### ReNEW
+
+:**title**: -
+:**homepage**: -
+:**funding**: -
+:**description**: -
+:**AIT contact**: -
 
 ---
 

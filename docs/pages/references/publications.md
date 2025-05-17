@@ -29,6 +29,40 @@ instructions in the [section on contributing](#contributing) below.
 ### Strömer, et al. (2024)
 
 <span>
+    <a href="https://doi.org/10.1109/OSMSES62085.2024.10668965" target="_blank"><img alt="Citation DOI" src="https://img.shields.io/badge/DOI-10.1109%2FOSMSES62085.2024.10668965-white?style=flat&labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+    &nbsp;
+    <a href="https://publications.ait.ac.at/en/publications/iesopt-a-modular-framework-for-high-performance-energy-system-opt" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+</span>
+
+| **Factsheet** |   |
+|---------------|---|
+| title         | IESopt: A Modular Framework for High-Performance Energy System Optimization |
+| project       | - |
+| keywords      | energy system modeling, optimization framework, Julia, open-source-tool introduction |
+| abstract      | Current climatic, political, and societal challenges pose increasingly complex questions, which in turn require comprehensive models of the real world, with rapidly growing complexity, to support decision makers with sound and reliable quantitative analyses. The energy system optimization framework IESopt may constitute one piece in filling this gap, by offering a modular and adaptable tool for modelers, that does not compromise on performance while still being user-friendly. This is enabled by reducing energy system assets to abstract building blocks, that are supported by specialized implementation, and can be combined into complex systems without the need of a detailed understanding of mathematical modeling or proficiency in any coding-language. IESopt's architecture and functionalities are laid out here, and demonstrated by the means of an illustrative example. |
+| citation      | Strömer, S., & Maggauer, K. (2024, September). IESopt: A Modular Framework for High-Performance Energy System Optimization. In _2024 Open Source Modelling and Simulation of Energy Systems (OSMSES)_ (pp. 1-6). IEEE. |
+
+---
+
+### Strömer, et al. (2024)
+
+<span>
+    <a href="https://publications.ait.ac.at/en/publications/modelling-the-future-hydrogen-system-insights-from-the-hydrogen-v" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+</span>
+
+| **Factsheet** |   |
+|---------------|---|
+| title         | Modelling the Future Hydrogen System: Insights from the Hydrogen Valley "East Austria" |
+| project       | [H2Real](#references-projects-h2real) |
+| keywords      | Hydrogen valleys, Infrastructure modelling, Energy system modelling, Optimisation |
+| abstract      | The ongoing project H2REAL, "Hydrogen Region East Austria goes Live", aims to combine domain knowledge, existing assets, infrastructure, and real-world demonstrators, with scientific support to further develop the hydrogen infrastructure of Eastern Austria during the upcoming years. This work introduces the systemic modelling approach, undertaken as part of the project, that is used to analyse the emergence, transition, and to-be-achieved ideal design of the Austrian hydrogen infrastructure, that is indispensable to support imports, production, and transportation of hydrogen to wide range of customers. |
+| citation      | Strömer, S., Reuter, S., Ortmann, P., & Hasengst, F. (2024). Modelling the Future Hydrogen System: Insights from the Hydrogen Valley "East Austria". _In NEFI Conference New Energy for Industry 2024 Proceedings_ (pp. 26-28) |
+
+---
+
+### Strömer, et al. (2024)
+
+<span>
     <a href="https://doi.org/10.1016/j.segy.2024.100151" target="_blank"><img alt="Citation DOI" src="https://img.shields.io/badge/DOI-10.1016%2Fj.segy.2024.100151-white?style=flat&labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
     &nbsp;
     <a href="https://publications.ait.ac.at/en/publications/transitioning-to-a-renewable-hydrogen-system-optimal-infrastructu" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
@@ -40,7 +74,7 @@ instructions in the [section on contributing](#contributing) below.
 | project       | [HyTechonomy](#references-projects-hytechonomy) |
 | keywords      | Hydrogen, Renewable energy, Infrastructure modeling, Energy system modeling, Optimization |
 | abstract      | In this study, we employ an optimization model to optimally design a self-sufficient, independent of any imports and exports, hydrogen infrastructure for Austria by 2030. Our approach integrates key hydrogen technologies within a detailed spatial investment and operation model – coupled with a European scale electricity market model. We focus on optimizing diverse infrastructure components including trailers, pipelines, electrolyzers, and storages to meet Austria's projected hydrogen demand. To accurately estimate this demand in hourly resolution, we combine existing hydrogen strategies and projections to account for developments in various industrial sectors, consider demand driven by the transport sector, and integrate hydrogen demand arising from its use in gas-powered plants. Accounting for the inherent uncertainty linked to such projections, we run the analysis for two complementary scenarios. Our approach addresses the challenges of integrating large quantities of renewable hydrogen into a future energy system by recognizing the critical role of domestic production in the early market stages. The main contribution of this work is to address the gap in optimizing hydrogen infrastructure for effective integration of domestic renewable hydrogen production in Austria by 2030, considering sector coupling potentials, optimal electrolyzer placement, and the design of local hydrogen networks. |
-| citation      | Strömer, S., Beck, A., Traninger, M., Orsolits, D., Reuter, S. (2024). Transitioning to a renewable hydrogen system: Optimal infrastructure for self-sufficient hydrogen supply in Austria by 2030. In _Smart Energy Volume 15(2024)_ (pp. 1-17). |
+| citation      | Strömer, S., Beck, A., Traninger, M., Orsolits, D., Reuter, S. (2024). Transitioning to a renewable hydrogen system: Optimal infrastructure for self-sufficient hydrogen supply in Austria by 2030. In _Smart Energy Volume 15 (2024)_ (pp. 1-17). |
 
 ---
 

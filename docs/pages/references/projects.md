@@ -263,6 +263,21 @@ The project ReNEW develops an integrated simulation toolchain to enable resilien
 
 ---
 
+(references-projects-transpairent-energy)=
+### transpAIrent.energy
+
+| **Factsheet** |   |
+|-------------|---|
+| title       | Transparent AI Forecasts for Green Energy in Austria |
+| homepage    | [ait.ac.at](https://www.ait.ac.at/en/research-topics/flexibility-business-models/projects/transpairentenergy) |
+| funding     | [ffg.at](https://projekte.ffg.at/projekt/5121370) |
+| AIT contact | K. Maggauer, S. Strömer |
+
+**Description**  
+The project transpAIrent.energy aims to develop and publicly share transparent, AI-generated probabilistic forecasts for key energy system variables in Austria, using them to optimize the sustainable and economic operation of flexible renewable energy systems.
+
+---
+
 ## Contributing
 
 To contribute a new reference, either

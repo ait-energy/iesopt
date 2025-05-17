@@ -263,6 +263,21 @@ The project ReNEW develops an integrated simulation toolchain to enable resilien
 
 ---
 
+(references-projects-tekave)=
+### TeKaVe
+
+| **Factsheet** |   |
+|-------------|---|
+| title       | Technologieneutrale Kapazitätsmechanismen für eine Versorgungssichere Energiezukunft |
+| homepage    | [en.ergie.at](https://en.ergie.at/projekte/tekave/) |
+| funding     | [ffg.at](https://projekte.ffg.at/projekt/4805444) |
+| AIT contact | S. Strömer |
+
+**Description**  
+The TeKaVe project investigates whether Austria’s current energy-only market can ensure a secure and decarbonized electricity supply by evaluating capacity mechanisms through regulatory and economic analyses using an innovative modeling approach, combining an agent-based approach with mathematical optimization and decomposition techniques.
+
+---
+
 (references-projects-transpairent-energy)=
 ### transpAIrent.energy
 

@@ -97,7 +97,7 @@ class TestExamples:
         _check_example_model(
             "05_basic_two_nodes_1y",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": 667437.75, "hash": "b785df3592"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": 667437.75, "hash": "eb77d6ed94"},
         )
 
     def test_example_06(self, tmp_path):
@@ -105,7 +105,7 @@ class TestExamples:
         _check_example_model(
             "06_recursion_h2",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": 18790.8, "hash": "f44f7448f9"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": 18790.8, "hash": "72da4c3326"},
         )
 
     def test_example_07(self, tmp_path):
@@ -113,7 +113,7 @@ class TestExamples:
         _check_example_model(
             "07_csv_filestorage",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": 667437.75, "hash": "b785df3592"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": 667437.75, "hash": "eb77d6ed94"},
         )
 
     def test_example_08(self, tmp_path):
@@ -129,7 +129,7 @@ class TestExamples:
         _check_example_model(
             "09_csv_only",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": 667437.75, "hash": "b785df3592"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": 667437.75, "hash": "eb77d6ed94"},
         )
 
     def test_example_10(self, tmp_path):
@@ -177,7 +177,7 @@ class TestExamples:
         _check_example_model(
             "17_varying_connection_capacity",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": 300.0, "hash": "a641898bfe"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": 300.0, "hash": "179ea3d1ee"},
         )
 
     def test_example_18(self, tmp_path):
@@ -193,7 +193,7 @@ class TestExamples:
         _check_example_model(
             "20_chp",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": 16687.5, "hash": "76020dfd6b"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": 16687.5, "hash": "8ac609c2bb"},
         )
 
     def test_example_22(self, tmp_path):
@@ -301,7 +301,7 @@ class TestExamples:
         _check_example_model(
             "45_result_extraction",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": 1427.9999999999998, "hash": "78edd55a2d"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": 1427.9999999999998, "hash": "2241c633bb"},
         )
 
     def test_example_46(self, tmp_path):
@@ -317,5 +317,5 @@ class TestExamples:
         _check_example_model(
             "47_disable_components",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": 550.0, "hash": "44b1d5e46a"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": 550.0, "hash": "82d904d3af"},
         )

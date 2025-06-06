@@ -1,0 +1,938 @@
+# Julia
+
+If you are interested in more details on how to use [IESopt.jl](https://github.com/ait-energy/IESopt.jl) directly, please refer to it's source code.
+
+This page contains the docstrings of all things that are part of the public API of IESopt, except:
+
+- All core components. Their full documentation is available in the [components section](../yaml/core_components.md).
+- The docstrings related to sub-modules of IESopt, e.g., `IESopt.Assets`. These can be found in the sub-pages of the current section.
+
+## Notes
+
+- You can use `IESopt.IESU` as abbreviation for `IESopt.Utilities`, which allows using, e.g., `IESU.annuity(...)` after doing `using IESopt` - which may be better to understand when reading the code instead of `IESopt.Utilities.annuity(...)` (when only importing), or `Utilities.annuity(...)` (which does not show any relation to IESopt).
+
+:::{tip}
+The public API of the Python wrapper was, as far as possible, designed to be almost identical to the one of the Julia package, so things should look similar.
+
+For example, the following Python code:
+
+```python
+import iesopt
+
+model = iesopt.generate("config.iesopt.yaml")
+
+my_result = model.get_component("turbine").exp.out_water
+```
+
+can be translated to Julia like this:
+
+```julia
+import IESopt
+
+model = IESopt.generate!("config.iesopt.yaml")
+
+my_result = IESopt.get_component(model, "turbine").exp.out_water
+```
+
+:::
+
+:::{toctree}
+:hidden:
+
+assets.md
+utilities.md
+resultsduckdb.md
+resultsjld2.md
+:::
+
+## API Reference
+### Types
+
+#### `Carrier`
+
+```julia
+struct Carrier
+    name::String
+    unit::Union{String, Nothing}
+end
+
+
+```
+
+Represents a single (energy) carrier with a given `name`.
+
+This is mostly used to represent various commodities that (easily) represent some form of energy (e.g. gas, water, ...),
+but also enables modelling commodities that are not (treated as) representing some type of energy (e.g. CO2). Specify
+`unit` to bind that carrier to an (arbitrary) unit that allows easier plotting and result analysis.
+
+
+
+---
+
+#### `CoreTemplate`
+
+```julia
+CoreTemplate
+
+
+```
+
+A struct to represent an IESopt.jl "Core Template".
+
+
+
+---
+
+#### `Expression`
+
+```julia
+Expression
+
+
+```
+
+A mutable struct representing a general expression in the optimization model.
+
+_**Fields**_  
+- `model::JuMP.Model`: The IESopt model associated with the expression.
+- `dirty::Bool`: A flag indicating if the expression is dirty (modified but not updated). Defaults to `false`.
+- `temporal::Bool`: A flag indicating if the expression is temporal. Defaults to `false`.
+- `empty::Bool`: A flag indicating if the expression is empty. Defaults to `false`.
+- `value::Union{Nothing, JuMP.VariableRef, JuMP.AffExpr, Vector{JuMP.AffExpr}, Float64, Vector{Float64}}`: The value of the expression, which can be a JuMP variable reference, affine expression, vector of affine expressions, float, or vector of floats. Defaults to `nothing`.
+- `internal::Union{Nothing, NamedTuple}`: Internal data associated with the expression. Defaults to `nothing`.
+
+_**Usage examples**_  
+```julia
+if !my_exp.empty
+    # ... do something with `my_exp`, since it contains values ...
+end
+```
+
+```julia
+# Get the Expression's value at Snapshot `t`.
+access(my_exp, t)
+
+# Get the Expression's value - could be vector-valued.
+access(my_exp)
+```
+
+Both ways to access the value can be used with a type assertion to get the value in a specific type:
+
+```julia
+# Get the Expression's value at Snapshot `t` as a Float64.
+access(my_exp, t, Float64)
+
+# Get the Expression's value as a Float64.
+access(my_exp, Float64)
+```
+
+If the value of `my_exp` is a vector of `Float64`, the first call will succeed, while the second will throw a type assertion error.
+
+
+
+---
+
+#### `InternalData`
+
+```julia
+InternalData
+
+
+```
+
+The internal data structure used by IESopt.jl to store all relevant information about the model, its components, and
+results.
+
+
+
+---
+
+#### `NonEmptyExpressionValue`
+
+This constant defines a union type `NonEmptyExpressionValue` which describes any value type that an Expression can hold,
+guaranteeing that the Expression can not be empty.
+
+
+---
+
+#### `NonEmptyNumericalExpressionValue`
+
+This constant defines a union type `NonEmptyNumericalExpressionValue` which describes any numerical value type that an
+Expression can hold, guaranteeing that the Expression can not be empty. `JuMP` objects are not included, and it can be
+either scalar or vector-valued.
+
+
+---
+
+#### `NonEmptyScalarExpressionValue`
+
+This constant defines a union type `NonEmptyScalarExpressionValue` which describes any scalar-valued type that an
+Expression can hold, guaranteeing that the Expression can not be empty.
+
+
+---
+
+#### `OptionalScalarExpressionValue`
+
+This constant defines a union type `OptionalScalarExpressionValue` which describes any scalar-valued value type that an
+Expression can hold. Due to `Optional` it also includes `nothing`.
+
+
+---
+
+#### `Snapshot`
+
+```julia
+struct Snapshot
+    name::_String
+    id::_ID
+    weight::_ScalarInput
+
+    is_representative::Bool
+    representative::_ID
+end
+
+
+```
+
+Represent a specific timestamp, that can be tied to timeseries values.
+
+Each `Snapshot` expects a `name`, that can be used to hold a timestamp (as `String`; therefore supporting arbitrary
+formats). The `weight` (default = 1.0) specifies the "probabilistic weight" of this `Snapshot` or the length of the
+timeperiod that **begins** there (a `weight` of 2 can therefore represent a 2-hour-resolution; this also allows a
+variable temporal resolution throughout the year/month/...).
+
+
+
+---
+
+#### `Virtual`
+
+A `Virtual` (component) is a component that does not exist in the model, but one that a user might expect to exist.
+These are "components" that refer to a template. If a user creates a component "my_storage_foo", of type "Battery", they
+might expect (and want) to be able to interact with "my_storage_foo". Since the template is flattened into explicit
+`CoreComponent`s in the back, "my_storage_foo" does not actually exist - a problem that these `Virtual`s solve.
+
+
+
+---
+
+### Macros
+
+#### `@check`
+
+```julia
+@check
+
+
+```
+
+Check whether the passed expression passes an `ArgCheck.@check`, especially helpful to validate a Template's parameters.
+
+_**Example**_  
+
+A `validate` section added to a Template can make use of the `@check` macro to validate the parameters passed to the
+template. The macro will properly raise a descriptive error if the condition is not met.
+
+```yaml
+parameters:
+  p: null
+
+functions:
+  validate: |
+    @check this.get("p") isa Number
+    @check this.get("p") > 0
+```
+
+See ["Template Validation"](@ref manual_templates_validation) in the documentation for more information.
+
+!!! warning "Usage outside of Core Template validation"
+This requires `__component__` to be set to some `String` outside of calling the macro, since it accesses this to
+construct a proper error message.
+
+
+
+---
+
+#### `@config`
+
+```julia
+@config(model, expr, type::Union{Symbol, Expr}=:Any)
+
+
+```
+
+Returns or sets a configuration value in the `model`'s configuration dictionary.
+
+This macro is used to set and retrieve configuration values in the `model`'s configuration dictionary. This resolves the
+access properly during compile time. A type can be optionally specified to assert the type of the value.
+
+_**Example**_  
+
+```julia
+# Setting a configuration value.
+@config(model, general.verbosity.core) = "info"
+
+# Getting a configuration value.
+verbosity = @config(model, general.verbosity.core, String)
+```
+
+
+
+---
+
+#### `@critical`
+
+```julia
+@critical(msg, args...)
+
+
+```
+
+A macro that logs an error message and then throws an error with the same message. Use it in the same way you would use `@error`, or `@info`, etc.
+
+_**Arguments**_  
+- `msg`: The main error message to be logged and thrown.
+- `args...`: Additional arguments to be included in the error log.
+
+
+
+---
+
+#### `@profile`
+
+```julia
+@profile(arg1, arg2=nothing)
+
+
+```
+
+This macro is used to profile the execution of a function. It captures the time, memory allocation, and number of calls
+of the function. The profiling data is stored in the `_profiling` field of the `_IESoptData` structure. The identifier
+passed to the macro is used to store the profiling data. If no identifier is provided, the function's name is used as
+the identifier.
+
+Options to use this macro are:
+- @profile model "identifier" foo()
+- @profile model foo()
+- @profile "identifier" foo(model)
+- @profile foo(model)
+
+
+
+---
+
+### Functions
+
+#### `access`
+
+```julia
+access(e::Expression)
+
+
+```
+
+Access the value of an `Expression` object.
+
+
+
+---
+
+#### `add_term_to_objective!`
+
+```julia
+add_term_to_objective!(model::JuMP.Model, objective::String, term::Union{JuMP.AffExpr, JuMP.VariableRef})
+
+
+```
+
+Add a term to an objective in the model, which can be used for dynamically creating objectives, e.g., in addons.
+
+The default objective (that always exists) is called "total_cost". Other objectives can be dynamically registered using
+`register_objective!`, or they can be added based on the YAML configuration.
+
+_**Arguments**_  
+
+- `model::JuMP.Model`: The model to add the term to.
+- `objective::String`: The name of the objective to add the term to.
+- `term::Union{JuMP.AffExpr, JuMP.VariableRef}`: The term to add to the objective.
+
+_**Example**_  
+
+```julia
+add_term_to_objective!(model, "my_obj", 2 * x)
+```
+
+
+
+---
+
+#### `build!`
+
+```julia
+build!(model::JuMP.Model)
+
+
+```
+
+Builds and prepares the given IESopt model. This function performs the following steps:
+
+1. Prepares the model by ensuring necessary conversions before performing consistency checks.
+2. Checks the consistency of all parsed components in the model.
+3. If any component fails the consistency check, an error is raised.
+4. Builds the model if all components pass the consistency checks.
+5. Logs profiling results after the build process, displaying the top 5 profiling results.
+
+_**Arguments**_  
+- `model::JuMP.Model`: The IESopt model to be built and prepared.
+
+_**Errors**_  
+- Raises an error if any component does not pass the consistency check.
+
+
+
+---
+
+#### `compute_IIS`
+
+```julia
+function compute_IIS(model::JuMP.Model; filename::String = "")
+
+
+```
+
+Compute the IIS and print it. If `filename` is specified it will instead write all constraints to the given file. This
+will fail if the solver does not support IIS computation.
+
+
+
+---
+
+#### `docify`
+
+```julia
+docify(model::JuMP.Model, filename::String; format::String="markdown")
+
+
+```
+
+Document an IESopt model in the given format. Experimental feature, use with caution. Some formulations are currently
+not (or only partially) converted.
+
+_**Arguments**_  
+- `model::JuMP.Model`: The model to document.
+- `filename::String`: The filename to save the documentation.
+- `format::String`: The format to save the documentation in. Default is "markdown".
+
+
+
+---
+
+#### `extract_result`
+
+```julia
+extract_result(model::JuMP.Model; path::String = "./out", write_to_file::Bool=true)
+
+
+```
+
+DEPRECATED
+
+
+
+---
+
+#### `generate!`
+
+```julia
+generate!(filename::String; @nospecialize(kwargs...))
+
+
+```
+
+Generate an IESopt model based on the top-level config in `filename`.
+
+_**Arguments**_  
+- `filename::String`: The name of the file to load.
+
+_**Keyword Arguments**_  
+To be documented.
+
+_**Returns**_  
+- `model::JuMP.Model`: The generated IESopt model.
+
+
+
+---
+
+#### `get_T`
+
+```julia
+get_T(model::JuMP.Model)
+
+
+```
+
+Retrieve the vector `T` from the IESopt model.
+
+_**Arguments**_  
+- `model::JuMP.Model`: The IESopt model from which to extract the vector `T`.
+
+_**Returns**_  
+- `Vector{_ID}`: The vector `T`.
+
+
+
+---
+
+#### `get_component`
+
+```julia
+function get_component(model::JuMP.Model, component_name::AbstractString)
+
+
+```
+
+Get the component `component_name` from `model`.
+
+
+
+---
+
+#### `get_components`
+
+```julia
+get_components(model::JuMP.Model; tagged::Union{Nothing, String, Vector{String}} = nothing)
+
+
+```
+
+Retrieve components from a given IESopt model.
+
+_**Arguments**_  
+- `model::JuMP.Model`: The IESopt model from which to retrieve components.
+- `tagged::Union{Nothing, String, Vector{String}}`: Optional argument to specify tagged components to retrieve. 
+If `nothing`, all components are retrieved. If a `String` or `Vector{String}`, only components with the specified tags are retrieved.
+
+_**Returns**_  
+- `Vector{_CoreComponent}`: A subset of components from the model.
+
+
+
+---
+
+#### `get_global`
+
+```julia
+get_global(type::String)
+
+
+```
+
+Get a global setting for IESopt.
+
+_**Arguments**_  
+- `type::String`: The type of global setting. Currently supports: "parameters", "config", "addons", "carriers", "components", "load_components", "skip_validation".
+
+_**Returns**_  
+- The global setting.
+
+_**Example**_  
+```julia
+using IESopt
+
+get_global("skip_validation")
+```
+
+
+
+---
+
+#### `get_value_at`
+
+```julia
+get_value_at(x::T, ::_ID) where {T <: Union{Nothing, Real, JuMP.VariableRef, JuMP.AffExpr}}
+
+
+```
+
+Returns the value of `x` at any Snapshot index `t`. Can be used to access variables without needing to handle whether
+they are vector-valued or not.
+
+_**Arguments**_  
+- `x::T`: The input value which can be of type `Nothing`, `Real`, `JuMP.VariableRef`, or `JuMP.AffExpr`.
+- `::_ID`: Unused Snapshot index.
+
+_**Returns**_  
+- The value of `x`.
+
+
+
+---
+
+#### `get_version`
+
+```julia
+get_version()
+
+
+```
+
+Get the current version of IESopt.jl.
+
+_**Returns**_  
+- `String`: The current version of IESopt.jl.
+
+
+
+---
+
+#### `internal`
+
+```julia
+internal(model::JuMP.Model)
+
+
+```
+
+Retrieve the internal data structure from the JuMP model.
+
+
+
+---
+
+#### `make_base_name`
+
+```julia
+make_base_name(comp::_CoreComponent, str::String)
+
+
+```
+
+Create a `JuMP` object (e.g., a variable) for a given component based on the component's name and a user-defined string.
+
+_**Arguments**_  
+- `comp`: The core component for which to create the base name.
+- `str`: The user-defined string to append to the component's name.
+
+_**Returns**_  
+- A string containing the base name for the object.
+
+_**Example**_  
+```julia
+JuMP.@constraint(
+    model,
+    [t = get_T(model)],
+    profile.exp.value[t] <= 1,
+    base_name = make_base_name(profile, "con_custom"),
+    container = Array,
+)
+```
+
+
+
+---
+
+#### `optimize!`
+
+```julia
+optimize!(model::JuMP.Model; kwargs...)
+
+
+```
+
+Optimize the given IESopt model with optional keyword arguments.
+
+_**Arguments**_  
+- `model::JuMP.Model`: The IESopt model to be optimized.
+- `kwargs...`: Additional keyword arguments to be passed to the `JuMP.optimize!` function.
+
+_**Description**_  
+This function performs the following steps:
+1. If there are constraint safety penalties, it relaxes the constraints based on these penalties.
+2. Sets the verbosity of the solver output based on the model's configuration.
+3. Logs the solver output to a file if logging is enabled and supported by the solver.
+4. Calls `JuMP.optimize!` to solve the model.
+5. Checks the result count and termination status to log the optimization outcome.
+6. Analyzes the constraint safety results if there were any constraint safety penalties.
+7. Extracts and saves the results if the model is solved and feasible.
+8. Profiles the results after optimization.
+
+_**Logging**_  
+- Logs messages about the relaxation of constraints, solver output, and optimization status.
+- Logs warnings if the safety constraint feature is triggered or if unexpected result counts are encountered.
+- Logs errors if the solver log file setup fails, if no results are returned, or if extracting results is not possible.
+
+_**Returns**_  
+- `nothing`: This function does not return any value.
+
+
+
+---
+
+#### `overview`
+
+```julia
+overview(file::String)
+
+
+```
+
+Extracts the most important information from an IESopt model file, and returns it as a dictionary.
+
+
+
+---
+
+#### `pack`
+
+```julia
+pack(file::String; out::String="", method=:store)
+
+
+```
+
+Packs the IESopt model specified by the top-level config file `file` into single file.
+
+The `out` argument specifies the output file name. If not specified, a temporary file is created. Returns the output
+file name. The `method` argument specifies the compression method to use. The default is `:store`, which means no
+compression is used. The other option is `:deflate`, which uses the DEFLATE compression method. The default (`:auto`)
+applies `:store` to all files below 1 MB, `:deflate` otherwise.
+
+
+
+---
+
+#### `parse!`
+
+```julia
+parse!(model::JuMP.Model, filename::AbstractString; kwargs...)
+
+
+```
+
+Parse the model configuration from a specified file and update the given `JuMP.Model` object.
+
+_**Arguments**_  
+- `model::JuMP.Model`: The JuMP model to be updated.
+- `filename::AbstractString`: The path to the configuration file. The file must have a `.iesopt.yaml` extension.
+
+_**Keyword Arguments**_  
+To be documented.
+
+_**Returns**_  
+- `Bool`: Returns `true` if the model was successfully parsed.
+
+_**Errors**_  
+- Logs a critical error if the file does not have the `.iesopt.yaml` extension or if there is an error while parsing the model.
+
+
+
+---
+
+#### `register_objective!`
+
+```julia
+register_objective!(model::JuMP.Model, objective::String)
+
+
+```
+
+Register a new objective in the model, which can for dynamically creating objectives, e.g., in addons.
+
+_**Arguments**_  
+
+- `model::JuMP.Model`: The model to register the objective in.
+- `objective::String`: The name of the objective to register.
+
+_**Example**_  
+
+```julia
+register_objective!(model, "my_obj")
+```
+
+which is equivalent to:
+
+```yaml
+config:
+  optimization:
+    objectives:
+      my_obj: []
+```
+
+
+
+---
+
+#### `run`
+
+```julia
+run(filename::String; kwargs...)
+
+
+```
+
+Build, optimize, and return a model.
+
+_**Arguments**_  
+
+- `filename::String`: The path to the top-level configuration file.
+
+_**Keyword Arguments**_  
+
+Keyword arguments are passed to the `generate!(...)` function.
+
+
+
+---
+
+#### `safe_close_filelogger`
+
+```julia
+safe_close_filelogger(model::JuMP.Model)
+
+
+```
+
+Safely closes the file logger's iostream if it is open. This function checks if the logger associated with the given `model` is a `LoggingExtras.TeeLogger` and if it contains a `IESopt._FileLogger` as one of its loggers. If the file logger's stream is open, it will be closed.
+
+_**Arguments**_  
+- `model::JuMP.Model`: The IESopt model which contains the logger to be closed.
+
+_**Returns**_  
+- `nothing`: This function does not return any value.
+
+_**Notes**_  
+- The function includes a `try-catch` block to handle any potential errors during the closing process. Currently, the catch block does not perform any actions.
+
+
+
+---
+
+#### `set_global!`
+
+```julia
+set_global!(type::String, key::String, @nospecialize(value))
+
+
+```
+
+Set a global setting for IESopt. These will be used as defaults for every subsequent function call (that supports
+these). User passed settings will override these defaults.
+
+_**Arguments**_  
+- `type::String`: The type of global setting. Currently supports: "parameters", "config", "addons", "carriers", "components", "load_components".
+- `key::String`: The key of the global setting.
+- `value`: The value of the global setting.
+
+_**Example**_  
+```julia
+using IESopt
+
+set_global!("config", "general.verbosity.core", "error")
+```
+
+
+
+---
+
+#### `to_table`
+
+```julia
+function to_table(model::JuMP.Model; path::String = "./out", write_to_file::Bool=true)
+
+
+```
+
+Turn `model` into a set of CSV files containing all core components that represent the model.
+
+This can be useful by running
+```julia
+IESopt.parse!(model, filename)
+IESopt.to_table(model)
+```
+which will parse the model given by `filename`, without actually building it (which saves a lot of time), and will
+output a complete "description" in core components (that are the resolved version of all non-core components).
+
+If `write_to_file` is `false` it will instead return a dictionary of all DataFrames.
+
+
+
+---
+
+#### `unpack`
+
+```julia
+unpack(file::String; out::String="", force_overwrite::Bool=false)
+
+
+```
+
+Unpacks the IESopt model specified by `file`.
+
+The `out` argument specifies the output directory. If not specified, a temporary directory is created. Returns the
+path to the top-level config file. The `force_overwrite` argument specifies whether to overwrite existing files.
+
+
+
+---
+
+#### `validate`
+
+```julia
+validate(toplevel_config_file::String)
+
+
+```
+
+Validate the model description bsaed on the given top-level configuration file. This function checks the top-level
+configuration file and all referenced files for validity. The function returns `true` if the model description is valid,
+and `false` otherwise. If the model description is invalid, the function will print an error message.
+
+_**Arguments**_  
+- `toplevel_config_file::String`: The path to the top-level configuration file.
+
+_**Returns**_  
+- `valid::Bool`: Whether the model description is valid (true), or not (false).
+
+
+
+---
+
+#### `write_to_file`
+
+```julia
+write_to_file(model::JuMP.Model, filename::String; format::JuMP.MOI.FileFormats.FileFormat = JuMP.MOI.FileFormats.FORMAT_AUTOMATIC, kwargs...)
+
+
+```
+
+Write the given IESopt model to a file with the specified filename and format.
+
+Be aware, that this function will overwrite any existing file with the same name!
+
+_**Arguments**_  
+- `model::JuMP.Model`: The IESopt model to be written to a file.
+- `filename::String`: The name of the file to which the model should be written. Note that if the format is set to
+`FORMAT_AUTOMATIC`, the the file extension will be forced to lower case to allow detection.
+- `format::JuMP.MOI.FileFormats.FileFormat` (optional): The format in which the model should be written. The default is
+`JuMP.MOI.FileFormats.FORMAT_AUTOMATIC`; if left as that, it will try to automatically determine the format based on
+the file extension.
+
+All additional keyword arguments are passed to the `JuMP.write_to_file` function.
+
+_**Returns**_  
+- `String`: The absolute path to the file to which the model was written.
+
+_**Example**_  
+```julia
+import IESopt
+
+model = IESopt.generate!("config.iesopt.yaml")
+IESopt.write_to_file(model, "model.lp")
+```
+
+
+
+---
+

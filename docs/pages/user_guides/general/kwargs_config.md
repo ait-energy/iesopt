@@ -72,5 +72,5 @@ for day in range(0, 365):
 :::{tip}
 You can use this to easily control which input data files are loaded --- without the need to manually introduce a
 parameter that controls each file's name. Just use the `config` keyword argument to set, for example, that the file
-registered as `data_res` points to a specific weather year's file, by passing `config = {"files.data_res": "weather_res_2023.csv"}`.
+registered as `data` (see example [config](https://ait-energy.github.io/iesopt/pages/user_guides/general/monte_carlo.html#modifying-the-config)) points to a specific weather year's file, by passing `config = {"files.data": "weather_res_2023.csv"}`.
 :::

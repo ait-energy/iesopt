@@ -35,7 +35,7 @@ The heat output comprises two parts:
 * A 1-to-1 conversion of electricity to heat with an efficiency of 1; so this part equals always 20 as soon as the heat pump is turned on. 
 * Every additionally required kW heating power is converted by an efficiency that is dependent on the COP at this timestep; in our example time step 3367 it is 2.56. 
 
-This results in a total COP which is dependent on the power to be converted: With an increasing heat demand (meaning an increased part-load above minimum conversion), the total COP increases as well. At full-load, the total COP equals he COP from the parameter file. Between the minimum conversion and full-load, there is a linear correlation between heat out above minimum and electricity in above minimum. 
+This results in a total COP which is dependent on the power to be converted: With an increasing heat demand (meaning an increased part-load above minimum conversion), the total COP increases as well. At full-load, the total COP equals the COP from the parameter file. Between the minimum conversion and full-load, there is a linear correlation between heat out above minimum and electricity in above minimum. 
 
 Calculation example: 
 

@@ -269,15 +269,18 @@ Here we define the Snapshots (IESopt's representation of time steps, including a
 :`count` (`int`): The number of Snapshots to use in the optimization.
 :`names` (`str`, optional): Linked column of a loaded file (using the usual `col@file` syntax) that contains the names of the Snapshots. These are purely for aesthetic purposes (e.g., result data frames) and are not used in the optimization.
 :`weights` (`float`, default = `1`): The duration of each Snapshot in hours. Values below `1` are interpreted as fractions of an hour, e.g., `0.25` for 15 minutes.
+:`offset` (`int`, default = `0`): The offset at where to start reading a time series passed to the model. `168` means that the first 168 entries (rows) will be skipped and the first Snapshot is based on the 169th row.
+:`offset_virtual_files` (`bool`): Mandatory if `offset > 0`, without effect otherwise. If `true` time series passed using the `virtual_files` keyword argument will respect the `offset`, otherwise they are considered to "be already offset" and will be used directly from the first row on.
 
 ```{code-block} yaml
-:caption: Example for the `snapshots` section.
+:caption: Example for the `snapshots` section, with non-1-hourly resolution.
 
 config:
   optimization:
     snapshots:
-      count: 24
-      weights: 4
+      count: 24   # total of four days modeling period
+      weights: 4  # four hours per Snapshot
+      offset: 6   # start at the second day
 ```
 
 #### `objectives`

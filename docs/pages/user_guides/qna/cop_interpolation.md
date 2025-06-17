@@ -1,6 +1,6 @@
 # Variable COP and minimum conversion
 
-## Intro
+## Introduction
 Usually, the COP is defined by: 
 
 $$ COP = \frac{\text{out}}{\text{in}} $$

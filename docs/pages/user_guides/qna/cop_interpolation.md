@@ -3,7 +3,7 @@
 ## Introduction
 Usually, the COP is defined by: 
 
-$$ COP = \frac{\text{out}}{\text{in}} $$
+$$ COP = \frac{\text{heat out}}{\text{electricity in}} $$
 
 A result from the optimization at example timestep 3367 is:
 

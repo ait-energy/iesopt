@@ -61,7 +61,6 @@ $$
 \text{In} = \frac{\alpha * \text{capacity}}{COP_{at~min}} + (34kW - \alpha \cdot \text{capacity}) \cdot \frac{1}{COP_{over~min}} = \frac{20kW}{1} +  \frac{14kW}{4.197} = 23.34 kW 
 $$ 
 
-electricity. 
 
 
 #### Details

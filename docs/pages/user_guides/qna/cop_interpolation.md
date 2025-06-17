@@ -46,7 +46,7 @@ $$
 \end{align}
 $$
 
-Where the seconds one is only applied to the delta above 20kW!
+Where the second one is only applied to the delta above 20kW!
 
 $$
 \begin{align}

@@ -16,7 +16,7 @@ Which doesn't fit to the COP given in the parameter file for this timestep, whic
 >  How is the variable COP in example 15 used in the conversion from electricity to heat? How is the necessary electricity input calculated? 
 
 ## Answer
-In example 15, the heat pump has a maximum heating capacity (rated power) of 100kWh and a minimum conversion of 20% of the heating capa. 
+In example 15, the heat pump has a maximum heating capacity (rated power) of 100kWh and a minimum conversion of 20% of the heating capacity. 
 
 In addition, there are two different conversion expressions given: One for operating at minimum conversion where the transformation from electricity to heat is 1-to-1
 

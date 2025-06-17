@@ -63,7 +63,7 @@ $$
 
 
 
-#### Details
+## Details
 
 A detailed derivation of the $COP_{over~min}$ equation: 
 

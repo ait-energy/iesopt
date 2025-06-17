@@ -101,7 +101,7 @@ $$
     & COP_{at~max} = \frac{\text{out}}{\text{in}} = \frac{\text{capacity}}{\alpha \cdot \text{capacity} \cdot \frac{1}{\beta} + (1 - \alpha) \cdot \text{capacity} \cdot \frac{1}{COP_{over~min}}} \\
     \Leftrightarrow \quad & COP_{at~max} = \frac{1}{\frac{\alpha}{\beta} + \frac{(1 - \alpha)}{COP_{over~min}}} = \frac{\beta \cdot COP_{over~min}}{\alpha \cdot COP_{over~min} + (1 - \alpha) \cdot \beta} \\
     \Leftrightarrow \quad & COP_{at~max} \cdot \alpha \cdot COP_{over~min} + COP_{at~max} \cdot (1 - \alpha) \cdot \beta = \beta \cdot COP_{over~min} \\
-    \Leftrightarrow \quad & COP_{over~min} = \frac{COP_{at~max} \cdot (1 - \alpha) \cdot \beta}{\beta^2 - COP_{at~max} \cdot \alpha}
+    \Leftrightarrow \quad & COP_{over~min} = \frac{COP_{at~max} \cdot (1 - \alpha) \cdot \beta}{\beta - COP_{at~max} \cdot \alpha}
 \end{align}
 $$
 

@@ -78,13 +78,12 @@ components:
   # ...
 
   heat_pump:
-    template: CustomHeatPump
-    parameters:
-      p_nom: 10
-      electricity_from: electricity
-      heat_from: ambient
-      heat_to: heating
-      cop: 3
+    type: CustomHeatPump
+    p_nom: 10
+    electricity_from: electricity
+    heat_from: ambient
+    heat_to: heating
+    cop: 3
 ```
 
 ## Accounting for different configurations

@@ -68,9 +68,9 @@ pages/dev/updating.md
 
 Sound political and regulatory decisions require accurate studies and projections of the world's energy future to meet the rising challenges linked to climate change. 
 IESopt, developed and maintained at the Center for Energy at AIT Austrian Institute of Technology GmbH, is an energy system modeling framework. 
-It is fully implemented in julia and making use of JuMP.jl to optimize energy systems that are characterized by a high degree of integration between different energy carriers and sectors. It focuses on offering a modular and adaptable tool for modelers, that does not compromise on performance, while still being user-friendly.
+It is fully implemented in Julia and making use of JuMP.jl to optimize energy systems that are characterized by a high degree of integration between different energy carriers and sectors. It focuses on offering a modular and adaptable tool for modelers, that does not compromise on performance, while still being user-friendly.
 
-The modularity of the tool is given by the approach to not implement common energy system assets directly but specifies abstract Core Components that can be configured and / or combined into e.g. power plants, heatpumps or grid connections. 
+The modularity of the tool is given by the approach to not implement common energy system assets directly but specific abstract components instead, that can be configured and combined into, e.g., power plants, heat pumps, grid connections, or even complex multi-carrier storages. 
 The user-friendliness is given by the requirement of only one single file being the mandatory input and by the utilization of commonly known keywords to parameterize the components in the YAML format. 
 These two points enable users without detailed understanding of mathematical modeling or proficiency in any coding-language to use this tool. 
 
@@ -89,9 +89,9 @@ The documentation is currently being put together based on cleaned parts of the 
 
 ## Overview
 
-With a configuration YAML file you create a model of the desired system including all components, their parameters and corresponding input data like e.g. generation profiles, to solve a problem or answer a question. 
+With a configuration YAML file you create a model of the desired system including all components, their parameters and corresponding input data like, e.g., generation profiles, to solve a problem or answer a question. 
 Once you run the model it is by default optimized to minimize the total system costs, which is the objective value of the problem. 
-For every component that you specified in the configuration you will get detailed results for each time step. Depending on the type of the component, there are different results available, for example "expression_in" for component type "connection" which specifies the amount of energy going into the connection at this time step. The result labels are generated based on the problems' mathematical formulation, which is why there are expressions, variables and constraints as well as primal and dual results. 
+For every component that you specified in the configuration you will get detailed results for each time step. Depending on the type of the component, there are different results available, for example an "expression_in" for the component type "Connection" which specifies the amount of energy going into the connection at this time step. The result labels are generated based on the problems' mathematical formulation, which is why there are expressions, variables, and constraints, as well as primal and dual results. 
 
 For further description of the tools' functionalities also see the [^paper]. 
 

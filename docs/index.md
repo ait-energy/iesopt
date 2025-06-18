@@ -68,7 +68,7 @@ pages/dev/updating.md
 
 Sound political and regulatory decisions require accurate studies and projections of the world's energy future to meet the rising challenges linked to climate change. 
 IESopt, developed and maintained at the Center for Energy at AIT Austrian Institute of Technology GmbH, is an energy system modeling framework. 
-It is fully implemented in julia and making use of JuMP.jl to optimize energy systems that are characterized by a high degree of integration between different energy carriers and sectors. It focuses on offering a modular and adaptable tool for modelers, that does not compromise on performance, while still being user-friendly.
+It is fully implemented in Julia and making use of JuMP.jl to optimize energy systems that are characterized by a high degree of integration between different energy carriers and sectors. It focuses on offering a modular and adaptable tool for modelers, that does not compromise on performance, while still being user-friendly.
 
 The modularity of the tool is given by the approach to not implement common energy system assets directly but specifies abstract Core Components that can be configured and / or combined into e.g. power plants, heatpumps or grid connections. 
 The user-friendliness is given by the requirement of only one single file being the mandatory input and by the utilization of commonly known keywords to parameterize the components in the YAML format. 

@@ -15,7 +15,7 @@ Introduction <self>
 :caption: Tutorials
 :maxdepth: 2
 
-notebooks/getting_started.ipynb
+getting_started.md
 notebooks/first_model.ipynb
 tocs/tutorials_extracting_results.md
 tocs/tutorials_templates.md

@@ -89,7 +89,7 @@ The documentation is currently being put together based on cleaned parts of the 
 
 ## Overview
 
-With a configuration YAML file you create a model of the desired system including all components, their parameters and corresponding input data like e.g. generation profiles, to solve a problem or answer a question. 
+With a configuration YAML file you create a model of the desired system including all components, their parameters and corresponding input data like, e.g., generation profiles, to solve a problem or answer a question. 
 Once you run the model it is by default optimized to minimize the total system costs, which is the objective value of the problem. 
 For every component that you specified in the configuration you will get detailed results for each time step. Depending on the type of the component, there are different results available, for example "expression_in" for component type "connection" which specifies the amount of energy going into the connection at this time step. The result labels are generated based on the problems' mathematical formulation, which is why there are expressions, variables and constraints as well as primal and dual results. 
 

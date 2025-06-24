@@ -7,7 +7,7 @@
 :caption: IESopt
 :maxdepth: 2
 
-Getting started <self>
+Introduction <self>
 :::
 
 :::{toctree}
@@ -15,6 +15,7 @@ Getting started <self>
 :caption: Tutorials
 :maxdepth: 2
 
+getting_started.md
 notebooks/first_model.ipynb
 tocs/tutorials_extracting_results.md
 tocs/tutorials_templates.md
@@ -65,7 +66,21 @@ pages/dev/updating.md
 :::{admonition} _IESopt -- an Integrated Energy System Optimization framework._
 :class: tip
 
-IESopt is developed and maintained at the Center for Energy at AIT Austrian Institute of Technology GmbH. The framework isdesigned to support the optimization of energy systems that are characterized by a high degree of integration between different energy carriers and sectors. It focuses on offering a modular and adaptable tool for modelers, that does not compromise on performance, while still being user-friendly. This is enabled by reducing energy system assets to abstract building blocks, that are supported by specialized implementation, and can be combined into complex systems without the need of a detailed understanding of mathematical modeling or proficiency in any coding-language.
+Sound political and regulatory decisions require accurate studies and projections of the world's energy future to meet the rising challenges linked to climate change. 
+IESopt, developed and maintained at the Center for Energy at AIT Austrian Institute of Technology GmbH, is an energy system modeling framework. 
+It is fully implemented in Julia and making use of JuMP.jl to optimize energy systems that are characterized by a high degree of integration between different energy carriers and sectors. It focuses on offering a modular and adaptable tool for modelers, that does not compromise on performance, while still being user-friendly.
+
+The modularity of the tool is given by the approach to not implement common energy system assets directly but specific abstract components instead, that can be configured and combined into, e.g., power plants, heat pumps, grid connections, or even complex multi-carrier storages. 
+The user-friendliness is given by the requirement of only one single file being the mandatory input and by the utilization of commonly known keywords to parameterize the components in the YAML format. 
+These two points enable users without detailed understanding of mathematical modeling or proficiency in any coding-language to use this tool. 
+
+The framework provides numerous application possibilities: 
+  - Household scheduling
+  - Operational planning for industrial sites
+  - Optimizing energy infrastructure such as hydrogen grids
+  - Energy community design and analysis
+  - Modelling future global energy systems
+  - …
 :::
 
 :::{caution}
@@ -74,21 +89,21 @@ The documentation is currently being put together based on cleaned parts of the 
 
 ## Overview
 
+With a configuration YAML file you create a model of the desired system including all components, their parameters and corresponding input data like, e.g., generation profiles, to solve a problem or answer a question. 
+Once you run the model it is by default optimized to minimize the total system costs, which is the objective value of the problem. 
+For every component that you specified in the configuration you will get detailed results for each time step. Depending on the type of the component, there are different results available, for example an "expression_in" for the component type "Connection" which specifies the amount of energy going into the connection at this time step. The result labels are generated based on the problems' mathematical formulation, which is why there are expressions, variables, and constraints, as well as primal and dual results. 
+
+For further description of the tools' functionalities also see the [^paper]. 
+
 This overview of `iesopt`'s documentation [^diataxis] will help you know where to find what you are looking for.
-
-### Getting started
-
-1. The {ref}`Installation` section explains how to quickly install and set up `iesopt`.
-2. If you are new, you can then work through {ref}`A first model`, which will guide you through all the basics you need
-to now.
 
 ### Using this documentation
 
-For anything beyond {Getting started}`Getting started`, the following provides a high-level overview of the remaining
-documentation that can be helpful when creating your own models:
+To get started follow the instructions in {ref}`Getting started` to set up the environment and then create your first model by following the tutorial {ref}`a first model`. 
+A quick overview how this documentation is structured to support you in learning IESopt and creating your own models: 
 
 1. **Tutorials** will help you learn how to apply `iesopt`'s various main functionalities, to solve energy
-system optimization models. Start here if you are new and have completed the {ref}`A first model` initial tutorial.
+system optimization models. Start with {ref}`examples` if you are new and have completed the {ref}`A first model` initial tutorial.
 2. **User guides** provide various concise how-to guides, that help you accomplish a certain task, correctly
 and safely. Consult these to remind yourself _how to do X_.
 3. **Manual** contains technical reference for `IESopt.jl` core components, the YAML syntax, APIs, and more
@@ -113,102 +128,7 @@ you may be more used to - compared to the way Julia works.
 - [`IESoptLib.jl`](https://github.com/ait-energy/IESoptLib.jl), the library of various assets related to IESopt. You can
 find examples, as well as pre-defined templates and addons here. The library is automatically loaded for you.
 
-## Installation
 
-### Setting up an environment
-
-:::{note}
-Skip this step if you want to install `iesopt` into an existing environment and directly continue directly continue with
-[Installing `iesopt`](#installing-iesopt).
-:::
-
-This assumes that you have a working `uv` installed on your system. If not head over to the [installation](https://docs.astral.sh/uv/getting-started/installation/) section of their documentation.
-
-Make sure you are already inside the project folder that you want to develop in and run:
-
-```bash
-uv init
-```
-
-This creates a basic setup for you, including a sample Python file that you can run.
-
-You can make sure all dependencies are actually installed using
-
-```bash
-uv sync
-```
-
-which you can also use to install everything after you've cloned a repository (because then you obviously don't need the `uv init` step).
-
-You can test if everything works as expected by running
-
-```bash
-uv run hello.py
-```
-
-If everything works, you are ready to install `iesopt`!
-
-### Installing `iesopt`
-
-This assumes that you have a working environment, managed by `uv`. It should however work similarly using
-`conda`, `pip`, or `poetry` instead.
-
-You can install `iesopt` by executing
-
-```bash
-uv add iesopt
-```
-
-And that's it... you are done!
-
-#### Precompiling
-
-Julia, compared to Python as you are probably used to it, _compiles_ code [^compiling] just before it executes it. This,
-coupled with the fact that we - until now - did not fully initialize our Julia environment, may lead to your first time
-using `iesopt` taking a long (!) time.
-
-To "prevent" this, we can do a lot of the heavy lifting right here and now, by starting Python. You can do this by just
-executing `python` in the terminal that you used to set up everything, like so
-
-```bash
-(yourenvname) user@PCNAME:~/your/current/path$ uv run python
-```
-
-which should result in an info message similar to this one:
-
-```text
-Python 3.11.9 (main, Apr 19 2024, 16:48:06) [GCC 11.2.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>>
-```
-
-Then just run
-
-```python
-import iesopt
-```
-
-You will see some messages like `INFO:iesopt:Setting up Julia ...`, and most likely a lot of other output related to the
-instantiation of a Julia environment. This may take a few minutes, but should end with lines that print
-
-```text
-INFO:iesopt:Julia setup successful
-INFO:iesopt:Importing Julia module `IESopt`
-INFO:iesopt:Importing Julia module `JuMP`
-```
-
-and are followed by a welcome message that documents the current version of IESopt that you are using. After that, you
-are ready to start using `iesopt`.
-
-:::{admonition} Reducing overhead
-:class: hint
-
-The next time that you launch `iesopt` by using `import iesopt` inside your current environment will be considerably
-faster. Nonetheless, every new launch comes with certain compilation-related overheads. The best way to prevent this, is
-making use of an interactive / REPL-based style of development.
-:::
-
-<!--- TODO: link to REPL explanation here --->
 
 ## Citing IESopt
 
@@ -230,7 +150,7 @@ include the following citation:
       year = {2021-2024},
   }
   ```
-
+[^paper]: [IESopt: A Modular Framework for High-Performance Energy System Optimization](https://github.com/sstroemer/OSMSES2024/blob/main/paper_long_version.pdf)
 [^diataxis]: The structure of the documentation follows the [Diátaxis Framework](https://diataxis.fr), especially
 related to [The difference between a tutorial and how-to guide](https://diataxis.fr/tutorials-how-to).
 [^compiling]: If you are unsure what "compiling" actually means, you possibly could benefit from checking [differences between Julia and other languages](https://docs.julialang.org/en/v1/manual/noteworthy-differences/) (if you already know another programming language), or looking at [this discourse post](https://discourse.julialang.org/t/so-does-julia-compile-or-interpret/56073/2),

@@ -96,7 +96,7 @@ faster. Nonetheless, every new launch comes with certain compilation-related ove
 making use of an interactive / REPL-based style of development.
 :::
 
-<!--- TODO: link to REPL explanation here --->
+To learn more about "REPL-based" development consult [this introductory guide](https://code.visualstudio.com/docs/python/run) that contains a direct showcase of how this works in VSCode. If you are a fan of "notebooks" in general, consider using the "native REPL" mode, otherwise give the "terminal REPL" a try (which is also extremely similar to the way Julia development works).
 
 
 

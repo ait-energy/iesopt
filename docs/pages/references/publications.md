@@ -112,6 +112,24 @@ instructions in the [section on contributing](#contributing) below.
 
 ---
 
+### Patha, et al. (2024)
+
+<span>
+    <a href="https://doi.org/10.34726/hss.2024.110543" target="_blank"><img alt="Citation DOI" src="https://img.shields.io/badge/DOI-10.34726%2Fhss.2024.110543-white?style=flat&labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+    &nbsp;
+    <a href="https://publications.ait.ac.at/de/publications/techno-economic-assessment-of-pumped-storage-hydro-power-in-hybri" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+</span>
+
+| **Factsheet** |   |
+|---------------|---|
+| title         | Techno-economic assessment of pumped storage hydro power in hybrid operation with floating photovoltaic and battery energy storage |
+| project       | - |
+| keywords      | Floating PV, Techno-Economic Assessment, Pumped Storage Hydro Power |
+| abstract      | This thesis investigates the techno-economic impact of a floating PV system (FPV) and a battery energy storage system (BESS) in hybrid operation with pumped storage hydro power plants (PSHP) traded on the day-ahead market. It is assumed that FPV brings additional benefits to the PSHP by reducing evaporation and thus increasing the overall efficiency of the storage. Other advantages, such as sharing the grid connection and increasing the utilization of FPV generation by reducing curtailment, are also evaluated. A comparison is made between the binary and ternary operation of the PSHP, in which the ternary mode of operation increases operational flexibility. An existing storage power plant in central Sweden, for which Global Hydro provides specific data, is used as a reference for the PSHP. A steady-state simulation is used, which is optimized for trading on the day-ahead market. The simulation framework used for the technical model is the internal TESCA framework of the Austrian Institute of Technology (AIT), which is a Python-based tool for the techno-economic assessment of different technologies. The optimization model is a linearized abstraction implemented with the Julia-based optimization tool IESOpt of the AIT. The simulation is performed for different quantities of nominal FPV power, battery usable energy capacity and BESS storage duration (ratio of usable energy capacity and maximum discharge/charge power) within a parameter study to show the impact on the technical and economic key performance indicators. The levelized cost of energy (LCOE) and net present value (NPV) of the entire hybrid system are calculated for different weighted average costs of capital to assess the economic viability of the entire hybrid system. It is shown that the combined operation of FPV and PSHP can make better use of the limited grid connection capacity, as the FPV electricity can serve as input for the pumps. The BESS adds further storage capacity to store FPV generation and shift it via arbitrage to times of high energy prices. Overall, FPV and BESS increase the LCOE as the additional costs are not compensated by the energy surplus. The NPV is reduced by both technologies and makes the entire system economically nonviable for increasing nominal FPV power and BESS usable energy capacity. |
+| citation      | Patha, A., Steinlechner S., Kathan J., Golab, A., Auer, H., (2024). Techno-economic assessment of pumped storage hydro power in hybrid operation with floating photovoltaic and battery energy storage [Diploma Thesis, Technische Universität Wien]. reposiTUm. |
+
+---
+
 ### Reuter, et al. (2023)
 
 <span>

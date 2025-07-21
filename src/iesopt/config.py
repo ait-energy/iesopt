@@ -12,10 +12,10 @@ def _strtobool(val: str):
 
 class Config:
     DEFAULTS = {
-        "IESOPT_JULIA": "1.11.5",
+        "IESOPT_JULIA": "1.11.6",
         "IESOPT_CORE": "2.8.0",
-        "IESOPT_JUMP": "1.26.0",
-        "IESOPT_SOLVER_HIGHS": "1.18.1",
+        "IESOPT_JUMP": "1.27.0",
+        "IESOPT_SOLVER_HIGHS": "1.18.2",
         "IESOPT_MULTITHREADED": "no",  # yes, no
         "IESOPT_OPTIMIZATION": "latency",  # rapid, latency, normal, performance
     }

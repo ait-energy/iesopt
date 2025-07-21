@@ -34,17 +34,17 @@ components:
 functions:
   finalize: |
     # Parameters.
-    cm = get("power_ratio")
-    cv = get("power_loss_ratio")
-    p_max = get("p_max")
+    cm = this.get("power_ratio")
+    cv = this.get("power_loss_ratio")
+    p_max = this.get("p_max")
 
     # Output expressions.
-    out_heat = access("heat").exp.out_heat
-    out_elec = access("power").exp.out_electricity
+    out_heat = this.heat.exp.out_heat
+    out_elec = this.power.exp.out_electricity
 
     # Add constraints.
-    @constraint(MODEL.model, cm .* out_heat .<= out_elec)
-    @constraint(MODEL.model, out_elec .<= p_max .- cv .* out_heat)
+    @constraint(this.model, cm .* out_heat .<= out_elec)
+    @constraint(this.model, out_elec .<= p_max .- cv .* out_heat)
 ```
 
 This makes use of the `finalize(...)` function to link the `power` and `heat` components. Using an addon can be complicated, because the components do not inherently know about each other. The `finalize(...)` function however is attached to the template itself, can access both components, and is called after both are fully constructed, which means it can freely access their variables and expressions.

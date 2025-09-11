@@ -62,7 +62,10 @@ def jl_docs(obj: str, module: str = "IESopt"):
     julia_docstr = jl_safe_seval(f"@doc {module}.{obj}")
     if julia_docstr is None:
         return "Missing documentation string."
-    return "".join(el for el in julia_docstr.text)
+    try:
+        return "".join(str(el) for el in julia_docstr.content)
+    except Exception:
+        return "".join(str(el) for el in julia_docstr.text)
 
 
 def recursive_convert_py2jl(item):

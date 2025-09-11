@@ -402,10 +402,10 @@ config:
 Settings for the results output. Details to be added.
 
 :Parameters:
-:`enabled` (`bool`, default = `true`): Whether to enable the automatic extraction of results. If this is set to `false`, no results will read from the solver after optimizing the model - you can however still access the solver results directly, see for example {py:func}`iesopt.jump_value`.
+:`enabled` (`string`, default = `all`): Controls the mode of automatic result extraction. If this is set to `none`, no results will be read from the solver after optimizing the model - you can however still access the solver results directly, see for example {py:func}`iesopt.jump_value`. If set to `reduced`, all primal results, as well as shadow prices for all `Node`s will be extracted; this is a good compromise between speed and usability and skips the extraction of results that are often not needed.
 :`memory_only` (`bool`, default = `true`): Whether to store the results in memory only, without writing them to disk. This can be useful if you plan to access and further process the results directly in Python or Julia, or only want to store specific results.
 :`compress` (`bool`, default = `false`): Whether to compress the results when writing them to disk. This can save disk space but might increase the time needed to write and read the results. Refer to [JLD2.jl](https://github.com/JuliaIO/JLD2.jl) for more information about compression.
-:`include` (`str`, default = `none` or `nput+log`): A list of result extraction modes to activate, see below for more details. The default depends on the setting of `memory_only`: If `memory_only` is `true`, the default is `none`, otherwise it is `input+log`. You can use `all` to activate all possible settings.
+:`include` (`str`, default = `none` or `input+log`): A list of result extraction modes to activate, see below for more details. The default depends on the setting of `memory_only`: If `memory_only` is `true`, the default is `none`, otherwise it is `input+log`. You can use `all` to activate all possible settings.
 :`backend` (`str`, default = `jld2`): Backend to use in the result extraction. Currently `jld2` is the main/working one, while we are trying to improve the `duckdb` backend.
 
 ```{code-block} yaml
@@ -413,7 +413,7 @@ Settings for the results output. Details to be added.
 
 config:
   results:
-    enabled: true
+    enabled: reduced
     memory_only: true
 ```
 

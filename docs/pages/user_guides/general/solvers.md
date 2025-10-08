@@ -9,13 +9,13 @@ models. They are largely based on other model's defaults (see e.g.
 More information can be found at:
 
 - HiGHS:
-    - https://ergo-code.github.io/HiGHS/stable/options/definitions/
+    - [HiGHS Documentation - List of Options](https://ergo-code.github.io/HiGHS/stable/options/definitions/)
 - Gurobi:
-    - https://www.gurobi.com/wp-content/uploads/2022-10-Paris_Advanced_Algorithms.pdf
-    - https://www.gurobi.com/documentation/current/refman/parameters.html
+    - [Gurobi Days Paris Advanced Gurobi Algorithms](https://www.gurobi.com/wp-content/uploads/2022-10-Paris_Advanced_Algorithms.pdf)
+    - [Gurobi Documentation - Parameter Reference](https://docs.gurobi.com/projects/optimizer/en/current/reference/parameters.html)
 - CPLEX:
-    - https://www.ibm.com/docs/en/icos/22.1.1?topic=cplex-list-parameters
-    - https://public.dhe.ibm.com/software/products/Decision_Optimization/docs/pdf/paramcplex.pdf
+    - [IBM ILOG CPLEX Optimization Studio - List of CPLEX parameters](https://www.ibm.com/docs/en/icos/22.1.2?topic=cplex-list-parameters)
+    - [IBM ILOG CPLEX Optimization Studio CPLEX Parameters Reference (outdated)](https://public.dhe.ibm.com/software/products/Decision_Optimization/docs/pdf/paramcplex.pdf)
 
 ### HiGHS
 

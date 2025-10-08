@@ -15,6 +15,7 @@ More information can be found at:
     - https://www.gurobi.com/documentation/current/refman/parameters.html
 - CPLEX:
     - https://www.ibm.com/docs/en/icos/22.1.1?topic=cplex-list-parameters
+    - https://public.dhe.ibm.com/software/products/Decision_Optimization/docs/pdf/paramcplex.pdf
 
 ### HiGHS
 
@@ -93,9 +94,9 @@ solver:
 solver:
   name: cplex
   attributes:
-    threads: 4
-    lpmethod: 4
-    solutiontype: 2
-    barrier_convergetol: 1.e-5
-    feasopt_tolerance: 1.e-6
+    CPXPARAM_Threads: 8                 # Number of Threads
+    CPXPARAM_LPMethod: 4                # Barrier
+    CPXPARAM_SolutionType: 2            # No Crossover
+    CPXPARAM_Barrier_ConvergeTol: 1e-5
+    CPXPARAM_Feasopt_Tolerance: 1.e-5
 ```

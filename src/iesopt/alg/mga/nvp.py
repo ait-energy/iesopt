@@ -112,7 +112,8 @@ class Domain:
 
     def plot(self, ax=None):
         # TODO: plot current "max domain" (and "direction"; but that not in the "domain")
-        if ax is None:
+        create_fig = ax is None
+        if create_fig:
             fig, ax = plt.subplots(figsize=(10, 8))
         ax.scatter(self._points[:, 0], self._points[:, 1], c="lightblue", s=50, alpha=0.6, label="All Solutions")
         ax.scatter(self.vertices[:, 0], self.vertices[:, 1], c="red", s=50, label="Hull Vertices", zorder=5)
@@ -121,10 +122,7 @@ class Domain:
         ax.fill(self.vertices[:, 0], self.vertices[:, 1], alpha=0.2, color="red")
         ax.legend()
         ax.grid(True, alpha=0.3)
-        # for i, vertex in enumerate(self.vertices):
-        #     ax.annotate(f'V{i}', (vertex[0], vertex[1]), xytext=(5, 5), textcoords='offset points')
-
-        if ax is None:
+        if create_fig:
             plt.tight_layout()
             return fig, ax
         return None
@@ -179,7 +177,7 @@ class Domains:
 
         self._plot_slider.on_changed(update)
         update(0)
-        fig.show()
+        return fig, ax
 
 
 # NOTE on specific solver choice:
@@ -210,9 +208,13 @@ class NVP(Algorithm):
 
         nvp = mga.NVP(model, ["total_cost", "other_objective_A", "other_objective_B"], eps=0.05)
         nvp.run(maxiter=25)
-        nvp.visualize()
+        fig, ax = nvp.visualize()
+        fig.show()
+        # ... or save the figure!
         ```
+
         where the objectives could be defined like this in the config:
+
         ```yaml
         other_objective_A: [heatpump.exp.out_heat, hp_cool.heatpump.exp.out_heat]
         other_objective_B: [hwk_ne2.exp.out_heat, hwk_ne3.boiler.exp.out_heat]
@@ -295,4 +297,4 @@ class NVP(Algorithm):
         pass
 
     def visualize(self):
-        self.domains.plot()
+        return self.domains.plot()

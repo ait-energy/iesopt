@@ -13,7 +13,7 @@ def _strtobool(val: str):
 class Config:
     DEFAULTS = {
         "IESOPT_JULIA": "1.11.7",
-        "IESOPT_CORE": "2.9.1",
+        "IESOPT_CORE": "2.9.2",
         "IESOPT_JUMP": "1.29.1",
         "IESOPT_SOLVER_HIGHS": "1.19.0",
         "IESOPT_MULTITHREADED": "no",  # yes, no

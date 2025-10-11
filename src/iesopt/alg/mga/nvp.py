@@ -1,7 +1,15 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.widgets import Slider
-from scipy.spatial import ConvexHull
+
+try:
+    import matplotlib.pyplot as plt
+    from matplotlib.widgets import Slider
+except ImportError:
+    print("ERROR: Matplotlib is required for NVP visualization. Please install it via 'uv add matplotlib'.")
+
+try:
+    from scipy.spatial import ConvexHull
+except ImportError:
+    print("ERROR: Scipy is required for NVP. Please install it via 'uv add scipy'.")
 
 from ...model import Model
 from ..algorithm import Algorithm

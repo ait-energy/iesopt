@@ -175,7 +175,7 @@ class Domains:
 
 
 # NOTE on specific solver choice:
-# dual: contraints change
+# dual: constraints change
 # primal: objective change
 # iesopt.JuMP.set_attribute(model.core, "Method", -1)
 # iesopt.JuMP.set_attribute(model.core, "Method", 1)  # dual (to change constraints)

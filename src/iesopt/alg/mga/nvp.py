@@ -83,7 +83,7 @@ class Domain:
         try:
             self._calculate_convex_hull()
             self.valid = True
-        except:
+        except Exception as _:
             self.valid = False
 
     def _calculate_convex_hull(self):
@@ -187,7 +187,7 @@ class NVP(Algorithm):
     Normal Vector Pushing (like the most basic HSJ MGA algorithm).
 
     This requires the following additional dependencies:
-    
+
     - scipy
     - matplotlib (for plotting)
     - pyqt6 (for plotting if necessary to show the interactive windows)
@@ -269,11 +269,11 @@ class NVP(Algorithm):
                 visited = self.trials.get_visited_directions()
                 best = (None, -np.inf, None)
                 for i in range(len(domain.edges)):
-                    e, l, nv = domain.get_edge(i)
+                    edge, length, nv = domain.get_edge(i)
                     nv = dict(zip(self.objectives[1:], nv))
                     dist = min(sum((nv[obj] - v[obj]) ** 2 for obj in self.objectives[1:]) for v in visited)
-                    if (dist > 1e-3) and (l > best[1]):
-                        best = (e, l, nv)
+                    if (dist > 1e-3) and (length > best[1]):
+                        best = (edge, length, nv)
 
                 if best[0] is None:
                     print("\nNo new direction found, terminating.")

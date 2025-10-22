@@ -169,6 +169,7 @@ def setup_julia(target: Path, sysimage: Path):
     try:
         import juliacall
     except Exception as e:
+        print("XXXXXXXXXXXXX")
         print(e)
         exit(1)
 

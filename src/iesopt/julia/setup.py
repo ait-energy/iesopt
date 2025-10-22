@@ -157,7 +157,7 @@ def setup_julia(target: Path, sysimage: Path):
         if ("cluster" in hostname) or ("node" in hostname) or ("controller" in hostname):
             try:
                 logger.info("    It seems we are running on a cluster; trying to patch LD_LIBRARY_PATH for GLIBC")
-                lib = str((Path(juliapkg.executable()).parent / ".." / "lib" / "julia" / "libstdc++.so.6").resolve())
+                lib = str((Path(juliapkg.executable()).parent / ".." / "lib" / "julia").resolve() / "libstdc++.so.6")
                 logger.info("    Trying to manually load: %s" % lib)
                 from ctypes import cdll
                 cdll.LoadLibrary(lib)

@@ -166,7 +166,11 @@ def setup_julia(target: Path, sysimage: Path):
 
     os.environ["PYTHON_JULIACALL_BINDIR"] = str(Path(juliapkg.executable()).parent)
 
-    import juliacall
+    try:
+        import juliacall
+    except Exception as e:
+        print(e)
+        exit(1)
 
     logger.info("Julia setup complete")
 

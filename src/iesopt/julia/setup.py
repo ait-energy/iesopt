@@ -151,6 +151,17 @@ def setup_julia(target: Path, sysimage: Path):
     logger.info("    Executable: %s" % juliapkg.executable())
     logger.info("    Project: %s" % juliapkg.project())
 
+    # Try to find out if we are running on an old cluster, that might have issues with GLIBC.
+    if sys.platform == "linux":
+        hostname = os.uname().nodename
+        if ("cluster" in hostname) or ("node" in hostname) or ("controller" in hostname):
+            libdir = str((Path(juliapkg.executable()).parent / ".." / "lib" / "julia").resolve())
+            logger.warning(
+                " It seems we are running on a cluster; if you encounter an error related to 'GLIBCXX_*.*.*, "
+                + "or 'Unable to load dependent library', please manually set the LD_LIBRARY_PATH environment "
+                + "variable (e.g., by using 'export LD_LIBRARY_PATH=\"...\"')to: '%s'." % libdir
+            )
+
     os.environ["PYTHON_JULIACALL_BINDIR"] = str(Path(juliapkg.executable()).parent)
 
     import juliacall

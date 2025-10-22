@@ -151,6 +151,16 @@ def setup_julia(target: Path, sysimage: Path):
     logger.info("    Executable: %s" % juliapkg.executable())
     logger.info("    Project: %s" % juliapkg.project())
 
+    # Try to find out if we are running on an old cluster, that might have issues with GLIBC.
+    if sys.platform == "linux":
+        hostname = os.uname().nodename
+        if ("cluster" in hostname) or ("node" in hostname) or ("controller" in hostname):
+            logger.info("    It seems we are running on a cluster; trying to patch LD_LIBRARY_PATH for GLIBC")
+            julia_libdir = (Path(juliapkg.executable()).parent / ".." / "lib").resolve()
+            logger.info("    Setting LD_LIBRARY_PATH to include: %s" % str(julia_libdir))
+            ld_library_path = os.environ.get("LD_LIBRARY_PATH", "")
+            os.environ["LD_LIBRARY_PATH"] = julia_libdir + ("" if (ld_library_path == "") else ":" + ld_library_path)
+
     os.environ["PYTHON_JULIACALL_BINDIR"] = str(Path(juliapkg.executable()).parent)
 
     import juliacall

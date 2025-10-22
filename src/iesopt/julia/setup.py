@@ -155,11 +155,14 @@ def setup_julia(target: Path, sysimage: Path):
     if sys.platform == "linux":
         hostname = os.uname().nodename
         if ("cluster" in hostname) or ("node" in hostname) or ("controller" in hostname):
-            logger.info("    It seems we are running on a cluster; trying to patch LD_LIBRARY_PATH for GLIBC")
-            julia_libdir = str((Path(juliapkg.executable()).parent / ".." / "lib" / "julia").resolve())
-            logger.info("    Setting LD_LIBRARY_PATH to include: %s" % julia_libdir)
-            ld_library_path = os.environ.get("LD_LIBRARY_PATH", "")
-            os.environ["LD_LIBRARY_PATH"] = julia_libdir + ("" if (ld_library_path == "") else ":" + ld_library_path)
+            try:
+                logger.info("    It seems we are running on a cluster; trying to patch LD_LIBRARY_PATH for GLIBC")
+                lib = str((Path(juliapkg.executable()).parent / ".." / "lib" / "julia" / "libstdc++.so.6").resolve())
+                logger.info("    Trying to manually load: %s" % lib)
+                from ctypes import cdll
+                cdll.LoadLibrary(lib)
+            except Exception as e:
+                logger.error(f"    Failed to load library '{lib}': {e}")
 
     os.environ["PYTHON_JULIACALL_BINDIR"] = str(Path(juliapkg.executable()).parent)
 

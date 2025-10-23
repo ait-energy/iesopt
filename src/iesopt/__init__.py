@@ -1,27 +1,16 @@
 import os
 import importlib.metadata
 from pathlib import Path
-import tempfile
 
 # Set version.
 __version__ = importlib.metadata.version("iesopt")
 
 # Set juliapkg target path.
-__target__ = Path(tempfile.mkdtemp(prefix="iesopt"))
-__target__.mkdir(exist_ok=True)
-try:
-    _pre_295_target = (Path().cwd() / ".iesopt" / "juliapkg.json").resolve()
-    if _pre_295_target.exists():
-        print(
-            "WARNING: Found an old `juliapkg.json` file from previous version of `iesopt`, removing it to prevent potential"
-            " conflicts; you should only see this warning once after upgrading"
-        )
-        _pre_295_target.unlink()
-except Exception as e:
-    print(f"WARNING: Failed to remove old `juliapkg.json` file: {e}")
+__target__ = Path().cwd() / ".iesopt"
 
 # Set sysimage path.
-__sysimage__ = Path().cwd() / ".iesopt" / ("sysimage_v" + __version__.replace(".", "-") + ".so")
+__sysimage__ = __target__ / ("sysimage_v" + __version__.replace(".", "-") + ".so")
+
 
 # =======================================================================
 # Setup "module globals" that will be overwritten internally.
@@ -76,7 +65,9 @@ def get_jl_docstr(obj: str):
 from .julia import initialize as _initialize_everything  # noqa: E402
 from .util import get_iesopt_module_attr as _get_iesopt_module_attr  # noqa: E402
 
-julia = _initialize_everything(__target__, __sysimage__)
+julia = _initialize_everything(
+    __target__, __sysimage__, reuse_julia_env=os.environ.get("IESOPT_REUSE_JULIA_ENV", "no") == "yes"
+)
 
 # Export everything.
 from iesopt.model import Model as Model, ModelStatus as ModelStatus  # noqa: E402

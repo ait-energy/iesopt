@@ -36,6 +36,93 @@ def add_package(f_add, name: str, config: str, target: str):
         f_add(*lookup_package(name), version="=" + config, target=target)
 
 
+def _handle_env_vars():
+    os.environ["JULIA_PKG_PRESERVE_TIERED_INSTALLED"] = "true"
+    os.environ["PYTHON_JULIACALL_STARTUP_FILE"] = "no"
+    os.environ["PYTHON_JULIACALL_AUTOLOAD_IPYTHON_EXTENSION"] = "no"
+
+    if Config.get("multithreaded"):
+        os.environ["PYTHON_JULIACALL_THREADS"] = "auto"
+        os.environ["PYTHON_JULIACALL_HANDLE_SIGNALS"] = "yes"
+    else:
+        os.environ["PYTHON_JULIACALL_THREADS"] = "1"
+        os.environ["PYTHON_JULIACALL_HANDLE_SIGNAL"] = "no"
+
+    opt = Config.get("optimization")
+    if opt == "rapid":
+        os.environ["PYTHON_JULIACALL_COMPILE"] = "min"
+        os.environ["PYTHON_JULIACALL_OPTIMIZE"] = "0"
+        os.environ["PYTHON_JULIACALL_MIN_OPTLEVEL"] = "0"
+    elif opt == "latency":
+        os.environ["PYTHON_JULIACALL_COMPILE"] = "yes"
+        os.environ["PYTHON_JULIACALL_OPTIMIZE"] = "0"
+        os.environ["PYTHON_JULIACALL_MIN_OPTLEVEL"] = "0"
+    elif opt == "default":
+        pass
+    elif opt == "performance":
+        os.environ["PYTHON_JULIACALL_COMPILE"] = "all"
+        os.environ["PYTHON_JULIACALL_OPTIMIZE"] = "3"
+        os.environ["PYTHON_JULIACALL_MIN_OPTLEVEL"] = "3"
+    else:
+        raise Exception(f"Unknown optimization setting '{opt}'")
+
+
+def _handle_sysimage(sysimage: Path):
+    if sysimage.exists():
+        logger.info("    Using custom sysimage: %s" % str(sysimage))
+        os.environ["PYTHON_JULIACALL_SYSIMAGE"] = str(sysimage)
+    else:
+        logger.info("    Using default sysimage")
+        logger.warning(
+            " Consider executing `iesopt.create_sysimage()` once to create a custom sysimage that might offer improved"
+            " performance"
+        )
+
+
+def use_existing_julia_environment(sysimage: Path):
+    logger.info(
+        "    Re-using existing Julia environment; if you encounter issues or strange behavior, consider disabling this "
+        "option at least for one import. This is especially recommended after upgrading `iesopt` or if you use custom "
+        "dependencies that might not be installed."
+    )
+
+    if "juliacall" in sys.modules:
+        logger.error(
+            "It seems juliacall, and thus Julia, is already loaded; this may lead to unexpected behavior and prevents"
+            " proper setup based on the internal configs. If you are sure this is not an issue, you can safely ignore"
+            " this message, but we cannot guarantee anything to work as expected."
+        )
+
+    # Try to find out if we are running on an old cluster, that might have issues with GLIBC.
+    if sys.platform == "linux":
+        hostname = os.uname().nodename
+        if ("cluster" in hostname) or ("node" in hostname) or ("controller" in hostname):
+            libdir = str((Path(juliapkg.executable()).parent / ".." / "lib" / "julia").resolve())
+            logger.warning(
+                " It seems we are running on a cluster; if you encounter an error related to 'GLIBCXX_*.*.*, "
+                + "or 'Unable to load dependent library', please manually set the LD_LIBRARY_PATH environment "
+                + "variable (e.g., by using 'export LD_LIBRARY_PATH=\"...\"')to: '%s'." % libdir
+            )
+
+    _handle_env_vars()
+    _handle_sysimage(sysimage)
+
+    # Switch to offline mode.
+    os.environ["PYTHON_JULIAPKG_OFFLINE"] = "yes"
+
+    import juliapkg
+
+    logger.info("    Executable: %s" % juliapkg.executable())
+    logger.info("    Project: %s" % juliapkg.project())
+    os.environ["PYTHON_JULIACALL_BINDIR"] = str(Path(juliapkg.executable()).parent)
+
+    import juliacall
+
+    logger.info("Julia setup complete")
+
+    return juliacall
+
+
 def setup_julia(target: Path, sysimage: Path):
     target.mkdir(exist_ok=True)
     target_fullpath = str(target.resolve())
@@ -109,44 +196,8 @@ def setup_julia(target: Path, sysimage: Path):
 
     logger.info("Julia environment ready, loading Julia")
 
-    os.environ["JULIA_PKG_PRESERVE_TIERED_INSTALLED"] = "true"
-    os.environ["PYTHON_JULIACALL_STARTUP_FILE"] = "no"
-    os.environ["PYTHON_JULIACALL_AUTOLOAD_IPYTHON_EXTENSION"] = "no"
-
-    if Config.get("multithreaded"):
-        os.environ["PYTHON_JULIACALL_THREADS"] = "auto"
-        os.environ["PYTHON_JULIACALL_HANDLE_SIGNALS"] = "yes"
-    else:
-        os.environ["PYTHON_JULIACALL_THREADS"] = "1"
-        os.environ["PYTHON_JULIACALL_HANDLE_SIGNAL"] = "no"
-
-    opt = Config.get("optimization")
-    if opt == "rapid":
-        os.environ["PYTHON_JULIACALL_COMPILE"] = "min"
-        os.environ["PYTHON_JULIACALL_OPTIMIZE"] = "0"
-        os.environ["PYTHON_JULIACALL_MIN_OPTLEVEL"] = "0"
-    elif opt == "latency":
-        os.environ["PYTHON_JULIACALL_COMPILE"] = "yes"
-        os.environ["PYTHON_JULIACALL_OPTIMIZE"] = "0"
-        os.environ["PYTHON_JULIACALL_MIN_OPTLEVEL"] = "0"
-    elif opt == "default":
-        pass
-    elif opt == "performance":
-        os.environ["PYTHON_JULIACALL_COMPILE"] = "all"
-        os.environ["PYTHON_JULIACALL_OPTIMIZE"] = "3"
-        os.environ["PYTHON_JULIACALL_MIN_OPTLEVEL"] = "3"
-    else:
-        raise Exception(f"Unknown optimization setting '{opt}'")
-
-    if sysimage.exists():
-        logger.info("    Using custom sysimage: %s" % str(sysimage))
-        os.environ["PYTHON_JULIACALL_SYSIMAGE"] = str(sysimage)
-    else:
-        logger.info("    Using default sysimage")
-        logger.warning(
-            " Consider executing `iesopt.create_sysimage()` once to create a custom sysimage that might offer improved"
-            " performance"
-        )
+    _handle_env_vars()
+    _handle_sysimage(sysimage)
 
     logger.info("    Executable: %s" % juliapkg.executable())
     logger.info("    Project: %s" % juliapkg.project())

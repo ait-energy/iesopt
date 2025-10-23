@@ -81,7 +81,7 @@ def _handle_sysimage(sysimage: Path):
 
 def use_existing_julia_environment(sysimage: Path):
     logger.info(
-        "    Re-using existing Julia environment; if you encounter issues or strange behavior, consider disabling this "
+        "    Reusing existing Julia environment; if you encounter issues or strange behavior, consider disabling this "
         "option at least for one import. This is especially recommended after upgrading `iesopt` or if you use custom "
         "dependencies that might not be installed."
     )

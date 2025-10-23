@@ -93,6 +93,14 @@ def use_existing_julia_environment(sysimage: Path):
             " this message, but we cannot guarantee anything to work as expected."
         )
 
+    _handle_env_vars()
+    _handle_sysimage(sysimage)
+
+    # Switch to offline mode.
+    os.environ["PYTHON_JULIAPKG_OFFLINE"] = "yes"
+
+    import juliapkg
+
     # Try to find out if we are running on an old cluster, that might have issues with GLIBC.
     if sys.platform == "linux":
         hostname = os.uname().nodename
@@ -103,14 +111,6 @@ def use_existing_julia_environment(sysimage: Path):
                 + "or 'Unable to load dependent library', please manually set the LD_LIBRARY_PATH environment "
                 + "variable (e.g., by using 'export LD_LIBRARY_PATH=\"...\"')to: '%s'." % libdir
             )
-
-    _handle_env_vars()
-    _handle_sysimage(sysimage)
-
-    # Switch to offline mode.
-    os.environ["PYTHON_JULIAPKG_OFFLINE"] = "yes"
-
-    import juliapkg
 
     logger.info("    Executable: %s" % juliapkg.executable())
     logger.info("    Project: %s" % juliapkg.project())

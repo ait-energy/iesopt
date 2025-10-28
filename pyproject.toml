@@ -1,6 +1,6 @@
 [project]
 name = "iesopt"
-version = "2.12.0"
+version = "2.12.1.dev0"
 description = "IESopt -- an Integrated Energy System Optimization framework."
 keywords = ["integrated energy systems", "optimization", "energy model", "modelling"]
 authors = [

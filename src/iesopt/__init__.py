@@ -6,7 +6,7 @@ from pathlib import Path
 __version__ = importlib.metadata.version("iesopt")
 
 # Set juliapkg target path.
-__target__ = Path().cwd() / ".iesopt"
+__target__ = Path(__file__).parent.resolve()
 
 # Set sysimage path.
 __sysimage__ = __target__ / ("sysimage_v" + __version__.replace(".", "-") + ".so")

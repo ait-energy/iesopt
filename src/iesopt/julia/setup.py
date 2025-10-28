@@ -126,15 +126,16 @@ def use_existing_julia_environment(sysimage: Path):
 def setup_julia(target: Path, sysimage: Path):
     target.mkdir(exist_ok=True)
     target_fullpath = str(target.resolve())
-    logger.info(f"    Target for juliapkg: '{target_fullpath}'")
+    logger.info(f"    Target for juliapkg: '{target_fullpath}/juliapkg.json'")
 
-    _pre_264_target = (Path(__file__).parent / ".." / "juliapkg.json").resolve()
-    if _pre_264_target.exists():
-        logger.warning(
-            "Found an old `juliapkg.json` file from previous version of `iesopt`, removing it to prevent potential"
-            " conflicts; you should only see this warning once after upgrading"
-        )
-        _pre_264_target.unlink()
+    # NOTE: Disabled as we move back to creating the `juliapkg.json` "inside" of `iesopt`.
+    # _pre_264_target = (Path(__file__).parent / ".." / "juliapkg.json").resolve()
+    # if _pre_264_target.exists():
+    #     logger.warning(
+    #         "Found an old `juliapkg.json` file from previous version of `iesopt`, removing it to prevent potential"
+    #         " conflicts; you should only see this warning once after upgrading"
+    #     )
+    #     _pre_264_target.unlink()
 
     logger.info("Checking Julia environment")
 
@@ -144,9 +145,6 @@ def setup_julia(target: Path, sysimage: Path):
             " proper setup based on the internal configs. If you are sure this is not an issue, you can safely ignore"
             " this message, but we cannot guarantee anything to work as expected."
         )
-
-    if Path("juliapkg.json").exists():
-        raise Exception("Found `juliapkg.json` file; remove it to prevent potential conflicts")
 
     if (target / "juliapkg.json").exists():
         (target / "juliapkg.json").unlink()
@@ -175,6 +173,16 @@ def setup_julia(target: Path, sysimage: Path):
     # Setup Julia (checking if it "looks" valid).
     sys.path.insert(0, target_fullpath)
     import juliapkg
+
+    # Check allowed/existing `juliapkg.json` files.
+    allowed_deps_files = ["juliacall/juliapkg.json", "juliapkg/juliapkg.json"]
+    all_deps_files = juliapkg.deps.deps_files()
+    for f in all_deps_files:
+        if any(f.endswith(el) for el in allowed_deps_files):
+            logger.debug("   Detected valid `juliapkg.json` file: '%s'" % f)
+            continue
+        logger.warning("Detected invalid `juliapkg.json` file, renaming to render it stale: '%s'" % f)
+        Path(f).rename(Path(f).with_suffix(".json.DISABLED"))
 
     # Set Julia version.
     juliapkg.require_julia(f"={Config.get('julia')}", target=target_fullpath)

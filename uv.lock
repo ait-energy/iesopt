@@ -492,7 +492,7 @@ wheels = [
 
 [[package]]
 name = "iesopt"
-version = "2.8.2.dev0"
+version = "2.12.1.dev0"
 source = { editable = "." }
 dependencies = [
     { name = "juliacall" },
@@ -524,7 +524,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "juliacall", specifier = "==0.9.28" },
-    { name = "juliapkg", specifier = "==0.1.19" },
+    { name = "juliapkg", specifier = "==0.1.22" },
     { name = "pandas", specifier = ">=2.0.0" },
     { name = "pathlib", specifier = ">=1.0.0" },
     { name = "pydantic", specifier = ">=2.7.4" },
@@ -748,15 +748,17 @@ wheels = [
 
 [[package]]
 name = "juliapkg"
-version = "0.1.19"
+version = "0.1.22"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "filelock" },
     { name = "semver" },
+    { name = "tomli" },
+    { name = "tomlkit" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/41/7a/354980a0898a8b8c031c8392540919f2e2e528bc7ffae8167cd2674a7e4a/juliapkg-0.1.19.tar.gz", hash = "sha256:02076cfe58f661c56efcd5ba559f050a434e790b8d049482b73197fd241d76b6", size = 22167, upload-time = "2025-09-17T21:34:01.161Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ce/fe/1e329a4244855924d1130138625860b57e8f94397a0357a9d4cd66fd50a7/juliapkg-0.1.22.tar.gz", hash = "sha256:4358d8853a4e741a73906737ae433ae2f4c6e00f4f7969512d90880c0e22aae6", size = 23462, upload-time = "2025-10-08T20:04:37.62Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0a/5b/285aebd28402ce25bde61aa5dde33f1c9945353490e44b307e7f72ea452f/juliapkg-0.1.19-py3-none-any.whl", hash = "sha256:184e2ab84e43b7432e444a0483682bd3ea549ca4aed90e349dd151629d596f59", size = 20363, upload-time = "2025-09-17T21:33:58.489Z" },
+    { url = "https://files.pythonhosted.org/packages/39/6e/361d176cc94ccb8aac22a39677e146a91406005f8f6bb098b15606c523f6/juliapkg-0.1.22-py3-none-any.whl", hash = "sha256:fc197c21087345e296036190c769b888f7701bf1fb47d7036a20d01221ec550a", size = 21860, upload-time = "2025-10-08T20:04:36.389Z" },
 ]
 
 [[package]]
@@ -2110,6 +2112,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/5b/b9/1ed31d167be802da0fc95020d04cd27b7d7065cc6fbefdd2f9186f60d7bd/tomli-2.2.1-cp313-cp313-win32.whl", hash = "sha256:d3f5614314d758649ab2ab3a62d4f2004c825922f9e370b29416484086b264ec", size = 98724, upload-time = "2024-11-27T22:38:32.837Z" },
     { url = "https://files.pythonhosted.org/packages/c7/32/b0963458706accd9afcfeb867c0f9175a741bf7b19cd424230714d722198/tomli-2.2.1-cp313-cp313-win_amd64.whl", hash = "sha256:a38aa0308e754b0e3c67e344754dff64999ff9b513e691d0e786265c93583c69", size = 109383, upload-time = "2024-11-27T22:38:34.455Z" },
     { url = "https://files.pythonhosted.org/packages/6e/c2/61d3e0f47e2b74ef40a68b9e6ad5984f6241a942f7cd3bbfbdbd03861ea9/tomli-2.2.1-py3-none-any.whl", hash = "sha256:cb55c73c5f4408779d0cf3eef9f762b9c9f147a77de7b258bef0a5628adc85cc", size = 14257, upload-time = "2024-11-27T22:38:35.385Z" },
+]
+
+[[package]]
+name = "tomlkit"
+version = "0.13.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/cc/18/0bbf3884e9eaa38819ebe46a7bd25dcd56b67434402b66a58c4b8e552575/tomlkit-0.13.3.tar.gz", hash = "sha256:430cf247ee57df2b94ee3fbe588e71d362a941ebb545dec29b53961d61add2a1", size = 185207, upload-time = "2025-06-05T07:13:44.947Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bd/75/8539d011f6be8e29f339c42e633aae3cb73bffa95dd0f9adec09b9c58e85/tomlkit-0.13.3-py3-none-any.whl", hash = "sha256:c89c649d79ee40629a9fda55f8ace8c6a1b42deb912b2a8fd8d942ddadb606b0", size = 38901, upload-time = "2025-06-05T07:13:43.546Z" },
 ]
 
 [[package]]

@@ -175,14 +175,15 @@ def setup_julia(target: Path, sysimage: Path):
     import juliapkg
 
     # Check allowed/existing `juliapkg.json` files.
-    allowed_deps_files = ["juliacall/juliapkg.json", "juliapkg/juliapkg.json"]
+    allowed_deps_files = [("juliacall", "juliapkg"), ("juliapkg", "juliapkg")]
     all_deps_files = juliapkg.deps.deps_files()
     for f in all_deps_files:
-        if any(f.endswith(el) for el in allowed_deps_files):
+        f, p = Path(f), Path(f).parent
+        if any((p.stem == el[0] and f.stem == el[1]) for el in allowed_deps_files):
             logger.debug("   Detected valid `juliapkg.json` file: '%s'" % f)
             continue
         logger.warning("Detected invalid `juliapkg.json` file, renaming to render it stale: '%s'" % f)
-        Path(f).rename(Path(f).with_suffix(".json.DISABLED"))
+        f.rename(f.with_suffix(".json.DISABLED"))
 
     # Set Julia version.
     juliapkg.require_julia(f"={Config.get('julia')}", target=target_fullpath)

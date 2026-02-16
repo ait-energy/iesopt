@@ -300,7 +300,7 @@ class Results:
                         field_names = [f] * n_snapshots
                     else:
                         snapshots = [None] * size
-                        field_names = [f"{f}[{idx}]" for idx in range(size)]
+                        field_names = [f"{f}[i_{idx}]" for idx in range(size)]
 
                     _data["snapshot"].extend(snapshots)
                     _data["component"].extend([c] * size)

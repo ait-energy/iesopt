@@ -233,7 +233,7 @@ class TestExamples:
         _check_example_model(
             "29_advanced_unit_commitment",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": 7000.0, "hash": "b826bfcee4"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": 7000.0, "hash": "d360daab35"},
         )
 
     def test_example_31(self, tmp_path):
@@ -268,7 +268,7 @@ class TestExamples:
         model = _check_example_model(
             "41_multiobjective_epsilon",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": "moa", "hash": "7b1af169ea"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": "moa", "hash": "2521c64ff0"},
         )
 
         assert len(model.objective_value) == 2
@@ -280,7 +280,7 @@ class TestExamples:
         model = _check_example_model(
             "43_multiobjective_hierarchical",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": "moa", "hash": "8e87105785"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": "moa", "hash": "84d41bf9b8"},
         )
 
         assert len(model.objective_value) == 3

@@ -97,7 +97,7 @@ class TestToPandas_Long:
                     "snapshot": [1, 2, 3, None, None],
                     "component": ["comp1"] * 5,
                     "fieldtype": ["var"] * 5,
-                    "field": ["my_var1"] * 3 + ["my_var2[0]", "my_var2[1]"],
+                    "field": ["my_var1"] * 3 + ["my_var2[i_0]", "my_var2[i_1]"],
                     "value": [1.0, 2.0, 3.0, 5.0, 10.0],
                     "mode": ["primal"] * 5,
                 }

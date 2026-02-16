@@ -294,12 +294,20 @@ class Results:
                     _data["value"].append(v)
                     _data["mode"].append(m)
                 else:
-                    _data["snapshot"].extend(self._snapshots)
-                    _data["component"].extend([c] * n_snapshots)
-                    _data["fieldtype"].extend([t] * n_snapshots)
-                    _data["field"].extend([f] * n_snapshots)
+                    size = len(v)
+                    if size == n_snapshots:
+                        snapshots = self._snapshots
+                        field_names = [f] * n_snapshots
+                    else:
+                        snapshots = [None] * size
+                        field_names = [f"{f}[i_{idx}]" for idx in range(size)]
+
+                    _data["snapshot"].extend(snapshots)
+                    _data["component"].extend([c] * size)
+                    _data["fieldtype"].extend([t] * size)
+                    _data["field"].extend(field_names)
                     _data["value"].extend(v)
-                    _data["mode"].extend([m] * n_snapshots)
+                    _data["mode"].extend([m] * size)
 
             try:
                 return pd.DataFrame(_data)
@@ -309,7 +317,7 @@ class Results:
                     "common cause are custom results, registered inside an addon, that have a different "
                     "temporal resolution than the main model results. Consider filtering out such results."
                 )
-                return None
+                raise
 
         raise ValueError(f"`orientation` can be 'wide' or 'long', got '{orientation}'.")
 

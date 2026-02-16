@@ -1,6 +1,6 @@
 [project]
 name = "iesopt"
-version = "2.9.1.dev0"
+version = "2.12.2.dev0"
 description = "IESopt -- an Integrated Energy System Optimization framework."
 keywords = ["integrated energy systems", "optimization", "energy model", "modelling"]
 authors = [
@@ -28,7 +28,7 @@ dependencies = [
     "python-dotenv >= 1.0.1",
     # the Julia dependencies are intentionally pinned!
     "juliacall == 0.9.28",
-    "juliapkg == 0.1.19",
+    "juliapkg == 0.1.22",
 ]
 
 [project.urls]

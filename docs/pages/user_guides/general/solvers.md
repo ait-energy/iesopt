@@ -9,12 +9,13 @@ models. They are largely based on other model's defaults (see e.g.
 More information can be found at:
 
 - HiGHS:
-    - https://ergo-code.github.io/HiGHS/stable/options/definitions/
+    - [HiGHS Documentation - List of Options](https://ergo-code.github.io/HiGHS/stable/options/definitions/)
 - Gurobi:
-    - https://www.gurobi.com/wp-content/uploads/2022-10-Paris_Advanced_Algorithms.pdf
-    - https://www.gurobi.com/documentation/current/refman/parameters.html
+    - [Gurobi Days Paris Advanced Gurobi Algorithms](https://www.gurobi.com/wp-content/uploads/2022-10-Paris_Advanced_Algorithms.pdf)
+    - [Gurobi Documentation - Parameter Reference](https://docs.gurobi.com/projects/optimizer/en/current/reference/parameters.html)
 - CPLEX:
-    - https://www.ibm.com/docs/en/icos/22.1.1?topic=cplex-list-parameters
+    - [IBM ILOG CPLEX Optimization Studio - List of CPLEX parameters](https://www.ibm.com/docs/en/icos/22.1.2?topic=cplex-list-parameters)
+    - [IBM ILOG CPLEX Optimization Studio CPLEX Parameters Reference (outdated)](https://public.dhe.ibm.com/software/products/Decision_Optimization/docs/pdf/paramcplex.pdf)
 
 ### HiGHS
 
@@ -93,9 +94,9 @@ solver:
 solver:
   name: cplex
   attributes:
-    threads: 4
-    lpmethod: 4
-    solutiontype: 2
-    barrier_convergetol: 1.e-5
-    feasopt_tolerance: 1.e-6
+    CPXPARAM_Threads: 8                 # Number of Threads
+    CPXPARAM_LPMethod: 4                # Barrier
+    CPXPARAM_SolutionType: 2            # No Crossover
+    CPXPARAM_Barrier_ConvergeTol: 1e-5
+    CPXPARAM_Feasopt_Tolerance: 1.e-5
 ```

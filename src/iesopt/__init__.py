@@ -6,10 +6,11 @@ from pathlib import Path
 __version__ = importlib.metadata.version("iesopt")
 
 # Set juliapkg target path.
-__target__ = Path().cwd() / ".iesopt"
+__target__ = Path(__file__).parent.resolve()
 
 # Set sysimage path.
 __sysimage__ = __target__ / ("sysimage_v" + __version__.replace(".", "-") + ".so")
+
 
 # =======================================================================
 # Setup "module globals" that will be overwritten internally.
@@ -64,7 +65,9 @@ def get_jl_docstr(obj: str):
 from .julia import initialize as _initialize_everything  # noqa: E402
 from .util import get_iesopt_module_attr as _get_iesopt_module_attr  # noqa: E402
 
-julia = _initialize_everything(__target__, __sysimage__)
+julia = _initialize_everything(
+    __target__, __sysimage__, reuse_julia_env=os.environ.get("IESOPT_REUSE_JULIA_ENV", "no") == "yes"
+)
 
 # Export everything.
 from iesopt.model import Model as Model, ModelStatus as ModelStatus  # noqa: E402

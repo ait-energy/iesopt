@@ -6,10 +6,10 @@ runs:
   steps:
     - name: "set UV version"
       shell: bash
-      run: echo "VERSION_UV=0.5.25" >> $GITHUB_ENV
+      run: echo "VERSION_UV=0.10.3" >> $GITHUB_ENV
 
     - name: "set Julia version"
       shell: bash
-      run: echo "VERSION_JULIA=1.11.7" >> $GITHUB_ENV
+      run: echo "VERSION_JULIA=1.12.5" >> $GITHUB_ENV
 
 

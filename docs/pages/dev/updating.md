@@ -70,7 +70,7 @@ Julia from the official homepage [julialang.org/](https://julialang.org/download
 > juliaup is the recommended way to install Julia. It automatically installs the latest stable julia binary and helps
 > keep it up to date. It also supports installing and using different versions of Julia simultaneously.
 
-This most importantly means that if you have `juliaup` installed, IESopt can re-use this across different projects that
+This most importantly means that if you have `juliaup` installed, IESopt can reuse this across different projects that
 you work on, heavily reducing the setup time since there's no need to download a full Julia for each project and a lot
 of precompilation stuff can be shared.
 

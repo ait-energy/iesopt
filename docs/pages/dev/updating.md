@@ -2,6 +2,78 @@
 
 This page collects information about updating the project between specific versions.
 
+## Pre-2.13 to 2.13.0
+
+Version 2.13.0 introduced an updated IESopt.jl version, which requires a note on how to upgrade existing environments.
+The most important change is a mandatory move to Julia `1.12` and Python `3.14`; the latter could be relaxed in the
+future if needed, but using `>= 3.14` simplifies matching OpenSSL versions between Julia and Python by a lot (many
+"versions" of CPython make use of an outdated OpenSSL with some "crucial insecurities", which breaks using Julia/Python
+together).
+
+Follow these steps, but please report any issues you encounter immediately to the dev chat, so that we can fix/document
+problems that might arise with slightly differing initial setups:
+
+First, make sure your `uv` is up-to-date, by running:
+
+```bash
+uv self update
+```
+
+Update the required Python version in your `pyproject.toml` by setting it to:
+
+```toml
+requires-python = ">=3.14"
+```
+
+Set a specific Python version in your `.python-version` file (note: this version prevents pulling an outdated CPython
+build as of 17.02.2026; might require a different version in the future), by changing its content to:
+
+```text
+3.14.3
+```
+
+Update the `iesopt` version in your `pyproject.toml` to (at least) `2.13.0` by running
+
+```bash
+uv add "iesopt >= 2.13.0"
+```
+
+:::{caution}
+If this step fails with an error that mentions `pandas>=3.0.0` being required by your project, run
+`uv add "pandas < 3.0"` first, then rerun the above command.
+:::
+
+You should now be able to run:
+
+```bash
+uv run python
+>>> import iesopt
+```
+
+If this succeeds (after some time to precompile the new version), then you are good to run any model as you are used to.
+
+### Read on: JuliaUp
+
+If you encounter a log message like this:
+
+```console
+WARNING: About to install Julia ... to ...
+         If you use juliapkg in more than one environment, you are likely to
+         have Julia installed in multiple locations. It is recommended to
+         install JuliaUp (https://github.com/JuliaLang/juliaup) or Julia
+         (https://julialang.org/downloads) yourself.
+```
+
+we highly recommend following that advice and installing `juliaup`. This is nowadays done automatically when you install
+Julia from the official homepage [julialang.org/](https://julialang.org/downloads/):
+
+> juliaup is the recommended way to install Julia. It automatically installs the latest stable julia binary and helps
+> keep it up to date. It also supports installing and using different versions of Julia simultaneously.
+
+This most importantly means that if you have `juliaup` installed, IESopt can reuse this across different projects that
+you work on, heavily reducing the setup time since there's no need to download a full Julia for each project and a lot
+of precompilation stuff can be shared.
+
 ## 2.6.3 to 2.6.4 or 2.6.5
 
 When upgrading from a version between `2.0.0` and `2.6.3` to either `2.6.4` or `2.6.5` you may run into an error looking similar to

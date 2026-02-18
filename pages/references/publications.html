@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+
+<html :class="{ 'dark' : darkMode === true }" data-content_root="../../" lang="en" x-data="{ darkMode: $persist(window.matchMedia('(prefers-color-scheme: dark)').matches), activeSection: ''}">
+<head>
+<script>
+    (function () {
+      // Set initial color scheme
+      if ((localStorage.getItem("_x_darkMode") === "true") || (window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      }
+
+      // Watch for media preference changes
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (event) => {
+        localStorage.setItem("_x_darkMode", event.matches);
+        document.documentElement.classList.toggle("dark", event.matches);
+      });
+    })();
+  </script>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta charset="utf-8"/>
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#030711" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Publications | IESopt 2.13.1.dev0 documentation</title>
+<meta content="Publications | IESopt 2.13.1.dev0 documentation" property="og:title"/>
+<meta content="Publications | IESopt 2.13.1.dev0 documentation" name="twitter:title"/>
+<link href="../../_static/pygments.css?v=0a3749eb" rel="stylesheet" type="text/css"/>
+<link href="../../_static/pygments_dark.css" id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css"/>
+<link href="../../_static/theme.css?v=73505e79" rel="stylesheet" type="text/css"/>
+<link href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" rel="stylesheet" type="text/css"/>
+<link href="../../_static/togglebutton.css?v=9c3e77be" rel="stylesheet" type="text/css"/>
+<link href="../../_static/custom.css?v=89055611" rel="stylesheet" type="text/css"/>
+<link href="../../_static/awesome-myst-nb.css?v=3b66abd6" rel="stylesheet" type="text/css"/>
+<link href="../../_static/favicon.ico" rel="icon"/>
+<link href="../../search.html" rel="search" title="Search"/>
+<link href="../../genindex.html" rel="index" title="Index"/>
+<link href="projects.html" rel="next" title="Projects"/>
+<link href="../manual/julia/resultsjld2.html" rel="prev" title="ResultsJLD2"/>
+</head>
+<body :class="{ 'overflow-hidden': showSidebar }" @scroll.window="showScrollTop = pageYOffset &gt; 100" class="min-h-screen font-sans antialiased bg-background text-foreground" x-data="{ showSidebar: false, showScrollTop: false }">
+<div @click.self="showSidebar = false" class="fixed inset-0 z-50 overflow-hidden bg-background/80 backdrop-blur-sm md:hidden" x-cloak="" x-show="showSidebar"></div><div class="relative flex flex-col min-h-screen" id="page"><a class="absolute top-0 left-0 z-[100] block bg-background p-4 text-xl transition -translate-x-full opacity-0 focus:translate-x-0 focus:opacity-100" href="#content">
+      Skip to content
+    </a><header class="sticky top-0 z-40 w-full border-b shadow-xs border-border bg-background/90 backdrop-blur"><div class="container flex items-center h-14">
+<div class="hidden mr-4 md:flex">
+<a class="flex items-center mr-6" href="../../index.html"><span class="hidden font-bold sm:inline-block text-clip whitespace-nowrap">IESopt 2.13.1.dev0 documentation</span>
+</a><nav class="flex items-center gap-6 text-sm font-medium">
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="../../index.html">Home</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/ait-energy/iesopt" rel="noopener nofollow">GitHub</a>
+<a class="transition-colors hover:text-foreground/80 text-foreground/60" href="https://github.com/ait-energy/IESopt.jl" rel="noopener nofollow">IESopt.jl</a>
+</nav></div><button @click="showSidebar = true" class="inline-flex items-center justify-center h-10 px-0 py-2 mr-2 text-base font-medium transition-colors rounded-md hover:text-accent-foreground hover:bg-transparent md:hidden" type="button">
+<svg aria-hidden="true" fill="currentColor" height="24" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M152.587 825.087q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440Zm0-203.587q-19.152 0-32.326-13.174T107.087 576q0-19.152 13.174-32.326t32.326-13.174h320q19.152 0 32.326 13.174T518.087 576q0 19.152-13.174 32.326T472.587 621.5h-320Zm0-203.587q-19.152 0-32.326-13.174t-13.174-32.326q0-19.152 13.174-32.326t32.326-13.174h440q19.152 0 32.326 13.174t13.174 32.326q0 19.152-13.174 32.326t-32.326 13.174h-440ZM708.913 576l112.174 112.174q12.674 12.674 12.674 31.826t-12.674 31.826Q808.413 764.5 789.261 764.5t-31.826-12.674l-144-144Q600 594.391 600 576t13.435-31.826l144-144q12.674-12.674 31.826-12.674t31.826 12.674q12.674 12.674 12.674 31.826t-12.674 31.826L708.913 576Z"></path>
+</svg>
+<span class="sr-only">Toggle navigation menu</span>
+</button>
+<div class="flex items-center justify-between flex-1 gap-2 sm:gap-4 md:justify-end">
+<div class="flex-1 w-full md:w-auto md:flex-none"><form @keydown.k.window.meta="$refs.search.focus()" action="../../search.html" class="relative flex items-center group" id="searchbox" method="get">
+<input aria-label="Search the docs" class="inline-flex items-center font-medium transition-colors bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background border border-input hover:bg-accent focus:bg-accent hover:text-accent-foreground focus:text-accent-foreground hover:placeholder-accent-foreground py-2 px-4 relative h-9 w-full justify-start rounded-[0.5rem] text-sm text-muted-foreground sm:pr-12 md:w-40 lg:w-64" id="search-input" name="q" placeholder="Search ..." type="search" x-ref="search"/>
+<kbd class="pointer-events-none absolute right-1.5 top-2 hidden h-5 select-none text-muted-foreground items-center gap-1 rounded border border-border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex group-hover:bg-accent group-hover:text-accent-foreground">
+<span class="text-xs">⌘</span>
+    K
+  </kbd>
+</form>
+</div>
+<nav class="flex items-center gap-1">
+<button @click="darkMode = !darkMode" class="relative inline-flex items-center justify-center px-0 text-sm font-medium transition-colors rounded-md hover:bg-accent hover:text-accent-foreground h-9 w-9" title="Toggle color scheme" type="button">
+<svg class="absolute transition-all scale-100 rotate-0 dark:-rotate-90 dark:scale-0" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 685q45.456 0 77.228-31.772Q589 621.456 589 576q0-45.456-31.772-77.228Q525.456 467 480 467q-45.456 0-77.228 31.772Q371 530.544 371 576q0 45.456 31.772 77.228Q434.544 685 480 685Zm0 91q-83 0-141.5-58.5T280 576q0-83 58.5-141.5T480 376q83 0 141.5 58.5T680 576q0 83-58.5 141.5T480 776ZM80 621.5q-19.152 0-32.326-13.174T34.5 576q0-19.152 13.174-32.326T80 530.5h80q19.152 0 32.326 13.174T205.5 576q0 19.152-13.174 32.326T160 621.5H80Zm720 0q-19.152 0-32.326-13.174T754.5 576q0-19.152 13.174-32.326T800 530.5h80q19.152 0 32.326 13.174T925.5 576q0 19.152-13.174 32.326T880 621.5h-80Zm-320-320q-19.152 0-32.326-13.174T434.5 256v-80q0-19.152 13.174-32.326T480 130.5q19.152 0 32.326 13.174T525.5 176v80q0 19.152-13.174 32.326T480 301.5Zm0 720q-19.152 0-32.326-13.17Q434.5 995.152 434.5 976v-80q0-19.152 13.174-32.326T480 850.5q19.152 0 32.326 13.174T525.5 896v80q0 19.152-13.174 32.33-13.174 13.17-32.326 13.17ZM222.174 382.065l-43-42Q165.5 327.391 166 308.239t13.174-33.065q13.435-13.674 32.587-13.674t32.065 13.674l42.239 43q12.674 13.435 12.555 31.706-.12 18.272-12.555 31.946-12.674 13.674-31.445 13.413-18.772-.261-32.446-13.174Zm494 494.761-42.239-43q-12.674-13.435-12.674-32.087t12.674-31.565Q686.609 756.5 705.38 757q18.772.5 32.446 13.174l43 41.761Q794.5 824.609 794 843.761t-13.174 33.065Q767.391 890.5 748.239 890.5t-32.065-13.674Zm-42-494.761Q660.5 369.391 661 350.62q.5-18.772 13.174-32.446l41.761-43Q728.609 261.5 747.761 262t33.065 13.174q13.674 13.435 13.674 32.587t-13.674 32.065l-43 42.239q-13.435 12.674-31.706 12.555-18.272-.12-31.946-12.555Zm-495 494.761Q165.5 863.391 165.5 844.239t13.674-32.065l43-42.239q13.435-12.674 32.087-12.674t31.565 12.674Q299.5 782.609 299 801.38q-.5 18.772-13.174 32.446l-41.761 43Q231.391 890.5 212.239 890t-33.065-13.174ZM480 576Z"></path>
+</svg>
+<svg class="absolute transition-all scale-0 rotate-90 dark:rotate-0 dark:scale-100" fill="currentColor" height="16" viewbox="0 96 960 960" width="16" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 936q-151 0-255.5-104.5T120 576q0-138 90-239.5T440 218q25-3 39 18t-1 44q-17 26-25.5 55t-8.5 61q0 90 63 153t153 63q31 0 61.5-9t54.5-25q21-14 43-1.5t19 39.5q-14 138-117.5 229T480 936Zm0-80q88 0 158-48.5T740 681q-20 5-40 8t-40 3q-123 0-209.5-86.5T364 396q0-20 3-40t8-40q-78 32-126.5 102T200 576q0 116 82 198t198 82Zm-10-270Z"></path>
+</svg>
+</button>
+</nav>
+</div>
+</div>
+</header>
+<div class="flex-1"><div class="container md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10"><aside :aria-hidden="!showSidebar" :class="{ 'translate-x-0': showSidebar }" class="fixed inset-y-0 left-0 md:top-14 z-50 md:z-30 bg-background md:bg-transparent transition-all duration-100 -translate-x-full md:translate-x-0 ml-0 p-6 md:p-0 md:-ml-2 md:h-[calc(100vh-3.5rem)] w-5/6 md:w-full overflow-y-auto border-r border-border md:sticky" id="left-sidebar">
+<a class="justify-start text-sm md:!hidden bg-background" href="../../index.html"><span class="font-bold text-clip whitespace-nowrap">IESopt 2.13.1.dev0 documentation</span>
+</a>
+<div class="relative overflow-hidden md:overflow-auto my-4 md:my-0">
+<div class="overflow-y-auto h-full w-full relative pr-6"><nav class="flex md:hidden flex-col font-medium mt-4">
+<a href="../../index.html">Home</a>
+<a href="https://github.com/ait-energy/iesopt" rel="nofollow noopener">GitHub</a>
+<a href="https://github.com/ait-energy/IESopt.jl" rel="nofollow noopener">IESopt.jl</a>
+</nav><nav class="table w-full min-w-full my-6 lg:my-8">
+<p class="caption" role="heading"><span class="caption-text">IESopt</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/first_model.html">A first model</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../tocs/tutorials_extracting_results.html">Extracting results<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/custom_results_1.html">Part I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/custom_results_2.html">Part II</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../tocs/tutorials_templates.html">Templates<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/templates_1.html">Part I</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/templates_2.html">Part II</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/templates/getter_setter.html">Getter and setter functions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/addons.html">Addons</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../../tocs/examples.html">Examples<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/example_52.html">52</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/example_53.html">53</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/example_54.html">54</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../notebooks/example_55.html">55</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guides/index.html">Intro</a></li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../user_guides/toc_general.html">General<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../user_guides/general/best_practice.html">Best practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guides/general/global_parameters.html">Global parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guides/general/kwargs_config.html">Python: Modify <code class="docutils literal notranslate"><span class="pre">config</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guides/general/monte_carlo.html">Monte Carlo simulations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guides/general/common_errors.html">Common errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guides/general/linking_components.html">Linking components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guides/general/solvers.html">Solvers</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../user_guides/toc_qna.html">Q &amp; A<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../user_guides/qna/snapshot_duration.html">Time resolution &amp; power vs. energy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guides/qna/profiles_sign.html">Sign convention for time series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guides/qna/dynamic_marginal_costs.html">Output-dependent marginal costs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guides/qna/passive_charging.html">Passive charging of an underground heat storage</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Manual</span></p>
+<ul>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../manual/yaml/index.html">YAML<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../manual/yaml/top_level.html">Top-level config</a></li>
+<li class="toctree-l2" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../manual/yaml/core_components.html">Components<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l3"><a class="reference internal" href="../manual/yaml/core/connection.html">Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manual/yaml/core/decision.html">Decision</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manual/yaml/core/node.html">Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manual/yaml/core/profile.html">Profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manual/yaml/core/unit.html">Unit</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../manual/python/index.html">Python<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../manual/python/configuration.html">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/python/model.html">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/python/results.html">Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/python/util.html">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/python/jump.html">JuMP</a></li>
+</ul>
+</li>
+<li class="toctree-l1" x-data="{ expanded: $el.classList.contains('current') ? true : false }"><a :class="{ 'expanded' : expanded }" @click="expanded = !expanded" class="reference internal expandable" href="../manual/julia/index.html">Julia<button @click.prevent.stop="expanded = !expanded" type="button" x-cloak=""><span class="sr-only"></span><svg fill="currentColor" height="18px" stroke="none" viewbox="0 0 24 24" width="18px" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></button></a><ul x-cloak="" x-show="expanded">
+<li class="toctree-l2"><a class="reference internal" href="../manual/julia/assets.html">Assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/julia/utilities.html">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/julia/resultsduckdb.html">ResultsDuckDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manual/julia/resultsjld2.html">ResultsJLD2</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Publications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Projects</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev/general.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/core.html">IESopt.jl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/updating.html">Updating</a></li>
+</ul>
+</nav>
+</div>
+</div>
+<button @click="showSidebar = false" class="absolute md:hidden right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100" type="button">
+<svg class="h-4 w-4" fill="currentColor" height="24" stroke="none" viewbox="0 96 960 960" width="24" xmlns="http://www.w3.org/2000/svg">
+<path d="M480 632 284 828q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536 576l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480 632Z"></path>
+</svg>
+</button>
+</aside>
+<main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
+<div class="w-full min-w-0 mx-auto">
+<nav aria-label="breadcrumbs" class="flex items-center mb-4 space-x-1 text-sm text-muted-foreground">
+<a class="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground" href="../../index.html">
+<span class="hidden md:inline">IESopt 2.13.1.dev0 documentation</span>
+<svg aria-label="Home" class="md:hidden" fill="currentColor" height="18" stroke="none" viewbox="0 96 960 960" width="18" xmlns="http://www.w3.org/2000/svg">
+<path d="M240 856h120V616h240v240h120V496L480 316 240 496v360Zm-80 80V456l320-240 320 240v480H520V696h-80v240H160Zm320-350Z"></path>
+</svg>
+</a>
+<div class="mr-1">/</div><span aria-current="page" class="font-medium text-foreground overflow-hidden text-ellipsis whitespace-nowrap">Publications</span>
+</nav>
+<div id="content" role="main">
+<section class="tex2jax_ignore mathjax_ignore" id="publications">
+<h1>Publications<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#publications"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h1>
+<section id="overview">
+<h2>Overview<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#overview" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#overview'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>This maintains a list of publications (journals, conferences, …) where IESopt was applied as part of the modeling
+approach. Entries are in chronological order. If you want to contribute a new publication or project, please follow the
+instructions in the <a class="reference internal" href="#contributing">section on contributing</a> below.</p>
+</section>
+<section id="list-of-references">
+<h2>List of references<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#list-of-references" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#list-of-references'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<section id="mariuzzo-et-al-2025">
+<h3>Mariuzzo, et al. (2025)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#mariuzzo-et-al-2025" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#mariuzzo-et-al-2025'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<span>
+<a href="https://doi.org/10.1016/j.rser.2024.115028" target="_blank"><img alt="Citation DOI" src="https://img.shields.io/badge/DOI-10.1016%2Fj.rser.2024.115028-white?style=flat&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+     
+    <a href="https://publications.ait.ac.at/de/publications/grid-friendly-optimization-of-energy-communities-through-enhanced" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+</span>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Factsheet</strong></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>title</p></td>
+<td><p>Grid-friendly optimization of energy communities through enhanced multiple participation</p></td>
+</tr>
+<tr class="row-odd"><td><p>project</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p>keywords</p></td>
+<td><p>Energy communities, Multiple participation, Linear programming, Peak load, Load shedding</p></td>
+</tr>
+<tr class="row-odd"><td><p>abstract</p></td>
+<td><p>Energy communities have been designed to promote sustainable development in the form of improved and affordable energy access, sustainable generation, and social inclusion. Thus, in this study, an optimization model is proposed to allocate the demand and production of each participant, generation unit, and storage initially belonging to different communities that are implemented under the same distribution transformer and engage in multiple participation. Both energy- and grid-related costs are minimized, and the benchmark independent energy community case is compared with the novel multiple participation.</p></td>
+</tr>
+<tr class="row-even"><td><p>citation</p></td>
+<td><p>Mariuzzo, I., Fina, B., Stroemer, S., Corinaldesi, C., &amp; Raugi, M. (2025). Grid-friendly optimization of energy communities through enhanced multiple participation. <em>Renewable and Sustainable Energy Reviews, 208</em>, 115028.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils"/>
+<section id="stromer-et-al-2024">
+<h3>Strömer, et al. (2024)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#stromer-et-al-2024" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#stromer-et-al-2024'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<span>
+<a href="https://doi.org/10.1109/OSMSES62085.2024.10668965" target="_blank"><img alt="Citation DOI" src="https://img.shields.io/badge/DOI-10.1109%2FOSMSES62085.2024.10668965-white?style=flat&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+     
+    <a href="https://publications.ait.ac.at/en/publications/iesopt-a-modular-framework-for-high-performance-energy-system-opt" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+</span>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Factsheet</strong></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>title</p></td>
+<td><p>IESopt: A Modular Framework for High-Performance Energy System Optimization</p></td>
+</tr>
+<tr class="row-odd"><td><p>project</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p>keywords</p></td>
+<td><p>energy system modeling, optimization framework, Julia, open-source-tool introduction</p></td>
+</tr>
+<tr class="row-odd"><td><p>abstract</p></td>
+<td><p>Current climatic, political, and societal challenges pose increasingly complex questions, which in turn require comprehensive models of the real world, with rapidly growing complexity, to support decision makers with sound and reliable quantitative analyses. The energy system optimization framework IESopt may constitute one piece in filling this gap, by offering a modular and adaptable tool for modelers, that does not compromise on performance while still being user-friendly. This is enabled by reducing energy system assets to abstract building blocks, that are supported by specialized implementation, and can be combined into complex systems without the need of a detailed understanding of mathematical modeling or proficiency in any coding-language. IESopt’s architecture and functionalities are laid out here, and demonstrated by the means of an illustrative example.</p></td>
+</tr>
+<tr class="row-even"><td><p>citation</p></td>
+<td><p>Strömer, S., &amp; Maggauer, K. (2024, September). IESopt: A Modular Framework for High-Performance Energy System Optimization. In <em>2024 Open Source Modelling and Simulation of Energy Systems (OSMSES)</em> (pp. 1-6). IEEE.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils"/>
+<section id="id1">
+<h3>Strömer, et al. (2024)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id1" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id1'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<span>
+<a href="https://publications.ait.ac.at/en/publications/modelling-the-future-hydrogen-system-insights-from-the-hydrogen-v" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+</span>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Factsheet</strong></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>title</p></td>
+<td><p>Modelling the Future Hydrogen System: Insights from the Hydrogen Valley “East Austria”</p></td>
+</tr>
+<tr class="row-odd"><td><p>project</p></td>
+<td><p><a class="reference internal" href="projects.html#references-projects-h2real"><span class="std std-ref">H2Real</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>keywords</p></td>
+<td><p>Hydrogen valleys, Infrastructure modelling, Energy system modelling, Optimisation</p></td>
+</tr>
+<tr class="row-odd"><td><p>abstract</p></td>
+<td><p>The ongoing project H2REAL, “Hydrogen Region East Austria goes Live”, aims to combine domain knowledge, existing assets, infrastructure, and real-world demonstrators, with scientific support to further develop the hydrogen infrastructure of Eastern Austria during the upcoming years. This work introduces the systemic modelling approach, undertaken as part of the project, that is used to analyse the emergence, transition, and to-be-achieved ideal design of the Austrian hydrogen infrastructure, that is indispensable to support imports, production, and transportation of hydrogen to wide range of customers.</p></td>
+</tr>
+<tr class="row-even"><td><p>citation</p></td>
+<td><p>Strömer, S., Reuter, S., Ortmann, P., &amp; Hasengst, F. (2024). Modelling the Future Hydrogen System: Insights from the Hydrogen Valley “East Austria”. <em>In NEFI Conference New Energy for Industry 2024 Proceedings</em> (pp. 26-28)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils"/>
+<section id="id2">
+<h3>Strömer, et al. (2024)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id2" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id2'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<span>
+<a href="https://doi.org/10.1016/j.segy.2024.100151" target="_blank"><img alt="Citation DOI" src="https://img.shields.io/badge/DOI-10.1016%2Fj.segy.2024.100151-white?style=flat&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+     
+    <a href="https://publications.ait.ac.at/en/publications/transitioning-to-a-renewable-hydrogen-system-optimal-infrastructu" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+</span>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Factsheet</strong></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>title</p></td>
+<td><p>Transitioning to a Renewable Hydrogen System: Optimal Infrastructure for Self-sufficient Hydrogen Supply in Austria by 2030</p></td>
+</tr>
+<tr class="row-odd"><td><p>project</p></td>
+<td><p><a class="reference internal" href="projects.html#references-projects-hytechonomy"><span class="std std-ref">HyTechonomy</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>keywords</p></td>
+<td><p>Hydrogen, Renewable energy, Infrastructure modeling, Energy system modeling, Optimization</p></td>
+</tr>
+<tr class="row-odd"><td><p>abstract</p></td>
+<td><p>In this study, we employ an optimization model to optimally design a self-sufficient, independent of any imports and exports, hydrogen infrastructure for Austria by 2030. Our approach integrates key hydrogen technologies within a detailed spatial investment and operation model – coupled with a European scale electricity market model. We focus on optimizing diverse infrastructure components including trailers, pipelines, electrolyzers, and storages to meet Austria’s projected hydrogen demand. To accurately estimate this demand in hourly resolution, we combine existing hydrogen strategies and projections to account for developments in various industrial sectors, consider demand driven by the transport sector, and integrate hydrogen demand arising from its use in gas-powered plants. Accounting for the inherent uncertainty linked to such projections, we run the analysis for two complementary scenarios. Our approach addresses the challenges of integrating large quantities of renewable hydrogen into a future energy system by recognizing the critical role of domestic production in the early market stages. The main contribution of this work is to address the gap in optimizing hydrogen infrastructure for effective integration of domestic renewable hydrogen production in Austria by 2030, considering sector coupling potentials, optimal electrolyzer placement, and the design of local hydrogen networks.</p></td>
+</tr>
+<tr class="row-even"><td><p>citation</p></td>
+<td><p>Strömer, S., Beck, A., Traninger, M., Orsolits, D., Reuter, S. (2024). Transitioning to a renewable hydrogen system: Optimal infrastructure for self-sufficient hydrogen supply in Austria by 2030. In <em>Smart Energy Volume 15 (2024)</em> (pp. 1-17).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils"/>
+<section id="ortmann-et-al-2024">
+<h3>Ortmann, et al. (2024)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#ortmann-et-al-2024" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#ortmann-et-al-2024'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<span>
+<a href="https://doi.org/10.1109/EEM60825.2024.10608856" target="_blank"><img alt="Citation DOI" src="https://img.shields.io/badge/DOI-10.1109%2FEEM60825.2024.10608856-white?style=flat&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+     
+    <a href="https://publications.ait.ac.at/en/publications/development-of-a-global-market-model-for-renewable-hydrogen" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+</span>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Factsheet</strong></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>title</p></td>
+<td><p>Development of a Global Market Model for Renewable Hydrogen</p></td>
+</tr>
+<tr class="row-odd"><td><p>project</p></td>
+<td><p><a class="reference internal" href="projects.html#references-projects-h2real"><span class="std std-ref">H2REAL</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>keywords</p></td>
+<td><p>Renewable energy sources, Energy Markt Modelling, Hydrogen Market, Hydrogen Price Projections, Renewable Hydrogen</p></td>
+</tr>
+<tr class="row-odd"><td><p>abstract</p></td>
+<td><p>Considerable effort has been devoted to obtaining price indications for renewable hydrogen, reflecting the high interest in this topic. The focus of the present work is to combine the existing fundamental data into a market model to find a cost-minimizing equilibrium solution for a hypothetical ideal global hydrogen market in 2030. By combining data on planned production projects with LCOH estimations, a supply curve can be constructed for each region. Demand for renewable hydrogen is derived from European regulation such as the Renewable Energy Directive. Equilibrium prices, including marginal costs for transportation via ship or pipeline, range between €2.5 and 3.5 €/kg. The cost-optimal solution of the model also provides insights on the most efficient production sites as well as transport flows. It is observable that anticipated European production is adequate to meet demand, with flows within Europe mainly occurring from the North to the South.</p></td>
+</tr>
+<tr class="row-even"><td><p>citation</p></td>
+<td><p>Ortmann, P., Reuter, S., &amp; Strömer, S. (2024). Development of a Global Market Model for Renewable Hydrogen. In <em>20th International Conference on the European Energy Market (EEM)</em>(pp. 1-6).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils"/>
+<section id="id3">
+<h3>Ortmann, et al. (2024)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#id3" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#id3'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<span>
+<a href="https://publications.ait.ac.at/de/publications/entwicklung-eines-globalen-marktmodells-f%C3%BCr-wasserstoff" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+</span>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Factsheet</strong></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>title</p></td>
+<td><p>Entwicklung eines globalen Marktmodells für Wasserstoff</p></td>
+</tr>
+<tr class="row-odd"><td><p>project</p></td>
+<td><p><a class="reference internal" href="projects.html#references-projects-h2real"><span class="std std-ref">H2REAL</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>keywords</p></td>
+<td><p>Wasserstoff, Erzeugungskosten, Marktmodell Wasserstoff</p></td>
+</tr>
+<tr class="row-odd"><td><p>abstract</p></td>
+<td><p>Wasserstoff wird einen essenziellen Bestandteil des zukünftigen Energiesystems darstellen. Derzeit liegen die Erzeugungskosten von grünem Wasserstoff deutlich über jenen von fossilen Alternativen. Vor allem in Mitteleuropa sind die Erzeugungspotentiale für grünen Wasserstoff beschränkt, weshalb der Import in einem wachsenden Markt eine zunehmende Rolle spielen wird. In vergangenen Arbeiten wurden die Erzeugungskosten an einzelnen Standorten ermittelt, gezielte Importrouten kalkuliert, Transportkosten abgeschätzt, oder das Flächenpotenzial zur H2-Erzeugung beurteilt. Die vorliegende Arbeit führt diese vorhandenen Fundamentaldaten in einem globalen Marktmodell zusammen, um eine kostenminimale Gleichgewichtslösung für den weltweiten Wasserstoffhandel zu finden.</p></td>
+</tr>
+<tr class="row-even"><td><p>citation</p></td>
+<td><p>Ortmann, P., Reuter, S., &amp; Strömer, S. (2024). Entwicklung eines globalen Marktmodells für Wasserstoff. <em>18. Symposium Energieinnovation (EnInnov 2024)</em>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils"/>
+<section id="patha-et-al-2024">
+<h3>Patha, et al. (2024)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#patha-et-al-2024" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#patha-et-al-2024'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<span>
+<a href="https://doi.org/10.34726/hss.2024.110543" target="_blank"><img alt="Citation DOI" src="https://img.shields.io/badge/DOI-10.34726%2Fhss.2024.110543-white?style=flat&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+     
+    <a href="https://publications.ait.ac.at/de/publications/techno-economic-assessment-of-pumped-storage-hydro-power-in-hybri" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+</span>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Factsheet</strong></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>title</p></td>
+<td><p>Techno-economic assessment of pumped storage hydro power in hybrid operation with floating photovoltaic and battery energy storage</p></td>
+</tr>
+<tr class="row-odd"><td><p>project</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p>keywords</p></td>
+<td><p>Floating PV, Techno-Economic Assessment, Pumped Storage Hydro Power</p></td>
+</tr>
+<tr class="row-odd"><td><p>abstract</p></td>
+<td><p>This thesis investigates the techno-economic impact of a floating PV system (FPV) and a battery energy storage system (BESS) in hybrid operation with pumped storage hydro power plants (PSHP) traded on the day-ahead market. It is assumed that FPV brings additional benefits to the PSHP by reducing evaporation and thus increasing the overall efficiency of the storage. Other advantages, such as sharing the grid connection and increasing the utilization of FPV generation by reducing curtailment, are also evaluated. A comparison is made between the binary and ternary operation of the PSHP, in which the ternary mode of operation increases operational flexibility. An existing storage power plant in central Sweden, for which Global Hydro provides specific data, is used as a reference for the PSHP. A steady-state simulation is used, which is optimized for trading on the day-ahead market. The simulation framework used for the technical model is the internal TESCA framework of the Austrian Institute of Technology (AIT), which is a Python-based tool for the techno-economic assessment of different technologies. The optimization model is a linearized abstraction implemented with the Julia-based optimization tool IESOpt of the AIT. The simulation is performed for different quantities of nominal FPV power, battery usable energy capacity and BESS storage duration (ratio of usable energy capacity and maximum discharge/charge power) within a parameter study to show the impact on the technical and economic key performance indicators. The levelized cost of energy (LCOE) and net present value (NPV) of the entire hybrid system are calculated for different weighted average costs of capital to assess the economic viability of the entire hybrid system. It is shown that the combined operation of FPV and PSHP can make better use of the limited grid connection capacity, as the FPV electricity can serve as input for the pumps. The BESS adds further storage capacity to store FPV generation and shift it via arbitrage to times of high energy prices. Overall, FPV and BESS increase the LCOE as the additional costs are not compensated by the energy surplus. The NPV is reduced by both technologies and makes the entire system economically nonviable for increasing nominal FPV power and BESS usable energy capacity.</p></td>
+</tr>
+<tr class="row-even"><td><p>citation</p></td>
+<td><p>Patha, A., Steinlechner S., Kathan J., Golab, A., Auer, H., (2024). Techno-economic assessment of pumped storage hydro power in hybrid operation with floating photovoltaic and battery energy storage [Diploma Thesis, Technische Universität Wien]. reposiTUm.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils"/>
+<section id="reuter-et-al-2023">
+<h3>Reuter, et al. (2023)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#reuter-et-al-2023" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#reuter-et-al-2023'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<span>
+<a href="https://publications.ait.ac.at/en/publications/optimizing-the-domestic-production-and-infrastructure-for-green-h" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+</span>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Factsheet</strong></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>title</p></td>
+<td><p>Optimizing the Domestic Production and Infrastructure for Green Hydrogen in Austria for 2030</p></td>
+</tr>
+<tr class="row-odd"><td><p>project</p></td>
+<td><p><a class="reference internal" href="projects.html#references-projects-hytechonomy"><span class="std std-ref">HyTechonomy</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>keywords</p></td>
+<td><p>Hydrogen infrastructure, Energy system modelling, centralised electrolysis, decentralised electrolysis</p></td>
+</tr>
+<tr class="row-odd"><td><p>abstract</p></td>
+<td><p>The decarbonisation of the Austrian energy system is expected to be facilitated by the uptake of hydrogen-based technologies, which requires the establishment of a hydrogen infrastructure to meet the rising demand. While large quantities of hydrogen are expected to be imported in the future, current developments in the energy market suggest that domestic production of hydrogen should not be ignored to ensure the security of supply. As domestic production ramps up, locating electrolysers to ensure optimal system integration is still an open question. To address this challenge, the “HyTechonomy” project developed an optimisation model that identifies the most promising domestic locations for green hydrogen production and optimal means of hydrogen transport for the year 2030.</p></td>
+</tr>
+<tr class="row-even"><td><p>citation</p></td>
+<td><p>Reuter, S., Strömer, S., Traninger, M., &amp; Beck, A. (2023, September). Optimizing the Domestic Production and Infrastructure for Green Hydrogen in Austria for 2030. In <em>Book of Abstracts: 9th International Conference on Smart Energy Systems</em> (pp. 278-279).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<hr class="docutils"/>
+<section id="marx-et-al-2023">
+<h3>Marx, et al. (2023)<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#marx-et-al-2023" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#marx-et-al-2023'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<span>
+<a href="https://publications.ait.ac.at/en/publications/heat-highway-heat-transmission-network-design-optimization-and-ro" target="_blank"><img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/></a>
+</span>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><strong>Factsheet</strong></p></th>
+<th class="head"><p></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>title</p></td>
+<td><p>Heat Highway - Heat Transmission Network Design Optimization and Robustness Analysis for a Case Study in Tyrol</p></td>
+</tr>
+<tr class="row-odd"><td><p>project</p></td>
+<td><p><a class="reference internal" href="projects.html#references-projects-heathighway"><span class="std std-ref">Heat Highway</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>keywords</p></td>
+<td><p>Future district heating, Waste heat sources, 4th generation DH, Heat transmission networks, Deterministic optimization, Monte Carlo simulation</p></td>
+</tr>
+<tr class="row-odd"><td><p>abstract</p></td>
+<td><p>The majority of district heating (DH) networks today are fueled by combustion processes based on fossil or biogenic fuels. For the decarbonization of DH networks various uncertainties regarding the future development of key factors, such as energy prices, need to be considered. Within the project “HeatHighway” a hypothetical inter-regional heat transfer network (HTN) in the region of the Inn valley in Tyrol, Austria was investigated.</p></td>
+</tr>
+<tr class="row-even"><td><p>citation</p></td>
+<td><p>Marx, N. O., Schmidt, R. R., Blakcori, R., Maggauer, K., Strömer, S., &amp; Forster, T. (2023). Heat Highway - Heat Transmission Network Design Optimization and Robustness Analysis for a Case Study in Tyrol. In <em>Book of Abstracts: 9th International Conference on Smart Energy Systems</em> (pp. 103-104).</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<hr class="docutils"/>
+<section id="contributing">
+<h2>Contributing<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#contributing" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#contributing'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h2>
+<p>To contribute a new reference, either</p>
+<ul class="simple">
+<li><p>fork the <a class="reference external" href="https://github.com/ait-energy/iesopt" rel="nofollow noopener">iesopt<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> repository, and directly add to the above list, or</p></li>
+<li><p>open an issue with the reference details.</p></li>
+</ul>
+<p>See the template below for the structure of a reference.</p>
+<section id="template">
+<h3>Template<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#template" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#template'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>Please stick to APA format here, and always include a link as badge (if possible a DOI, if not other links are okay
+too).</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="gu">### LastnameFirstAuthor, et al. (YYYY)</span>
+</span><span id="line-2">
+</span><span id="line-3">&lt;span&gt;
+</span><span id="line-4">    &lt;a href="doi-url-here" target="_blank"&gt;&lt;img alt="Citation DOI" src="https://img.shields.io/badge/DOI-10.XXXX%2Fname.YYYY.ZZZZZZ-white?style=flat&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/&gt;&lt;/a&gt;
+</span><span id="line-5">    &amp;nbsp;
+</span><span id="line-6">    &lt;a href="ait-pure-url-here" target="_blank"&gt;&lt;img alt="Citation PURE" src="https://img.shields.io/badge/PURE-publications.ait.ac.at-white?style=social&amp;labelColor=blue" style="display:inline; vertical-align:middle;"/&gt;&lt;/a&gt;
+</span><span id="line-7">&lt;/span&gt;
+</span><span id="line-8">
+</span><span id="line-9">| <span class="gs">**Factsheet**</span> |   |
+</span><span id="line-10">|---------------|---|
+</span><span id="line-11">| title         | put the full title here |
+</span><span id="line-12">| project       | [<span class="nt">Project (short) name</span>](<span class="na">#references-projects-shortname</span>) |
+</span><span id="line-13">| keywords      | put all keywords here |
+</span><span id="line-14">| abstract      | put the abstract here |
+</span><span id="line-15">| citation      | put the APA styled citation here |
+</span><span id="line-16">
+</span><span id="line-17">---
+</span></code></pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">project</span></code> can be left out if not applicable. Otherwise it should refer to a proper project link target, that is set.</p>
+</section>
+<section id="creating-citation-badges">
+<h3>Creating citation badges<a @click.prevent="window.navigator.clipboard.writeText($el.href); $el.setAttribute('data-tooltip', 'Copied!'); setTimeout(() =&gt; $el.setAttribute('data-tooltip', 'Copy link to this element'), 2000)" aria-label="Copy link to this element" class="headerlink" data-tooltip="Copy link to this element" href="#creating-citation-badges" x-intersect.margin.0%.0%.-70%.0%="activeSection = '#creating-citation-badges'"><svg height="1em" viewbox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></path></svg></a></h3>
+<p>You can use <a class="reference external" href="https://shields.io/badges" rel="nofollow noopener">shields.io<svg fill="currentColor" height="1em" stroke="none" viewbox="0 96 960 960" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M188 868q-11-11-11-28t11-28l436-436H400q-17 0-28.5-11.5T360 336q0-17 11.5-28.5T400 296h320q17 0 28.5 11.5T760 336v320q0 17-11.5 28.5T720 696q-17 0-28.5-11.5T680 656V432L244 868q-11 11-28 11t-28-11Z"></path></svg></a> to create badges, or use standardized ones that you already have
+(e.g., from Zenodo), otherwise stick to the ones provided in the template above (DOI and PURE).</p>
+</section>
+</section>
+</section>
+</div></div><aside class="hidden text-sm xl:block" id="right-sidebar">
+<div class="sticky top-16 -mt-10 max-h-[calc(100vh-5rem)] h-full overflow-y-auto pt-6 space-y-2"><p class="font-medium">On this page</p>
+<ul>
+<li><a :data-current="activeSection === '#overview'" class="reference internal" href="#overview">Overview</a></li>
+<li><a :data-current="activeSection === '#list-of-references'" class="reference internal" href="#list-of-references">List of references</a><ul>
+<li><a :data-current="activeSection === '#mariuzzo-et-al-2025'" class="reference internal" href="#mariuzzo-et-al-2025">Mariuzzo, et al. (2025)</a></li>
+<li><a :data-current="activeSection === '#stromer-et-al-2024'" class="reference internal" href="#stromer-et-al-2024">Strömer, et al. (2024)</a></li>
+<li><a :data-current="activeSection === '#id1'" class="reference internal" href="#id1">Strömer, et al. (2024)</a></li>
+<li><a :data-current="activeSection === '#id2'" class="reference internal" href="#id2">Strömer, et al. (2024)</a></li>
+<li><a :data-current="activeSection === '#ortmann-et-al-2024'" class="reference internal" href="#ortmann-et-al-2024">Ortmann, et al. (2024)</a></li>
+<li><a :data-current="activeSection === '#id3'" class="reference internal" href="#id3">Ortmann, et al. (2024)</a></li>
+<li><a :data-current="activeSection === '#patha-et-al-2024'" class="reference internal" href="#patha-et-al-2024">Patha, et al. (2024)</a></li>
+<li><a :data-current="activeSection === '#reuter-et-al-2023'" class="reference internal" href="#reuter-et-al-2023">Reuter, et al. (2023)</a></li>
+<li><a :data-current="activeSection === '#marx-et-al-2023'" class="reference internal" href="#marx-et-al-2023">Marx, et al. (2023)</a></li>
+</ul>
+</li>
+<li><a :data-current="activeSection === '#contributing'" class="reference internal" href="#contributing">Contributing</a><ul>
+<li><a :data-current="activeSection === '#template'" class="reference internal" href="#template">Template</a></li>
+<li><a :data-current="activeSection === '#creating-citation-badges'" class="reference internal" href="#creating-citation-badges">Creating citation badges</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+</div><footer class="py-6 border-t border-border md:py-0">
+<div class="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+<div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+<p class="text-sm leading-loose text-center text-muted-foreground md:text-left">© AIT Austrian Institute of Technology GmbH Built with <a class="font-medium underline underline-offset-4" href="https://www.sphinx-doc.org" rel="noreferrer">Sphinx 9.1.0</a></p>
+</div>
+</div>
+</footer>
+</div><button :class="{'opacity-0 invisible' : !showScrollTop}" @click="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-8 right-8 p-2 z-10 rounded-sm bg-gray-700 text-xs text-white transition-all duration-1000 hover:bg-gray-950 focus:bg-gray-950" id="scrolltop" x-cloak="">
+<svg aria-hidden="true" class="inline fill-current mb-[2px]" height="14" viewbox="0 96 960 960" width="14" xmlns="http://www.w3.org/2000/svg">
+<path d="M450 896V370L202 618l-42-42 320-320 320 320-42 42-248-248v526h-60Z"></path>
+</svg>
+  Back to top
+</button>
+<script src="../../_static/documentation_options.js?v=f5da64ed"></script>
+<script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+<script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+<script>let toggleHintShow = 'Click to show';</script>
+<script>let toggleHintHide = 'Click to hide';</script>
+<script>let toggleOpenOnPrint = 'true';</script>
+<script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+<script defer="defer" src="../../_static/theme.js?v=582b20c5"></script>
+<script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+</body>
+</html>

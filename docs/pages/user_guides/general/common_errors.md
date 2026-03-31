@@ -12,4 +12,11 @@ Errors that may occur when executing `import iesopt`.
   - '=1.12.5' at ...\\.venv\lib\site-packages\iesopt\juliapkg.json
   - '1.0.0 - 1.11' at ...\\.venv\lib\site-packages\juliacall\juliapkg.json (OpenSSL_jll)
   ```
-  Try installing Python via `uv` instead of the standard [Python Installer](https://www.python.org/downloads/release/pymanager-260/); this can be done, e.g., by running `uv python install 3.14 --force`. Currently, versions published directly by CPython come with an outdated `OpenSSL` version.
+  You can either:
+  1. Try installing Python via `uv` instead of the standard [Python Installer](https://www.python.org/downloads/release/pymanager-260/); this can be done, e.g., by running `uv python install 3.14 --force`. Currently, versions published directly by CPython come with an outdated `OpenSSL` version.  
+  2. Or (most likely better), try a general fix by telling `uv` to use only Python installations managed by them (instead of a global / system-wide CPython), by adding this to your `pyproject.toml`:  
+  ```toml
+  [tool.uv]
+  python-preference = "only-managed"
+  ```
+

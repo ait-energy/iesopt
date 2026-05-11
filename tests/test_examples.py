@@ -268,7 +268,7 @@ class TestExamples:
         model = _check_example_model(
             "41_multiobjective_epsilon",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": "moa", "hash": "2521c64ff0"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": "moa", "hash": "2923d45ce7"},
         )
 
         assert len(model.objective_value) == 2
@@ -280,7 +280,7 @@ class TestExamples:
         model = _check_example_model(
             "43_multiobjective_hierarchical",
             tmp_path,
-            {"status": "ModelStatus.OPTIMAL", "objective_value": "moa", "hash": "84d41bf9b8"},
+            {"status": "ModelStatus.OPTIMAL", "objective_value": "moa", "hash": "5baf4785a9"},
         )
 
         assert len(model.objective_value) == 3

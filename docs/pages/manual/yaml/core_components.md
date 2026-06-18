@@ -14,7 +14,7 @@ Their usage, and various internal details, are rather advanced and currently not
 
 ## Custom config for core components
 
-It can be useful to assign additional variables to a core component. For example, to give every unit of the same type a variable, so that you may use it in a single addon where you loop over all that units (marked by a tag).
+It can be useful to assign additional variables to a core component. For example, to give every unit of the same type a variable, so that you may use it in a single addon where you loop over all those units (marked by a tag).
 You can see this approach applied in the [CHP core template](https://github.com/ait-energy/IESopt.jl/blob/54c36a51dc8d57e686ecfeaec42abf8114f20819/assets/templates/CHP.iesopt.template.yaml#L44-L47).
 
 ```yaml
@@ -29,7 +29,7 @@ unit:
 
 ## Fixed cost of core components
 
-Although not relevant for the optimization, it can be convenient to be able to add fixed cost to a core component, e.g., the fixed operational cost of an existing unit. It will add this amount to the objective value. Look at example '46_constants_in_objective' to see it applied.
+Although not relevant for the optimization, it can be convenient to be able to add fixed costs to a core component, e.g., the fixed operational cost of an existing unit. It will add this amount to the objective value. Look at example [46_constants_in_objective](https://github.com/ait-energy/IESopt.jl/blob/54c36a51dc8d57e686ecfeaec42abf8114f20819/assets/examples/46_constants_in_objective.iesopt.yaml) to see it applied.
 
 ```yaml
 unit:

@@ -12,6 +12,44 @@ There exists a further type, called `Virtual`, that works almost exactly the sam
 Their usage, and various internal details, are rather advanced and currently not fully documented.
 :::
 
+## Enable core components
+
+You can assign an enable-parameter to switch core components on and off via bools. A disable-parameter is also available. Tip: Never mix both parameters in one project to not get confused by bools working in two directions.
+
+```yaml
+unit:
+  enabled: true
+  type: Unit
+  inputs: {}                    
+  outputs: {}                   
+  conversion: foo -> bar        
+  capacity: 5 out:electricity
+```
+
+You might want to use multiple bools, you can combine them using boolean operators according to [Julia syntax](https://docs.julialang.org/en/v1/manual/mathematical-operations/#Boolean-Operators).
+
+```yaml
+unit:
+  enabled: <enable_unit> && <enable_scenario>
+  type: Unit
+  inputs: {}                    
+  outputs: {}                   
+  conversion: foo -> bar        
+  capacity: 5 out:electricity
+```
+
+or using the disabled-syntax and further including a more complicated condition.
+
+```yaml
+unit:
+  disabled: !<enable_unit> || <mode> == "something"
+  type: Unit
+  inputs: {}                    
+  outputs: {}                   
+  conversion: foo -> bar        
+  capacity: 5 out:electricity
+```
+
 ## Custom config for core components
 
 It can be useful to assign additional variables to a core component. For example, to give every unit of the same type a variable, so that you may use it in a single addon where you loop over all those units (marked by a tag).

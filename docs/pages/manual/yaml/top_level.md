@@ -365,6 +365,10 @@ In the above example, the file `inputs_2023_base.csv` is linked to the name `dat
 Assuming that, in the above example, we call `data` the file's "descriptor" and `inputs_2023_base.csv` the file's "name", then make sure that **the descriptor does not start with an underscore**, and further only uses alphanumeric characters and underscores (so no `!`, `~`, or other "unexpected" special characters).
 :::
 
+:::{tip}
+You can ignore columns in the csv by putting a "$" in front of the respective column name. For example, it allows to include extra information (beyond model parameters) in the csv, which it otherwise could not since IESopt then complains about a column it does not understand or expect.
+:::
+
 #### `_csv_config`
 
 :::{caution}

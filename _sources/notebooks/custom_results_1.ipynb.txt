@@ -1,0 +1,1092 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Extracting results: Part I\n",
+    "\n",
+    "This tutorial showcases how results can be extracted, including how user defined templates are able to create new result\n",
+    "calculations."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "tags": [
+     "remove-stdout",
+     "remove-stderr"
+    ]
+   },
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "INFO:iesopt:Setting up Julia ...\n",
+      "[ Info: Now using Revise\n",
+      "INFO:iesopt:Julia setup successful\n",
+      "INFO:iesopt:Importing Julia module `IESoptLib`\n",
+      "INFO:iesopt:Importing Julia module `IESopt`\n"
+     ]
+    },
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Detected IPython. Loading juliacall extension. See https://juliapy.github.io/PythonCall.jl/stable/compat/#IPython\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "INFO:iesopt:Importing Julia module `JuMP`\n",
+      "INFO:iesopt:╔════════════════════════════════════════════════════════════════════════╗\n",
+      "INFO:iesopt:║            IESopt   «Integrated Energy System Optimization»            ║\n",
+      "INFO:iesopt:╟────────────────────────────────────────────────────────────────────────╢\n",
+      "INFO:iesopt:║   ╭────────────────────────────────────────────────────────────────╮   ║\n",
+      "INFO:iesopt:║   ├ authors: Stefan Strömer, Daniel Schwabeneder, and contributors │   ║\n",
+      "INFO:iesopt:║   ├ ©  2021: AIT Austrian Institute of Technology GmbH             │   ║\n",
+      "INFO:iesopt:║   ├    docs: https://ait-energy.github.io/iesopt                   │   ║\n",
+      "INFO:iesopt:║   ├ version: ┐                                                     │   ║\n",
+      "INFO:iesopt:║   │          ├─{ py  :: 1.0.0a3 }                                  │   ║\n",
+      "INFO:iesopt:║   │          ├─{ jl  :: 1.0.3   }                                  │   ║\n",
+      "INFO:iesopt:║   │          └─{ lib :: 0.2.0   }                                  │   ║\n",
+      "INFO:iesopt:║   ╰────────────────────────────────────────────────────────────────╯   ║\n",
+      "INFO:iesopt:╚════════════════════════════════════════════════════════════════════════╝\n"
+     ]
+    }
+   ],
+   "source": [
+    "import iesopt"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "INFO:iesopt:Data folder for examples already exists; NOT copying ANY contents\n",
+      "INFO:iesopt:Creating example ('48_custom_results') at: 'ex_custom_results/config.iesopt.yaml'\n",
+      "INFO:iesopt:Set write permissions for example ('ex_custom_results/config.iesopt.yaml'), and data folder ('ex_custom_results/files')\n"
+     ]
+    }
+   ],
+   "source": [
+    "config_file = iesopt.make_example(\n",
+    "    \"48_custom_results\", dst_dir=\"ex_custom_results\", dst_name=\"config\"\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model = iesopt.run(config_file)\n",
+    "\n",
+    "assert model.status == iesopt.ModelStatus.OPTIMAL"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Accessing model results: Objectives\n",
+    "\n",
+    "The objective of your model - after a successful solve - can be extracted using:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "981.1745152354571"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.objective_value"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "It may however be the case, that you have registered multiple objective functions (which can be used for multi-objective\n",
+    "algorithms, or even be useful just for analysis purposes). You can get their value by their name. The default objective\n",
+    "is always called `total_cost` and is the only one guaranteed to always exist. We can check which objectives are registered:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "dict_keys(['total_cost'])"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.results.objectives.keys()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "And get the value of `total_cost` (which should match the one obtained from `model.objective_value` for this example):"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "981.1745152354571"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.results.objectives[\"total_cost\"]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Accessing model results: Variables\n",
+    "\n",
+    "Three different ways to access the results of our custom storage component `storage`:"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Direct access"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,\n",
+       "        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,\n",
+       "       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,\n",
+       "       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,\n",
+       "        3.57894737,  3.47368421,  0.94736842,  0.52631579])"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.results.components[\"storage\"].exp.setpoint"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "> Accessing dual information:\n",
+    "> ```python\n",
+    "> model.results.components[\"grid\"].con.nodalbalance__dual\n",
+    "> ```"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Access using `get(...)`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,\n",
+       "        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,\n",
+       "       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,\n",
+       "       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,\n",
+       "        3.57894737,  3.47368421,  0.94736842,  0.52631579])"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model.results.get(\"component\", \"storage\", \"exp\", \"setpoint\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "> Accessing dual information:\n",
+    "> ```python\n",
+    "> model.results.get(\"component\", \"grid\", \"con\", \"nodalbalance\", mode=\"dual\")\n",
+    "> ```"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Collective results"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Using `to_dict(...)`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,\n",
+       "        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,\n",
+       "       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,\n",
+       "       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,\n",
+       "        3.57894737,  3.47368421,  0.94736842,  0.52631579])"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "results = model.results.to_dict()\n",
+    "\n",
+    "results[(\"storage\", \"exp\", \"setpoint\")]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "> Accessing dual information:\n",
+    "> ```python\n",
+    "> results[(\"grid\", \"con\", \"nodalbalance__dual\")]\n",
+    "> ```"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "> Note: You can filter the results returned by `to_dict(...)` in exactly the same way as when using `to_pandas(...)` (\n",
+    "> see below). However, this is uncommon to be useful, since you most likely want to work with tabular data anyways when\n",
+    "> using the filter function, which is why we skip it here."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Using `to_pandas(...)`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,\n",
+       "        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,\n",
+       "       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,\n",
+       "       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,\n",
+       "        3.57894737,  3.47368421,  0.94736842,  0.52631579])"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df = model.results.to_pandas()\n",
+    "\n",
+    "df.loc[\n",
+    "    (\n",
+    "        (df[\"component\"] == \"storage\")\n",
+    "        & (df[\"fieldtype\"] == \"exp\")\n",
+    "        & (df[\"field\"] == \"setpoint\")\n",
+    "        & (df[\"mode\"] == \"primal\")\n",
+    "    ),\n",
+    "    \"value\",\n",
+    "].values"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "t1   -3.656510\n",
+       "t2    3.473684\n",
+       "t3   -0.997230\n",
+       "t4    0.947368\n",
+       "t5    0.000000\n",
+       "Name: (storage, res, setpoint), dtype: float64"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "series = model.results.to_pandas(\n",
+    "    lambda c, t, f: c == \"storage\" and t == \"exp\" and f == \"setpoint\"\n",
+    ")\n",
+    "series.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We could actually only filter for the component (`c == \"storage\"`), since this is the only result that it creates."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "t1   -3.656510\n",
+       "t2    3.473684\n",
+       "t3   -0.997230\n",
+       "t4    0.947368\n",
+       "t5    0.000000\n",
+       "Name: (storage, res, setpoint), dtype: float64"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "series = model.results.to_pandas(lambda c, t, f: c == \"storage\")\n",
+    "series.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This may however be dangerous, since a similar call\n",
+    "\n",
+    "```python\n",
+    "model.results.to_pandas(lambda c,t,f: c == \"grid\")\n",
+    "```\n",
+    "\n",
+    "would then suddenly return a `pd.DataFrame`, since it contains two different results (try it out!) linked to the\n",
+    "component `grid`."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "> Accessing dual information (part I):\n",
+    ">\n",
+    "> ```python\n",
+    "> model.results.to_pandas(lambda c,t,f: c == \"grid\" and t == \"con\")\n",
+    "> ```\n",
+    ">\n",
+    "> This works, since the model only contains a single result linked to constraints of the component `grid`. However, this\n",
+    "> may again be dangerous, which is why you could instead make use of something like\n",
+    ">\n",
+    "> ```python\n",
+    "> df = model.results.to_pandas()\n",
+    "> df[df[\"mode\"] == \"dual\"]\n",
+    "> ```\n",
+    ">\n",
+    "> _Note that this extracts ALL dual results, not only those for the component used above, but again `to_pandas(...)` is\n",
+    "> mostly there to extract more than one result at the same time (we cover \"Which way should I use below?\")._"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "---\n",
+    "\n",
+    "You may now wonder - since it all looks the same - what `to_pandas(...)` could be useful for. It's main usage is\n",
+    "extracting more than one result in one call:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead tr th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>storage.storage</th>\n",
+       "      <th>demand</th>\n",
+       "      <th>grid</th>\n",
+       "      <th>generator</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>exp</th>\n",
+       "      <th>exp</th>\n",
+       "      <th>exp</th>\n",
+       "      <th>exp</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>injection</th>\n",
+       "      <th>value</th>\n",
+       "      <th>injection</th>\n",
+       "      <th>out_electricity</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>t1</th>\n",
+       "      <td>3.473684</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>4.440892e-16</td>\n",
+       "      <td>7.65651</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t2</th>\n",
+       "      <td>-3.473684</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>-1.110223e-16</td>\n",
+       "      <td>0.70000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t3</th>\n",
+       "      <td>0.947368</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>2.220446e-16</td>\n",
+       "      <td>4.99723</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t4</th>\n",
+       "      <td>-0.947368</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>0.000000e+00</td>\n",
+       "      <td>3.10000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t5</th>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>0.000000e+00</td>\n",
+       "      <td>4.00000</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   storage.storage demand          grid       generator\n",
+       "               exp    exp           exp             exp\n",
+       "         injection  value     injection out_electricity\n",
+       "t1        3.473684    4.0  4.440892e-16         7.65651\n",
+       "t2       -3.473684    4.0 -1.110223e-16         0.70000\n",
+       "t3        0.947368    4.0  2.220446e-16         4.99723\n",
+       "t4       -0.947368    4.0  0.000000e+00         3.10000\n",
+       "t5        0.000000    4.0  0.000000e+00         4.00000"
+      ]
+     },
+     "execution_count": 28,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df = model.results.to_pandas(field_types=\"exp\", orientation=\"wide\")\n",
+    "df.head(5)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Which result extraction should I use?\n",
+    "\n",
+    "As a basic guide you can use the following logic to decide how to extract results. Are you:\n",
+    "\n",
+    "1. Looking for a single result of a component? Extract it similar to `model.results.components[\"storage\"].exp.setpoint`.\n",
+    "2. Looking for multiple results of a component (e.g., all objective terms created by a single `Unit`), or similar results of multiple components (e.g., electricity generation of all generators)? Make use of `to_pandas(...)`, applying a specific filter, and either using `orientation = \"long\"` (the default), or `orientation = \"wide\"`.\n",
+    "\n",
+    "---\n",
+    "\n",
+    "**Advanced usage:** _Looking for a single result of a component at a time, but doing it repeatedly for a single run (= extracting a single result from component `A`, then one from component `B`, and  so on)?_\n",
+    "\n",
+    "Then use the `to_dict(...)` function and then extract your results similar to `model.to_dict()[(\"storage\", \"exp\", \"setpoint\")]`. Compared to (1.) this has the advantage of caching results during the first call to `to_dict(...)`, and being able to only extract specific results if correctly filtered. **Pay attention to why, when, and how you use this, since improper usage may be way slower than directly accessing your results as explained above."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Loading results from file\n",
+    "\n",
+    "The example that we have used until now, does not write any results to a file. To load results from file in later\n",
+    "program runs, we therefore need to enable writing to a file and re-solve the model. \n",
+    "\n",
+    "For that, edit the top-level config file, and change\n",
+    "\n",
+    "```yaml\n",
+    "config:\n",
+    "  # ...\n",
+    "  results:\n",
+    "    enabled: true\n",
+    "    memory_only: true\n",
+    "```\n",
+    "\n",
+    "to\n",
+    "\n",
+    "```yaml\n",
+    "config:\n",
+    "  # ...\n",
+    "  results:\n",
+    "    enabled: true\n",
+    "    memory_only: false       # <-- change here!\n",
+    "\n",
+    "Now run the model once more to create the result output file"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "tags": [
+     "remove-output"
+    ]
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "An IESopt model:\n",
+       "\tname: CustomResults\n",
+       "\tsolver: HiGHS\n",
+       "\t\n",
+       "\t96 variables, 170 constraints\n",
+       "\tstatus: OPTIMAL"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model = iesopt.run(\"ex_custom_results/config.iesopt.yaml\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "This will create an IESopt result file `SomeScenario.iesopt.result.jld2` inside the\n",
+    "`ex_custom_results/out/CustomResults/` folder, which contains all results. This can be used to analyse results at a\n",
+    "later time. To prevent losing information it tries to extract _**all**_ results - which may be time intensive, but\n",
+    "ensures that you do not forget to extract something, to only realise later that you miss it.\n",
+    "\n",
+    "We can now load this file using"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "results = iesopt.Results(\n",
+    "    file=\"ex_custom_results/out/CustomResults/SomeScenario.iesopt.result.jld2\"\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now, you can use exactly the same code that we have already walked through, c.f. {ref}`Accessing model results: Variables`, just by\n",
+    "replacing every access to `model.results` by `results`."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### File results: Direct access"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,\n",
+       "        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,\n",
+       "       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,\n",
+       "       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,\n",
+       "        3.57894737,  3.47368421,  0.94736842,  0.52631579])"
+      ]
+     },
+     "execution_count": 21,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# instead of\n",
+    "#   `model.results.components[\"storage\"].exp.setpoint`\n",
+    "# we now use:\n",
+    "\n",
+    "results.components[\"storage\"].exp.setpoint"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### File results: Access using `get(...)`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,\n",
+       "        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,\n",
+       "       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,\n",
+       "       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,\n",
+       "        3.57894737,  3.47368421,  0.94736842,  0.52631579])"
+      ]
+     },
+     "execution_count": 20,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "results.get(\"component\", \"storage\", \"exp\", \"setpoint\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### File results: Collective results"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### File results: Using `to_dict(...)`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([-3.6565097 ,  3.47368421, -0.99722992,  0.94736842,  0.        ,\n",
+       "        0.        ,  0.        , -5.6       ,  0.        , -0.1       ,\n",
+       "       -1.50221607,  3.47368421,  2.63157895,  0.31578947,  0.42105263,\n",
+       "       -3.46149584,  0.        ,  0.84210526, -2.4       , -4.        ,\n",
+       "        3.57894737,  3.47368421,  0.94736842,  0.52631579])"
+      ]
+     },
+     "execution_count": 22,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "result_dict = results.to_dict()\n",
+    "result_dict[(\"storage\", \"exp\", \"setpoint\")]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### File results: Using `to_pandas(...)`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead tr th {\n",
+       "        text-align: left;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>storage.storage</th>\n",
+       "      <th>demand</th>\n",
+       "      <th>grid</th>\n",
+       "      <th>generator</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>exp</th>\n",
+       "      <th>exp</th>\n",
+       "      <th>exp</th>\n",
+       "      <th>exp</th>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th></th>\n",
+       "      <th>injection</th>\n",
+       "      <th>value</th>\n",
+       "      <th>injection</th>\n",
+       "      <th>out_electricity</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>t1</th>\n",
+       "      <td>3.473684</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>4.440892e-16</td>\n",
+       "      <td>7.65651</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t2</th>\n",
+       "      <td>-3.473684</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>-1.110223e-16</td>\n",
+       "      <td>0.70000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t3</th>\n",
+       "      <td>0.947368</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>2.220446e-16</td>\n",
+       "      <td>4.99723</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t4</th>\n",
+       "      <td>-0.947368</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>0.000000e+00</td>\n",
+       "      <td>3.10000</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>t5</th>\n",
+       "      <td>0.000000</td>\n",
+       "      <td>4.0</td>\n",
+       "      <td>0.000000e+00</td>\n",
+       "      <td>4.00000</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   storage.storage demand          grid       generator\n",
+       "               exp    exp           exp             exp\n",
+       "         injection  value     injection out_electricity\n",
+       "t1        3.473684    4.0  4.440892e-16         7.65651\n",
+       "t2       -3.473684    4.0 -1.110223e-16         0.70000\n",
+       "t3        0.947368    4.0  2.220446e-16         4.99723\n",
+       "t4       -0.947368    4.0  0.000000e+00         3.10000\n",
+       "t5        0.000000    4.0  0.000000e+00         4.00000"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "df = results.to_pandas(field_types=\"exp\", orientation=\"wide\")\n",
+    "df.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Calling into Julia\n",
+    "\n",
+    "You should probably never need the following, but you can also manually access the `results` data `Struct` inside the\n",
+    "Julia model to extract some results. For an optimized model (not for results loaded from a file!), this could be done\n",
+    "using"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "my_result = (\n",
+    "    model.core.ext[iesopt.Symbol(\"iesopt\")].results.components[\"storage\"].exp.setpoint\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Observe that"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "juliacall.VectorValue"
+      ]
+     },
+     "execution_count": 22,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "type(my_result)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "which shows that the other modes of result extraction take care of a proper Julia-to-Python conversion for you already.\n",
+    "Further, you can then"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "5-element view(::Vector{Float64}, 1:1:5) with eltype Float64:\n",
+       " -3.656509695290859\n",
+       "  3.473684210526316\n",
+       " -0.997229916897507\n",
+       "  0.9473684210526315\n",
+       "  0.0"
+      ]
+     },
+     "execution_count": 23,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "my_result[:5]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "which, as you see, returns an actual `view` into the `Vector{Float64}`, indexed using the Julia range `1:1:5` (given by\n",
+    "the Python range `:5`). But"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "5-element view(::Vector{Float64}, 1:1:5) with eltype Float64:\n",
+       " -3.656509695290859\n",
+       "  3.473684210526316\n",
+       " -0.997229916897507\n",
+       "  0.9473684210526315\n",
+       "  0.0"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "my_result[0:5]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "makes it clear, that the wrapper we use automatically translates between 0-based (Python) and 1-based (Julia) indexing,\n",
+    "which may become confusing and error-prone when thinking about a Julia `Vector` but accessing the first entry using"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "-3.656509695290859"
+      ]
+     },
+     "execution_count": 25,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "my_result[0]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "> Accessing dual information (part I):\n",
+    ">\n",
+    "> ```python\n",
+    "> model.core.ext[iesopt.Symbol(\"iesopt\")].results.components[\"grid\"].con.nodalbalance__dual\n",
+    "> ```"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "iesopt",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.9"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

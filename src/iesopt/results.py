@@ -58,7 +58,7 @@ class Results:
     _valid_attrs: ClassVar = ["attributes", "model", "custom", "input", "info", "snapshots", "components"]
 
     @validate_call
-    def __init__(self, *, file: str = None, model=None):
+    def __init__(self, *, file: str | None = None, model=None):
         """
         Create a new `Results` object, either from a file or from an IESopt model. Make sure to pass either a file or a
         model explicitly using a keyword argument.

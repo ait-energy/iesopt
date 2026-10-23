@@ -173,7 +173,7 @@ class Results:
             raise ValueError("Invalid mode, must be either 'both', 'primal', or 'dual'")
 
     @validate_call
-    def entries(self, field: str = None):
+    def entries(self, field: str | None = None):
         """
         Get all available entries for a specific field, or all fields if `field` is `None`.
 

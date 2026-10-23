@@ -246,7 +246,7 @@ class Results:
         _dict = self.to_dict(filter, field_types, build_cache)
 
         # Check if we can cast to `pd.Series` (no matter the orientation).
-        _result_types = set(type(it) for it in _dict.values())
+        _result_types = {type(it) for it in _dict.values()}
         if len(_result_types) == 1:
             _rt = _result_types.pop()
             if _rt in [int, float]:

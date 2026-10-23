@@ -8,16 +8,16 @@ def jl_safe_seval(code: str):
     try:
         return get_iesopt_module_attr("julia").seval(code)
     except Exception as e:
-        logger.error("Exception while trying to execute Julia code: `%s`" % code)
-        logger.error("Exception: `%s`" % str(e))
-        logger.error("Exception details: `%s`" % getattr(e, "exception", "missing"))
+        logger.error(f"Exception while trying to execute Julia code: `{code}`")
+        logger.error(f"Exception: `{e!s}`")
+        logger.error("Exception details: `{}`".format(getattr(e, "exception", "missing")))
 
     return None
 
 
 def jl_import(module: str):
     """Import a Julia module."""
-    logger.info("    %s" % module)
+    logger.info(f"    {module}")
     jl_safe_seval(f"import {module}")
 
 

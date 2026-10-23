@@ -226,7 +226,7 @@ class Model:
             else:
                 self._IESopt.compute_IIS(self.core, filename=str(filename))
         except Exception as e:
-            logger.error("Error while computing IIS: `%s`" % str(e.args[0]))
+            logger.error(f"Error while computing IIS: `{e.args[0]!s}`")
 
     @property
     def results(self) -> Results:

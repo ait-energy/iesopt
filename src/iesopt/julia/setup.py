@@ -69,7 +69,7 @@ def _handle_env_vars():
 
 def _handle_sysimage(sysimage: Path):
     if sysimage.exists():
-        logger.info("    Using custom sysimage: %s" % str(sysimage))
+        logger.info(f"    Using custom sysimage: {sysimage!s}")
         os.environ["PYTHON_JULIACALL_SYSIMAGE"] = str(sysimage)
     else:
         logger.info("    Using default sysimage")
@@ -109,11 +109,11 @@ def use_existing_julia_environment(sysimage: Path):
             logger.warning(
                 " It seems we are running on a cluster; if you encounter an error related to 'GLIBCXX_*.*.*, "
                 + "or 'Unable to load dependent library', please manually set the LD_LIBRARY_PATH environment "
-                + "variable (e.g., by using 'export LD_LIBRARY_PATH=\"...\"')to: '%s'." % libdir
+                + f"variable (e.g., by using 'export LD_LIBRARY_PATH=\"...\"')to: '{libdir}'."
             )
 
-    logger.info("    Executable: %s" % juliapkg.executable())
-    logger.info("    Project: %s" % juliapkg.project())
+    logger.info(f"    Executable: {juliapkg.executable()}")
+    logger.info(f"    Project: {juliapkg.project()}")
     os.environ["PYTHON_JULIACALL_BINDIR"] = str(Path(juliapkg.executable()).parent)
 
     import juliacall
@@ -162,8 +162,9 @@ def setup_julia(target: Path, sysimage: Path):
     if "JULIA_SSL_CA_ROOTS_PATH" in os.environ:
         if os.environ["JULIA_SSL_CA_ROOTS_PATH"] != "":
             logger.info(
-                "Overwriting the env. variable `JULIA_SSL_CA_ROOTS_PATH` (current: `%s`) to prevent SSL issues during the Julia setup"
-                % str(os.environ["JULIA_SSL_CA_ROOTS_PATH"])
+                "Overwriting the env. variable `JULIA_SSL_CA_ROOTS_PATH` (current: `{}`) to prevent SSL issues during the Julia setup".format(
+                    str(os.environ["JULIA_SSL_CA_ROOTS_PATH"])
+                )
             )
             os.environ["JULIA_SSL_CA_ROOTS_PATH"] = ""
     else:
@@ -180,9 +181,9 @@ def setup_julia(target: Path, sysimage: Path):
     for f in all_deps_files:
         f, p = Path(f), Path(f).parent
         if any((p.stem == el[0] and f.stem == el[1]) for el in allowed_deps_files):
-            logger.debug("   Detected valid `juliapkg.json` file: '%s'" % f)
+            logger.debug(f"   Detected valid `juliapkg.json` file: '{f}'")
             continue
-        logger.warning("Detected invalid `juliapkg.json` file, renaming to render it stale: '%s'" % f)
+        logger.warning(f"Detected invalid `juliapkg.json` file, renaming to render it stale: '{f}'")
         f.rename(f.with_suffix(".json.DISABLED"))
 
     # Set Julia version.
@@ -208,8 +209,8 @@ def setup_julia(target: Path, sysimage: Path):
     _handle_env_vars()
     _handle_sysimage(sysimage)
 
-    logger.info("    Executable: %s" % juliapkg.executable())
-    logger.info("    Project: %s" % juliapkg.project())
+    logger.info(f"    Executable: {juliapkg.executable()}")
+    logger.info(f"    Project: {juliapkg.project()}")
 
     # Try to find out if we are running on an old cluster, that might have issues with GLIBC.
     if sys.platform == "linux":
@@ -219,7 +220,7 @@ def setup_julia(target: Path, sysimage: Path):
             logger.warning(
                 " It seems we are running on a cluster; if you encounter an error related to 'GLIBCXX_*.*.*, "
                 + "or 'Unable to load dependent library', please manually set the LD_LIBRARY_PATH environment "
-                + "variable (e.g., by using 'export LD_LIBRARY_PATH=\"...\"')to: '%s'." % libdir
+                + f"variable (e.g., by using 'export LD_LIBRARY_PATH=\"...\"')to: '{libdir}'."
             )
 
     os.environ["PYTHON_JULIACALL_BINDIR"] = str(Path(juliapkg.executable()).parent)

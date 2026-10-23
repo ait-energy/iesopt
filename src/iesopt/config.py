@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from dotenv import dotenv_values
 
 
@@ -11,7 +13,7 @@ def _strtobool(val: str):
 
 
 class Config:
-    DEFAULTS = {
+    DEFAULTS: ClassVar[dict[str, str]] = {
         "IESOPT_JULIA": "1.12.6",
         "IESOPT_CORE": "https://github.com/ait-energy/IESopt.jl#v2.11.0",
         "IESOPT_JUMP": "1.30.1",

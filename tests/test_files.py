@@ -1,5 +1,6 @@
-import iesopt
 from pathlib import Path
+
+import iesopt
 
 
 class TestExamples:

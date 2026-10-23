@@ -1,6 +1,6 @@
-import iesopt
 from pathlib import Path
 
+import iesopt
 
 # Make sure we are using the latest version.
 # This is necessary to pull in changes that may be present when an `.env` file with

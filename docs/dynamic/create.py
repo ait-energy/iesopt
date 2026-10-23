@@ -1,6 +1,6 @@
-import iesopt
 from pathlib import Path
 
+import iesopt
 
 DYNAMIC = Path(__file__).parent
 

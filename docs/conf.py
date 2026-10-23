@@ -1,9 +1,8 @@
+import importlib.metadata
 import sys
 from pathlib import Path
-import importlib.metadata
 
 from sphinxawesome_theme.postprocess import Icons
-
 
 # -- Setup -------------------------------------------------------------------
 
@@ -23,7 +22,7 @@ if len(CREATE_DYNAMIC_DOCSTRINGS) > 0:
 
     ddcreate.create_md(CREATE_DYNAMIC_DOCSTRINGS)
 
-import docs.dynamic.core as ddcore  # noqa: E402
+import docs.dynamic.core as ddcore
 
 ddcore._dyn_core_create_md("Connection")
 ddcore._dyn_core_create_md("Decision")
@@ -31,7 +30,7 @@ ddcore._dyn_core_create_md("Node")
 ddcore._dyn_core_create_md("Profile")
 ddcore._dyn_core_create_md("Unit")
 
-import docs.dynamic.julia  # noqa: E402, F401
+import docs.dynamic.julia  # noqa: F401
 
 # -- General -----------------------------------------------------------------
 

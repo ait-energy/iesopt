@@ -1,11 +1,11 @@
 import os
+import ssl
 import sys
 from pathlib import Path
-import ssl
 
+from ..config import Config
 from ..util import logger
 from .util import jl_import
-from ..config import Config
 
 
 def lookup_package(name: str):

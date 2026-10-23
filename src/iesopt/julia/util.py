@@ -1,5 +1,6 @@
 import pandas as pd
-from ..util import logger, get_iesopt_module_attr
+
+from ..util import get_iesopt_module_attr, logger
 
 
 def jl_safe_seval(code: str):

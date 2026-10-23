@@ -1,6 +1,5 @@
 import iesopt
 
-
 add_obj_threshold_constraint = iesopt.IESopt.seval("""
 function (model, obj, ub)
     JuMP.@constraint(model, internal(model).model.objectives[obj].expr <= ub)

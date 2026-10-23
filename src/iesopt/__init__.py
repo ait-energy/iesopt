@@ -1,5 +1,5 @@
-import os
 import importlib.metadata
+import os
 from pathlib import Path
 
 # Set version.
@@ -36,46 +36,45 @@ JuMP = None
 
 def jump_value(item):
     """Calls `JuMP.value.(item)`."""
-    pass
 
 
 def jump_dual(item):
     """Calls `JuMP.dual.(item)`."""
-    pass
 
 
 def jump_reduced_cost(item):
     """Calls `JuMP.reduced_cost.(item)`."""
-    pass
 
 
 def jump_shadow_price(item):
     """Calls `JuMP.shadow_price.(item)`."""
-    pass
 
 
 def get_jl_docstr(obj: str):
     """Get the documentation string of a Julia object inside the IESopt module."""
-    pass
 
 
 # =======================================================================
 
 # Setup Julia.
-from .julia import initialize as _initialize_everything  # noqa: E402
-from .util import get_iesopt_module_attr as _get_iesopt_module_attr  # noqa: E402
+from .julia import initialize as _initialize_everything
+from .util import get_iesopt_module_attr as _get_iesopt_module_attr
 
 julia = _initialize_everything(
     __target__, __sysimage__, reuse_julia_env=os.environ.get("IESOPT_REUSE_JULIA_ENV", "no") == "yes"
 )
 
 # Export everything.
-from iesopt.model import Model as Model, ModelStatus as ModelStatus  # noqa: E402
-from iesopt.results import Results as Results  # noqa: E402
-from iesopt.iesopt import run as run, examples as examples, make_example as make_example  # noqa: E402
+from iesopt.iesopt import examples as examples
+from iesopt.iesopt import make_example as make_example
+from iesopt.iesopt import run as run
+from iesopt.model import Model as Model
+from iesopt.model import ModelStatus as ModelStatus
+from iesopt.results import Results as Results
 
-from .julia.util import jl_symbol as jl_symbol, jl_docs  # noqa: E402
-from .julia import jl_isa as jl_isa  # noqa: E402
+from .julia import jl_isa as jl_isa
+from .julia.util import jl_docs
+from .julia.util import jl_symbol as jl_symbol
 
 Symbol = jl_symbol
 

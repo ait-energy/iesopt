@@ -1,9 +1,9 @@
-import os
 import importlib.metadata
+import os
 from pathlib import Path
 
 from ..util import logger, set_iesopt_module_attr
-from .setup import setup_julia, import_modules, use_existing_julia_environment
+from .setup import import_modules, setup_julia, use_existing_julia_environment
 
 
 def initialize(target: Path, sysimage: Path, *, reuse_julia_env: bool = False):

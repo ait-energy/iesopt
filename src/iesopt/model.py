@@ -2,9 +2,9 @@ from enum import Enum
 from pathlib import Path
 from warnings import warn
 
-from .util import logger, get_iesopt_module_attr
-from .julia.util import jl_symbol, recursive_convert_py2jl, jl_safe_seval
+from .julia.util import jl_safe_seval, jl_symbol, recursive_convert_py2jl
 from .results import Results
+from .util import get_iesopt_module_attr, logger
 
 
 class ModelStatus(Enum):

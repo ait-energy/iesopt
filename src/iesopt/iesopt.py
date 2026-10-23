@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from .util import logger, get_iesopt_module_attr
 from .model import Model, ModelStatus
+from .util import get_iesopt_module_attr, logger
 
 
 def run(filename: str | Path, **kwargs) -> Model:
@@ -71,8 +71,8 @@ def make_example(example: str, dst_dir: str | Path = "./", dst_name: str | None 
     Returns:
         Path to the generated example file.
     """
-    import shutil
     import os
+    import shutil
     import stat
 
     julia = get_iesopt_module_attr("julia")

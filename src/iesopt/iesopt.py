@@ -91,13 +91,11 @@ def make_example(example: str, dst_dir: str | Path = "./", dst_name: str | None 
         logger.info("Data folder for examples already exists; NOT copying ANY contents")
 
     # Copy the config file.
-    logger.info("Creating example ('%s') at: '%s'" % (example, target_filename))
+    logger.info(f"Creating example ('{example}') at: '{target_filename}'")
     shutil.copy(filename, target_filename)
 
     # Make everything editable.
-    logger.info(
-        "Set write permissions for example ('%s'), and data folder ('%s')" % (target_filename, target_datafolder)
-    )
+    logger.info(f"Set write permissions for example ('{target_filename}'), and data folder ('{target_datafolder}')")
     os.chmod(target_filename, os.stat(target_filename).st_mode & ~stat.S_IWRITE | stat.S_IWUSR)
     for dirpath, _, filenames in os.walk(target_datafolder):
         os.chmod(dirpath, os.stat(dirpath).st_mode & ~stat.S_IWRITE | stat.S_IWUSR)

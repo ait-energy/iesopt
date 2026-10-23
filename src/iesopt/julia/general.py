@@ -26,7 +26,9 @@ def initialize(target: Path, sysimage: Path, *, reuse_julia_env: bool = False):
 
     import_modules()
     logger.info(
-        "Loaded versions: py=%s, jl=%s" % (importlib.metadata.version("iesopt"), str(julia.pkgversion(julia.IESopt)))
+        "Loaded versions: py={}, jl={}".format(
+            importlib.metadata.version("iesopt"), str(julia.pkgversion(julia.IESopt))
+        )
     )
 
     set_iesopt_module_attr("IESopt", julia.IESopt)

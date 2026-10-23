@@ -9,7 +9,7 @@ def _strtobool(val: str):
         return 1
     if val in ("n", "no", "f", "false", "off", "0"):
         return 0
-    raise ValueError("Invalid truth value %r" % (val,))
+    raise ValueError(f"Invalid truth value {val!r}")
 
 
 class Config:

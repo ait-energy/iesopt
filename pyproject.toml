@@ -65,6 +65,12 @@ line-length = 120
 extend-exclude = ["*.jl"]
 target-version = "py313"
 
+[tool.ruff.lint]
+ignore = [
+    "BLE001", # Do not catch blind exception: `Exception`
+    "TRY002", # Create your own exception
+]
+
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",

@@ -248,7 +248,7 @@ class Model:
                 t = getattr(c, fieldtype)
                 f = getattr(t, field)
                 break
-            except Exception:
+            except Exception:  # noqa: S110
                 pass
 
         if f is None:

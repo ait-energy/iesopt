@@ -46,7 +46,7 @@ class Config:
 
     @classmethod
     def find(cls, prefix: str):
-        for k in cls._config.keys():
+        for k in cls._config:
             if k.startswith(prefix):
                 yield k
 

@@ -1,5 +1,6 @@
 import re
 import warnings
+from typing import ClassVar
 
 import numpy as np
 import pandas as pd
@@ -54,7 +55,7 @@ class JuliaCallPyConvertReadWrapper:
 
 
 class Results:
-    _valid_attrs = ["attributes", "model", "custom", "input", "info", "snapshots", "components"]
+    _valid_attrs: ClassVar = ["attributes", "model", "custom", "input", "info", "snapshots", "components"]
 
     @validate_call
     def __init__(self, *, file: str = None, model=None):

@@ -1,8 +1,11 @@
 # See: DocumenterInterLinks.jl
 # > https://github.com/JuliaDocs/DocumenterInterLinks.jl/
 # >     "sphinx-to-documenter-links"
+from typing import ClassVar
+
 from sphinx.domains import Domain, ObjType
 from sphinx.roles import XRefRole
+from sphinx.util.typing import RoleFunction
 
 
 class JuliaDomain(Domain):
@@ -10,7 +13,7 @@ class JuliaDomain(Domain):
 
     name = "jl"
     label = "Julia"
-    object_types = {
+    object_types: ClassVar[dict[str, ObjType]] = {
         # name => (localized name, *roles)
         "macro": ObjType("macro", "macro", "obj"),
         "keyword": ObjType("keyword", "keyword", "obj"),
@@ -21,7 +24,7 @@ class JuliaDomain(Domain):
         "constant": ObjType("constant", "const", "constant", "obj"),
     }
 
-    roles = {
+    roles: ClassVar[dict[str, RoleFunction]] = {
         "macro": XRefRole(),
         "keyword": XRefRole(),
         "function": XRefRole(fix_parens=True),

@@ -252,17 +252,15 @@ class Results:
             if _rt in [int, float]:
                 return pd.Series(_dict)
 
-            if _rt == np.ndarray:
-                if len(_dict) == 1:
-                    k, v = next(iter(_dict.items()))
+            if _rt == np.ndarray and len(_dict) == 1:
+                k, v = next(iter(_dict.items()))
 
-                    if isinstance(v, int | float):
-                        return pd.Series(v, index=k)
+                if isinstance(v, int | float):
+                    return pd.Series(v, index=k)
 
-                    value_shape = v.shape
-                    if len(value_shape) == 1:
-                        if value_shape[0] == len(self._snapshots):
-                            return pd.Series(v, index=self._snapshots, name=k)
+                value_shape = v.shape
+                if len(value_shape) == 1 and value_shape[0] == len(self._snapshots):
+                    return pd.Series(v, index=self._snapshots, name=k)
 
             if orientation == "wide":
                 return pd.DataFrame(_dict, index=self._snapshots)

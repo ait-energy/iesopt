@@ -210,14 +210,14 @@ class Results:
 
         entries = {}
         if self._cache is None:
-            for c in self._model["components"].keys():
+            for c in self._model["components"]:
                 for t in field_types:
                     container = getattr(self._model["components"][c], t)
                     for f in [str(it) for it in self._julia.Main.keys(container)]:
                         if (filter is None) or filter(c, t, f):
                             entries[(c, t, f)] = Results._safe_convert(getattr(container, f))
         else:
-            for c, t, f in self._cache.keys():
+            for c, t, f in self._cache:
                 if (t in field_types) and ((filter is None) or filter(c, t, f)):
                     entries[(c, t, f)] = self._cache[(c, t, f)]
 
@@ -402,7 +402,7 @@ class Results:
         results = self._IESopt.ResultsJLD2.load_results(file)
 
         result_entries = ddict({})
-        for key in results.keys():
+        for key in results:
             _current = result_entries
             _keys = key.split("/")
             for i in range(len(_keys)):
@@ -412,7 +412,7 @@ class Results:
                     _current[_keys[i]] = _current.get(_keys[i], ddict({}))
                     _current = _current[_keys[i]]
 
-        for key in result_entries.keys():
+        for key in result_entries:
             if hasattr(self, f"_{key}"):
                 if getattr(self, f"_{key}") is None:
                     setattr(self, f"_{key}", result_entries[key])

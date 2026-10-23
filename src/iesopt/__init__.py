@@ -65,6 +65,8 @@ julia = _initialize_everything(
 )
 
 # Export everything.
+import sys
+
 from iesopt.iesopt import examples as examples
 from iesopt.iesopt import make_example as make_example
 from iesopt.iesopt import run as run
@@ -107,4 +109,4 @@ def create_sysimage():
     )
 
     print("Successfully created sysimage; launch your script/code again to use it")
-    exit(0)
+    sys.exit(0)

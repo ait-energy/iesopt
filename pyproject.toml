@@ -67,6 +67,7 @@ target-version = "py313"
 
 [tool.ruff.lint]
 ignore = [
+    "E402", # Module level import not at top of file
     "BLE001", # Do not catch blind exception: `Exception`
     "TRY002", # Create your own exception
 ]

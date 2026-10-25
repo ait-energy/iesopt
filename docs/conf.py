@@ -4,15 +4,15 @@ from pathlib import Path
 
 from sphinxawesome_theme.postprocess import Icons
 
-import docs.dynamic.core as ddcore
-import docs.dynamic.julia  # noqa: F401
-
 # -- Setup -------------------------------------------------------------------
 
 DOCS = Path(__file__).parent
 sys.path.insert(0, str((DOCS / "_extensions").resolve()))
 sys.path.insert(0, str((DOCS / ".." / "src").resolve()))
 sys.path.insert(0, str((DOCS / "..").resolve()))
+
+import docs.dynamic.core as ddcore  # noqa: E402
+import docs.dynamic.julia  # noqa: E402, F401
 
 CREATE_DYNAMIC_DOCSTRINGS = [
     # ("test", "getfield", "some_foo(...)")

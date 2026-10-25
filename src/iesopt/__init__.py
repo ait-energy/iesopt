@@ -1,6 +1,20 @@
 import importlib.metadata
 import os
+import sys
 from pathlib import Path
+
+from iesopt.iesopt import examples as examples
+from iesopt.iesopt import make_example as make_example
+from iesopt.iesopt import run as run
+from iesopt.model import Model as Model
+from iesopt.model import ModelStatus as ModelStatus
+from iesopt.results import Results as Results
+
+from .julia import initialize as _initialize_everything
+from .julia import jl_isa as jl_isa
+from .julia.util import jl_docs
+from .julia.util import jl_symbol as jl_symbol
+from .util import get_iesopt_module_attr as _get_iesopt_module_attr
 
 # Set version.
 __version__ = importlib.metadata.version("iesopt")
@@ -57,26 +71,10 @@ def get_jl_docstr(obj: str):
 # =======================================================================
 
 # Setup Julia.
-from .julia import initialize as _initialize_everything
-from .util import get_iesopt_module_attr as _get_iesopt_module_attr
-
 julia = _initialize_everything(
     __target__, __sysimage__, reuse_julia_env=os.environ.get("IESOPT_REUSE_JULIA_ENV", "no") == "yes"
 )
 
-# Export everything.
-import sys
-
-from iesopt.iesopt import examples as examples
-from iesopt.iesopt import make_example as make_example
-from iesopt.iesopt import run as run
-from iesopt.model import Model as Model
-from iesopt.model import ModelStatus as ModelStatus
-from iesopt.results import Results as Results
-
-from .julia import jl_isa as jl_isa
-from .julia.util import jl_docs
-from .julia.util import jl_symbol as jl_symbol
 
 Symbol = jl_symbol
 

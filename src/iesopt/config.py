@@ -14,7 +14,7 @@ def _strtobool(val: str):
 
 class Config:
     DEFAULTS: ClassVar[dict[str, str]] = {
-        "IESOPT_JULIA": "1.13.2",
+        "IESOPT_JULIA": "1.13.3",
         "IESOPT_CORE": "https://github.com/ait-energy/IESopt.jl#v2.12.0",
         "IESOPT_JUMP": "1.32.1",
         "IESOPT_SOLVER_HIGHS": "1.26.1",

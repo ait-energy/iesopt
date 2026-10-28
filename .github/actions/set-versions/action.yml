@@ -10,5 +10,5 @@ runs:
 
     - name: "set Julia version"
       shell: bash
-      run: echo "VERSION_JULIA=1.13.2" >> $GITHUB_ENV
+      run: echo "VERSION_JULIA=1.13.3" >> $GITHUB_ENV
 

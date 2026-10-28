@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from dotenv import dotenv_values
 
 
@@ -7,11 +9,11 @@ def _strtobool(val: str):
         return 1
     if val in ("n", "no", "f", "false", "off", "0"):
         return 0
-    raise ValueError("Invalid truth value %r" % (val,))
+    raise ValueError(f"Invalid truth value {val!r}")
 
 
 class Config:
-    DEFAULTS = {
+    DEFAULTS: ClassVar[dict[str, str]] = {
         "IESOPT_JULIA": "1.12.6",
         "IESOPT_CORE": "https://github.com/ait-energy/IESopt.jl#v2.11.0",
         "IESOPT_JUMP": "1.30.1",
@@ -44,7 +46,7 @@ class Config:
 
     @classmethod
     def find(cls, prefix: str):
-        for k in cls._config.keys():
+        for k in cls._config:
             if k.startswith(prefix):
                 yield k
 

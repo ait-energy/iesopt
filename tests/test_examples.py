@@ -1,7 +1,8 @@
-import iesopt
+import hashlib
 
 import pandas as pd
-import hashlib
+
+import iesopt
 
 
 def _check_example_model(name: str, dst_dir, checks: dict, mode: str = "check"):

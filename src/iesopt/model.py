@@ -2,9 +2,9 @@ from enum import Enum
 from pathlib import Path
 from warnings import warn
 
-from .util import logger, get_iesopt_module_attr
-from .julia.util import jl_symbol, recursive_convert_py2jl, jl_safe_seval
+from .julia.util import jl_safe_seval, jl_symbol, recursive_convert_py2jl
 from .results import Results
+from .util import get_iesopt_module_attr, logger
 
 
 class ModelStatus(Enum):
@@ -226,7 +226,7 @@ class Model:
             else:
                 self._IESopt.compute_IIS(self.core, filename=str(filename))
         except Exception as e:
-            logger.error("Error while computing IIS: `%s`" % str(e.args[0]))
+            logger.error(f"Error while computing IIS: `{e.args[0]!s}`")
 
     @property
     def results(self) -> Results:
@@ -248,7 +248,7 @@ class Model:
                 t = getattr(c, fieldtype)
                 f = getattr(t, field)
                 break
-            except Exception:
+            except Exception:  # noqa: S110
                 pass
 
         if f is None:

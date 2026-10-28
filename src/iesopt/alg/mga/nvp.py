@@ -13,7 +13,7 @@ except ImportError:
 
 from ...model import Model
 from ..algorithm import Algorithm
-from .util import set_weighted_objective, add_obj_threshold_constraint
+from .util import add_obj_threshold_constraint, set_weighted_objective
 
 
 # Calculate the normal vector pointing inward the convex hull

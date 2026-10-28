@@ -1,7 +1,8 @@
-import pytest
-import re
 import os
+import re
 from unittest import mock
+
+import pytest
 
 
 @mock.patch.dict(os.environ, {"IESOPT_DOCS_NOEXEC": "True"})
@@ -13,7 +14,7 @@ def test_julia_ci_version_consistent_with_python_package(project_root_path):
     # parse the CI action that sets the julia version
     julia_ci = "unknown"
     with open(f"{project_root_path}/.github/actions/set-versions/action.yml") as f:
-        for line in f.readlines():
+        for line in f:
             if "VERSION_JULIA" in line:
                 julia_ci = re.search('.*VERSION_JULIA=(.*)"', line).group(1)
                 break

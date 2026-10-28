@@ -1,11 +1,13 @@
-import warnings
 import re
-import pandas as pd
+import warnings
+from typing import ClassVar
+
 import numpy as np
+import pandas as pd
 from pydantic import validate_call
 
-from .util import get_iesopt_module_attr
 from .julia import jl_isa
+from .util import get_iesopt_module_attr
 
 
 class ddict(dict):
@@ -53,10 +55,10 @@ class JuliaCallPyConvertReadWrapper:
 
 
 class Results:
-    _valid_attrs = ["attributes", "model", "custom", "input", "info", "snapshots", "components"]
+    _valid_attrs: ClassVar = ["attributes", "model", "custom", "input", "info", "snapshots", "components"]
 
     @validate_call
-    def __init__(self, *, file: str = None, model=None):
+    def __init__(self, *, file: str | None = None, model=None):
         """
         Create a new `Results` object, either from a file or from an IESopt model. Make sure to pass either a file or a
         model explicitly using a keyword argument.
@@ -171,7 +173,7 @@ class Results:
             raise ValueError("Invalid mode, must be either 'both', 'primal', or 'dual'")
 
     @validate_call
-    def entries(self, field: str = None):
+    def entries(self, field: str | None = None):
         """
         Get all available entries for a specific field, or all fields if `field` is `None`.
 
@@ -208,14 +210,14 @@ class Results:
 
         entries = {}
         if self._cache is None:
-            for c in self._model["components"].keys():
+            for c in self._model["components"]:
                 for t in field_types:
                     container = getattr(self._model["components"][c], t)
                     for f in [str(it) for it in self._julia.Main.keys(container)]:
                         if (filter is None) or filter(c, t, f):
                             entries[(c, t, f)] = Results._safe_convert(getattr(container, f))
         else:
-            for c, t, f in self._cache.keys():
+            for c, t, f in self._cache:
                 if (t in field_types) and ((filter is None) or filter(c, t, f)):
                     entries[(c, t, f)] = self._cache[(c, t, f)]
 
@@ -244,23 +246,21 @@ class Results:
         _dict = self.to_dict(filter, field_types, build_cache)
 
         # Check if we can cast to `pd.Series` (no matter the orientation).
-        _result_types = set(type(it) for it in _dict.values())
+        _result_types = {type(it) for it in _dict.values()}
         if len(_result_types) == 1:
             _rt = _result_types.pop()
             if _rt in [int, float]:
                 return pd.Series(_dict)
 
-            if _rt == np.ndarray:
-                if len(_dict) == 1:
-                    k, v = next(iter(_dict.items()))
+            if _rt == np.ndarray and len(_dict) == 1:
+                k, v = next(iter(_dict.items()))
 
-                    if isinstance(v, int | float):
-                        return pd.Series(v, index=k)
+                if isinstance(v, int | float):
+                    return pd.Series(v, index=k)
 
-                    value_shape = v.shape
-                    if len(value_shape) == 1:
-                        if value_shape[0] == len(self._snapshots):
-                            return pd.Series(v, index=self._snapshots, name=k)
+                value_shape = v.shape
+                if len(value_shape) == 1 and value_shape[0] == len(self._snapshots):
+                    return pd.Series(v, index=self._snapshots, name=k)
 
             if orientation == "wide":
                 return pd.DataFrame(_dict, index=self._snapshots)
@@ -400,7 +400,7 @@ class Results:
         results = self._IESopt.ResultsJLD2.load_results(file)
 
         result_entries = ddict({})
-        for key in results.keys():
+        for key in results:
             _current = result_entries
             _keys = key.split("/")
             for i in range(len(_keys)):
@@ -410,7 +410,7 @@ class Results:
                     _current[_keys[i]] = _current.get(_keys[i], ddict({}))
                     _current = _current[_keys[i]]
 
-        for key in result_entries.keys():
+        for key in result_entries:
             if hasattr(self, f"_{key}"):
                 if getattr(self, f"_{key}") is None:
                     setattr(self, f"_{key}", result_entries[key])

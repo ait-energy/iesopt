@@ -114,7 +114,6 @@ def use_existing_julia_environment(sysimage: Path):
 
     logger.info(f"    Executable: {juliapkg.executable()}")
     logger.info(f"    Project: {juliapkg.project()}")
-    os.environ["PYTHON_JULIACALL_BINDIR"] = str(Path(juliapkg.executable()).parent)
 
     import juliacall
 
@@ -222,8 +221,6 @@ def setup_julia(target: Path, sysimage: Path):
                 + "or 'Unable to load dependent library', please manually set the LD_LIBRARY_PATH environment "
                 + f"variable (e.g., by using 'export LD_LIBRARY_PATH=\"...\"')to: '{libdir}'."
             )
-
-    os.environ["PYTHON_JULIACALL_BINDIR"] = str(Path(juliapkg.executable()).parent)
 
     import juliacall
 

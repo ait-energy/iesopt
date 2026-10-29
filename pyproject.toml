@@ -25,8 +25,8 @@ dependencies = [
     "pydantic >= 2.7.4",
     "python-dotenv >= 1.0.1",
     # the Julia dependencies are intentionally pinned!
-    "juliacall == 0.9.31",
-    "juliapkg == 0.1.22",
+    "juliacall == 0.9.37",
+    "juliapkg == 0.1.28",
 ]
 
 [project.urls]

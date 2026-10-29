@@ -71,11 +71,11 @@ wheels = [
 
 [[package]]
 name = "cachetools"
-version = "7.2.6"
+version = "7.2.7"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/f2/0f/e02be8857e0fc519a12337568f0bf4b0aad4f3a95d7303e9e9d9fbcca8c2/cachetools-7.2.6.tar.gz", hash = "sha256:1096513bdeed468ba505df3d123e4578a5a22c955f4a9ba3912fd71f3f95363a", size = 46662, upload-time = "2026-10-26T21:46:43.818Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/40/3a/bce69b9ecf4658dcd3599abe5122a9031386f8f94bd85c6525fca9109db7/cachetools-7.2.7.tar.gz", hash = "sha256:e2154c809ce9e1247120258c36821467597b5663d44c3255a9790785f23c2b1e", size = 47240, upload-time = "2026-10-28T22:15:17.189Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/53/98/c8201d54b354857a3050a52751ca482eb143c404b387ab2c41a0f981b610/cachetools-7.2.6-py3-none-any.whl", hash = "sha256:8722e08fc36ae0838a9a0a2ab9935554720de3343a62dad7aae7c595854c8623", size = 19523, upload-time = "2026-10-26T21:46:42.277Z" },
+    { url = "https://files.pythonhosted.org/packages/dc/68/211287b89b122a6842b3f078ffecc5a2abd3c0e4362748586f765e2fb3c5/cachetools-7.2.7-py3-none-any.whl", hash = "sha256:88e6b53373a96786d20894fed9ce623ae5b73cbc07421b7a73098db088be69ae", size = 19654, upload-time = "2026-10-28T22:15:15.555Z" },
 ]
 
 [[package]]
@@ -466,11 +466,11 @@ wheels = [
 
 [[package]]
 name = "filelock"
-version = "3.32.7"
+version = "4.2.4"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/0f/59/e19834834cb01a32febfbb0f8a23a9088088f5d45991824ff2bc3b5e8acb/filelock-3.32.7.tar.gz", hash = "sha256:37b8a3d9811b0f9aef7e5ec5c71bb320de52df51e6ca9bcd6f5ad81187660da7", size = 225154, upload-time = "2026-09-16T00:24:20.907Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d8/28/3893324bcadf8f89b1616637468d766af3f625008c0735bf704fdfa86617/filelock-4.2.4.tar.gz", hash = "sha256:c6d8663535e1650ee430507b4ffbac7b464dd64b7647ea0112a9f406499d163d", size = 652444, upload-time = "2026-10-19T01:57:51.001Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/15/df/31098c5aeb4d966b553641472bd55fcf5fdfac953549894b8a765ba44e91/filelock-3.32.7-py3-none-any.whl", hash = "sha256:65ff0d0190ea42038b32bda4b77834fb05be2cad4c5b9b01aa4dfb3614536e52", size = 100157, upload-time = "2026-09-16T00:24:19.543Z" },
+    { url = "https://files.pythonhosted.org/packages/e0/1b/5e74289a1878e666bb4b65fe5805a04cafcac2aa5f519ef1ead67ef91c56/filelock-4.2.4-py3-none-any.whl", hash = "sha256:301241438c57936ef93f4243a94f2559022268bfcf9b375a9a72eb0f8db8358e", size = 162475, upload-time = "2026-10-19T01:57:49.419Z" },
 ]
 
 [[package]]
@@ -524,8 +524,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "juliacall", specifier = "==0.9.31" },
-    { name = "juliapkg", specifier = "==0.1.22" },
+    { name = "juliacall", specifier = "==0.9.37" },
+    { name = "juliapkg", specifier = "==0.1.28" },
     { name = "pandas", specifier = ">=2.0,<3.0" },
     { name = "pathlib", specifier = ">=1.0.0" },
     { name = "pydantic", specifier = ">=2.7.4" },
@@ -705,19 +705,19 @@ wheels = [
 
 [[package]]
 name = "juliacall"
-version = "0.9.31"
+version = "0.9.37"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "juliapkg" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ca/4a/39d774d53281ada1ccaac599646637e779192e688808228e8943a2b0ca77/juliacall-0.9.31.tar.gz", hash = "sha256:2b5c6abdde0b34d14ef2874e3cb82547700a142fdd8376d96f310b44efb412c2", size = 495355, upload-time = "2025-12-17T13:17:45.66Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e4/8e/bf4fdb7bcb077747ba0031bea51023e559476c0ab7fc8ba8ea0d59a608eb/juliacall-0.9.37.tar.gz", hash = "sha256:246db2ec648cd50dcd446d02323e0b187949a2ab50e06e32fe6db1a4323eba75", size = 502805, upload-time = "2026-10-19T19:03:30.597Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/14/1d/d6d77bd84c5261a5cbcb17e5000527d0f895e512545bd442caf28a7e3336/juliacall-0.9.31-py3-none-any.whl", hash = "sha256:171dd97489a855336558c49fea2eb26dcbeb1ddb1344acaddf99fff2a5a1b9ad", size = 12260, upload-time = "2025-12-17T13:17:42.677Z" },
+    { url = "https://files.pythonhosted.org/packages/d2/fc/97ba79312c411bb25e31ea460b7080b2da932c884086967e5d06ddf80107/juliacall-0.9.37-py3-none-any.whl", hash = "sha256:e8413f2081e77c04a4ba379bdb93620c0753bd7bc335127773c318ce3526b1b9", size = 12774, upload-time = "2026-10-19T19:03:29.144Z" },
 ]
 
 [[package]]
 name = "juliapkg"
-version = "0.1.22"
+version = "0.1.28"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "filelock" },
@@ -725,9 +725,9 @@ dependencies = [
     { name = "tomli" },
     { name = "tomlkit" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ce/fe/1e329a4244855924d1130138625860b57e8f94397a0357a9d4cd66fd50a7/juliapkg-0.1.22.tar.gz", hash = "sha256:4358d8853a4e741a73906737ae433ae2f4c6e00f4f7969512d90880c0e22aae6", size = 23462, upload-time = "2025-10-08T20:04:37.62Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ce/b1/965f7b066df488d7328fb448cf09b5647d2958266742e8e124239135c9fb/juliapkg-0.1.28.tar.gz", hash = "sha256:24f3ca545263e090f57521f47900bbb94ee7ebc9d91c55c82e4148aaf1b58e36", size = 27403, upload-time = "2026-10-24T21:24:35.341Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/39/6e/361d176cc94ccb8aac22a39677e146a91406005f8f6bb098b15606c523f6/juliapkg-0.1.22-py3-none-any.whl", hash = "sha256:fc197c21087345e296036190c769b888f7701bf1fb47d7036a20d01221ec550a", size = 21860, upload-time = "2025-10-08T20:04:36.389Z" },
+    { url = "https://files.pythonhosted.org/packages/b8/18/5b8ebec81b05ce0bf355118992cdb94a97cdfe19e60662f99e2059e61b73/juliapkg-0.1.28-py3-none-any.whl", hash = "sha256:e09640eb5d3465eda0ea40fda912048cc06f34e1a3880eb9e46f4e2c836d8d48", size = 23609, upload-time = "2026-10-24T21:24:34.26Z" },
 ]
 
 [[package]]
@@ -1176,11 +1176,11 @@ wheels = [
 
 [[package]]
 name = "platformdirs"
-version = "4.13.7"
+version = "4.14.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/35/e9/bf409046a91b6a9ca652e9b0ac3c39481674f6774e23e58b52315516099a/platformdirs-4.13.7.tar.gz", hash = "sha256:f7f351c027d6632c30471124e1fdb6ac0fef9ccc5cbac1b34cb333431b1fc3e1", size = 63906, upload-time = "2026-10-28T05:49:31.898Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/40/28/1c058a9143d2304b3078f8dadcbb9dc27f7d3581b5d05157c84869c4cc0d/platformdirs-4.14.0.tar.gz", hash = "sha256:83f009c1e8c5fc36869b5171755b291887bd2cade7965233cdfabd23d754720b", size = 70387, upload-time = "2026-10-28T18:27:30.973Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/46/ff/8ed4a836cbf7de39708a2d305d6b67575990908d072bc3565dd8ad71748e/platformdirs-4.13.7-py3-none-any.whl", hash = "sha256:47664602fbecad0a6efa561fb690d20dbc26875fe8aedf65ba362935df619bbb", size = 33111, upload-time = "2026-10-28T05:49:30.545Z" },
+    { url = "https://files.pythonhosted.org/packages/69/2b/887969ef4bb53e0cb271dc7c3f4a73d50c5d58bb88aeaae311e3340cd57e/platformdirs-4.14.0-py3-none-any.whl", hash = "sha256:1dadfc59a8a5d7565b3d9270ae8fa71c065595352c4277b41c11ee6c222c4b91", size = 35259, upload-time = "2026-10-28T18:27:29.659Z" },
 ]
 
 [[package]]
@@ -2028,11 +2028,11 @@ wheels = [
 
 [[package]]
 name = "tomlkit"
-version = "0.13.3"
+version = "0.15.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/cc/18/0bbf3884e9eaa38819ebe46a7bd25dcd56b67434402b66a58c4b8e552575/tomlkit-0.13.3.tar.gz", hash = "sha256:430cf247ee57df2b94ee3fbe588e71d362a941ebb545dec29b53961d61add2a1", size = 185207, upload-time = "2025-06-05T07:13:44.947Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/08/72/fc01563df95c189a9f65850096bdc205bc2fe37da6c740cd64afaf18d07e/tomlkit-0.15.2.tar.gz", hash = "sha256:83e32755ba1d20d9340bd069ee97e9f6232ba2346b63ffcba425de01f7e327a6", size = 190522, upload-time = "2026-10-16T04:07:08.166Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bd/75/8539d011f6be8e29f339c42e633aae3cb73bffa95dd0f9adec09b9c58e85/tomlkit-0.13.3-py3-none-any.whl", hash = "sha256:c89c649d79ee40629a9fda55f8ace8c6a1b42deb912b2a8fd8d942ddadb606b0", size = 38901, upload-time = "2025-06-05T07:13:43.546Z" },
+    { url = "https://files.pythonhosted.org/packages/da/46/7d84138a60a8bd796825b2d38ebe92d0d16501ca57d501b7c5d677401bbc/tomlkit-0.15.2-py3-none-any.whl", hash = "sha256:05562412163a3037b94497385fb7f9204c637bc605af7a48199e41cf2272f437", size = 52225, upload-time = "2026-10-16T04:07:09.216Z" },
 ]
 
 [[package]]

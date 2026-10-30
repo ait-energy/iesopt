@@ -1,0 +1,372 @@
+# Decision
+
+```{note}
+This section of the documentation is auto-generated from the code of the Julia-based core model. Refer to [IESopt.jl](https://github.com/ait-energy/IESopt.jl) for any further details (which may require some familiarity with Julia).
+
+**If you spot incorrect math-mode rendering**, or similar issues, please [file an issue](https://github.com/ait-energy/iesopt/issues), since rendering documentation from Julia to Python is not the easiest task.
+```
+
+## Overview
+
+A `Decision` represents a basic decision variable in the model that can be used as input for various other core component's settings, as well as have associated costs.
+
+
+## Parameters
+
+### `lb`
+
+Minimum size of the decision value (considered for each "unit" if count allows multiple "units").
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** -
+
+
+### `ub`
+
+Maximum size of the decision value (considered for each "unit" if count allows multiple "units").
+
+- **mandatory:** no
+- **default:** $+\infty$
+- **values:** numeric
+- **unit:** -
+
+
+### `cost`
+
+Cost that the decision value induces, given as ``cost \cdot value``.
+
+- **mandatory:** no
+- **default:** $0$
+- **values:** numeric
+- **unit:** monetary (per value)
+
+
+### `fixed_value`
+
+If `mode: fixed`, this value is used as the fixed value of the decision. This can be useful if this `Decision` was used in a previous optimization and its value should be fixed to that value in the next optimization (applying it where ever it is used, instead of needing to find all usages). Furthermore, this allows extracting the dual value of the constraint that fixes the value, assisting in approaches like Benders decomposition. Note that this does not change the induced cost in any way.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** numeric
+- **unit:** -
+
+
+### `fixed_cost`
+
+This setting activates a "fixed cost" component for this decision variable, which requires that the model's problem type allows for binary variables (e.g., `MILP`). This can be used to model fixed costs that are only incurred if the decision variable is active (e.g., a fixed cost for an investment that is only incurred if the investment is made). If the decision is `0`, no fixed costs have to be paid; however, if the decision is greater than `0`, the fixed cost is incurred. Note that after deciding to activate the decision, the overall value is still determined in the usual (continuous) way, incuring the (variable) `cost` as well. More complex cost functions can be modelled by switching to mode `sos1` or `sos2` and using the `sos` parameter.
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** -
+- **unit:** monetary
+
+
+### `mode`
+
+Type of the decision variable that is constructed. `linear` results in a continuous decision, `integer` results in a integer variable, `binary` constrains it to be either `0` or `1`. `sos1` and `sos2` can be used to activate SOS1 or SOS2 mode (used for piecewise linear costs). See `fixed_value` if setting this to `fixed`.
+
+- **mandatory:** no
+- **default:** $linear$
+- **values:** `linear`, `binary`, `integer`, `sos1`, `sos2`, `fixed`
+- **unit:** -
+
+
+### `sos`
+
+TODO (meanwhile, refer to the SOS or PiecewiseLinearCost example).
+
+- **mandatory:** no
+- **default:** $-$
+- **values:** list
+- **unit:** -
+
+
+### `build_priority`
+
+Priority for the build order of components. Components with higher build_priority are built before. This can be useful for addons, that connect multiple components and rely on specific components being initialized before others.
+
+- **mandatory:** no
+- **default:** $1000$
+- **values:** numeric
+- **unit:** -
+
+
+## Detailed reference
+
+
+### Expressions
+
+### Variables
+
+#### `fixed`
+
+:::{admonition} How to access this variable?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_decision").var.fixed
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_decision").var.fixed
+```
+
+:::
+
+Full implementation and all details: [`decision/var_fixed @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/decision/var_fixed.jl)
+
+> to be added
+#### `sos`
+
+:::{admonition} How to access this variable?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_decision").var.sos
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_decision").var.sos
+```
+
+:::
+
+Full implementation and all details: [`decision/var_sos @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/decision/var_sos.jl)
+
+> to be added
+#### `value`
+
+:::{admonition} How to access this variable?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_decision").var.value
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_decision").var.value
+```
+
+:::
+
+Full implementation and all details: [`decision/var_value @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/decision/var_value.jl)
+
+> Add the variable describing the `value` of this `decision` to the `model`. If lower and upper bounds (`decision.lb` and `decision.ub`) are the same, the variable will immediately be fixed to that value. This can be accessed via `decision.var.value`.
+### Constraints
+
+#### `fixed`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_decision").con.fixed
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_decision").con.fixed
+```
+
+:::
+
+Full implementation and all details: [`decision/con_fixed @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/decision/con_fixed.jl)
+
+> to be added
+#### `sos1`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_decision").con.sos1
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_decision").con.sos1
+```
+
+:::
+
+Full implementation and all details: [`decision/con_sos1 @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/decision/con_sos1.jl)
+
+> to be added
+#### `sos2`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_decision").con.sos2
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_decision").con.sos2
+```
+
+:::
+
+Full implementation and all details: [`decision/con_sos2 @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/decision/con_sos2.jl)
+
+> to be added
+#### `sos_value`
+
+:::{admonition} How to access this constraint?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_decision").con.sos_value
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_decision").con.sos_value
+```
+
+:::
+
+Full implementation and all details: [`decision/con_sos_value @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/decision/con_sos_value.jl)
+
+> to be added
+### Objectives
+
+#### `fixed`
+
+:::{admonition} How to access this objective?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_decision").obj.fixed
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_decision").obj.fixed
+```
+
+:::
+
+Full implementation and all details: [`decision/obj_fixed @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/decision/obj_fixed.jl)
+
+> to be added ```
+#### `sos`
+
+:::{admonition} How to access this objective?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_decision").obj.sos
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_decision").obj.sos
+```
+
+:::
+
+Full implementation and all details: [`decision/obj_sos @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/decision/obj_sos.jl)
+
+> Add the cost defined by the SOS-based value of this `Decision` to the `model`.
+#### `value`
+
+:::{admonition} How to access this objective?
+:class: dropdown
+
+```julia
+# Using Julia (`IESopt.jl`):
+import IESopt
+
+model = IESopt.run(...)  # assuming this is your model
+IESopt.get_component(model, "your_decision").obj.value
+```
+
+```python
+# Using Python (`iesopt`):
+import iesopt
+
+model = iesopt.run(...)  # assuming this is your model
+model.get_component("your_decision").obj.value
+```
+
+:::
+
+Full implementation and all details: [`decision/obj_value @ IESopt.jl`](https://github.com/ait-energy/IESopt.jl/tree/main/src/core/decision/obj_value.jl)
+
+> Add the cost defined by the value of this `Decision` to the `model`:
+> 
+> &nbsp;
+> 
+$$
+\text{value} \cdot \text{cost}
+$$

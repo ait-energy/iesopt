@@ -1,0 +1,47 @@
+# Assets
+
+```{note}
+This section of the documentation is auto-generated from the code of the Julia-based core model. Refer to [IESopt.jl](https://github.com/ait-energy/IESopt.jl) for any further details (which may require some familiarity with Julia).
+
+**If you spot incorrect math-mode rendering**, or similar issues, please [file an issue](https://github.com/ait-energy/iesopt/issues), since rendering documentation from Julia to Python is not the easiest task.
+```
+
+## Overview
+
+Assets module for IESopt.jl, containing path handling (relocatable) for assets: addons, examples, templates.
+
+
+
+## API Reference
+
+### Types
+
+### Macros
+
+### Functions
+
+#### `get_path`
+
+```julia
+get_path(asset_type::String)
+
+
+```
+
+Get the path to the asset type folder. Currently supports: "addons", "examples", "templates".
+
+_**Arguments**_  
+- `asset_type::String`: The asset type.
+
+_**Returns**_  
+- `RelocatableFolders.Path`: The path to the asset folder, already using `normpath`. `Path` implements an automatic conversion to `String`.
+
+_**Example**_  
+```julia
+Assets.get_path("templates")
+```
+
+
+
+---
+

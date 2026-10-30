@@ -50,11 +50,20 @@ class TestExamples:
 
     def test_example_01(self, tmp_path):
         # _check_example_model("01_basic_single_node", "/tmp/iesopt-tmp/", None, "print")
-        _check_example_model(
+        model = _check_example_model(
             "01_basic_single_node",
             tmp_path,
             {"status": "ModelStatus.OPTIMAL", "objective_value": 525.0},
         )
+        # test get_component(s)
+        node = model.get_component("node")
+        assert node.name == "node"
+        all_components = model.get_components()
+        assert len(all_components) == 8
+        node_components = model.get_components("Node")
+        assert len(node_components) == 3
+        no_componens = model.get_components(["Unit", "Profile"])
+        assert len(no_componens) == 0
 
     def test_example_02(self, tmp_path):
         # _check_example_model("02_advanced_single_node", "/tmp/iesopt-tmp/", None, "print")

@@ -3,6 +3,7 @@ on:
   push:
     tags:
       - "v*.*.*"
+  workflow-dispatch:
 
 permissions:
   contents: read

@@ -281,7 +281,7 @@ class Model:
         if tagged is None:
             return self._IESopt.get_components(self.core)
 
-        return self._IESopt.get_components(self.core, recursive_convert_py2jl(tagged))
+        return self._IESopt.get_components(self.core, tagged=recursive_convert_py2jl(tagged))
 
     def get_variable(self, component: str, variable: str):
         """Get a specific variable from a core component."""

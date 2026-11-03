@@ -20,7 +20,6 @@ classifiers = [
 ]
 requires-python = ">=3.13"
 dependencies = [
-    "pathlib >= 1.0.0",
     "pandas >= 2.0",
     "pydantic >= 2.7.4",
     "python-dotenv >= 1.0.1",

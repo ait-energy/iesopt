@@ -1,0 +1,22 @@
+# ResultsDuckDB
+
+```{note}
+This section of the documentation is auto-generated from the code of the Julia-based core model. Refer to [IESopt.jl](https://github.com/ait-energy/IESopt.jl) for any further details (which may require some familiarity with Julia).
+
+**If you spot incorrect math-mode rendering**, or similar issues, please [file an issue](https://github.com/ait-energy/iesopt/issues), since rendering documentation from Julia to Python is not the easiest task.
+```
+
+## Overview
+
+The `ResultsDuckDB` module provides functions to extract results from a JuMP model and store them in a DuckDB database.
+
+
+
+## API Reference
+
+### Types
+
+### Macros
+
+### Functions
+

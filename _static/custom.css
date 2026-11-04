@@ -1,0 +1,35 @@
+/*
+    Format code related blocks from MyST-NB
+        - Standard background color
+        - stderr and similar blocks with accent color
+        - Stream and text blocks with muted color
+*/
+div.cell_input.docutils.container {
+    background-color: hsl(var(--background)) !important;
+}
+div.output.stderr > div.highlight, div.output.stdout > div.highlight {
+    background-color: hsl(var(--accent)) !important;
+}
+div.output.stream, div.output.text_plain, div.output.text_html {
+    background-color: hsl(var(--muted)) !important;
+}
+
+/*
+    Format tables (needed to render pd.DataFrames):
+        - Standard background color
+        - Alternate row background color (odd rows)
+        - Text color to foreground color
+        - Hover row background color based on destructive color (50% opacity)
+*/
+div.cell_output tbody {
+    background: hsl(var(--background)) !important;
+}
+div.cell_output tbody tr:nth-child(odd) {
+    background: hsl(var(--muted)) !important;
+}
+div.cell_output table {
+    color: hsl(var(--foreground)) !important;
+}
+div.cell_output tbody tr:hover {
+    background: hsl(var(--destructive) / 0.5) !important;
+}

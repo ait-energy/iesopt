@@ -1,0 +1,214 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Internal annuity calculation (ex. 55)\n",
+    "\n",
+    "## Overview\n",
+    "\n",
+    "The relevant part of this example is inside the template `Asset`, which looks like this:\n",
+    "\n",
+    "```yaml\n",
+    "parameters:\n",
+    "  from: null\n",
+    "  to: null\n",
+    "  invest: null\n",
+    "  _annuity: null\n",
+    "\n",
+    "components:\n",
+    "  asset:\n",
+    "    type: Connection\n",
+    "    node_from: <from>\n",
+    "    node_to: <to>\n",
+    "    capacity: <self>.invest:value\n",
+    "  \n",
+    "  invest:\n",
+    "    type: Decision\n",
+    "    lb: 0\n",
+    "    ub: 100\n",
+    "    cost: <_annuity>\n",
+    "\n",
+    "# NOTE:\n",
+    "#   - The `|` at the start indicates in the YAML that what follows will be a multi-line string.\n",
+    "#   - You can use `this.get(\"...\")` to access any parameter known in this template.\n",
+    "#   - Accessing `wacc` is possible since it is NOT a parameter of this template AND is a known template in the global\n",
+    "#     parameters defined in the top-level config file (these are \"passed down\").\n",
+    "#   - You can set the value of a parameter using `this.set(\"...\", value)`.\n",
+    "#   - Using `_annuity` indicates that this parameter is \"private\": It cannot be set from the outside like normal\n",
+    "#     parameters (IESopt will error if a user tries to) and can only be used by functions like below.\n",
+    "#   - The `prepare` function is called before any components are constructed from this template; this allows accessing\n",
+    "#     the total `capex` and `lifetime`, using them together with the `annuity(...)` function in `IESU` (which is just\n",
+    "#     a quality-of-life renaming of `IESopt.Utilities`) to calculate the annuity, and finally setting the value of\n",
+    "#     the parameter `_annuity` - which is then used in the `invest` (Decision) component.\n",
+    "#   - `IESU.annuity(...)` will per default already factor in the total time span of the model, properly scaling the\n",
+    "#     annuity for models that do not span a 1hourly-1year model exactly. Refer to its documentation for more info.\n",
+    "#   - We are using a dict-valued parameter (`invest`) here - simply to showcase that this is a possibility. Not using\n",
+    "#     that and relying on simple parameters (like almost everywhere else) is perfectly possible as well!\n",
+    "functions:\n",
+    "  prepare: |\n",
+    "    capex = this.get(\"invest\")[\"capex\"]\n",
+    "    lifetime = this.get(\"invest\")[\"lifetime\"]\n",
+    "    annuity = IESU.annuity(capex; lifetime=lifetime, rate=this.get(\"wacc\"))\n",
+    "    this.set(\"_annuity\", annuity)\n",
+    "```\n",
+    "\n",
+    "Check out the top-level config file, etc., to see how this template is used in the model."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Running the example\n",
+    "\n",
+    "First, import `iesopt`."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "tags": [
+     "remove-stdout",
+     "remove-stderr"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "import iesopt"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Then, create a local copy of the IESopt example."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "INFO:iesopt:Data folder for examples already exists; NOT copying ANY contents\n",
+      "INFO:iesopt:Creating example ('55_annuity') at: 'opt/55_annuity.iesopt.yaml'\n",
+      "INFO:iesopt:Set write permissions for example ('opt/55_annuity.iesopt.yaml'), and data folder ('opt/files')\n"
+     ]
+    }
+   ],
+   "source": [
+    "config = iesopt.make_example(\"55_annuity\", \"opt\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Finally, run the model and observe some results."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>snapshot</th>\n",
+       "      <th>component</th>\n",
+       "      <th>fieldtype</th>\n",
+       "      <th>field</th>\n",
+       "      <th>value</th>\n",
+       "      <th>mode</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>73</th>\n",
+       "      <td>None</td>\n",
+       "      <td>pipeline.invest</td>\n",
+       "      <td>var</td>\n",
+       "      <td>value</td>\n",
+       "      <td>4.200000e+01</td>\n",
+       "      <td>primal</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>75</th>\n",
+       "      <td>None</td>\n",
+       "      <td>pipeline.invest</td>\n",
+       "      <td>obj</td>\n",
+       "      <td>value</td>\n",
+       "      <td>2.522829e+06</td>\n",
+       "      <td>primal</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   snapshot        component fieldtype  field         value    mode\n",
+       "73     None  pipeline.invest       var  value  4.200000e+01  primal\n",
+       "75     None  pipeline.invest       obj  value  2.522829e+06  primal"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "model = iesopt.run(config, config={\"general.verbosity.core\": \"error\"})\n",
+    "\n",
+    "model.results.to_pandas().query(\n",
+    "    \"component == 'pipeline.invest' and field == 'value' and mode == 'primal'\"\n",
+    ")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": ".venv",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.8"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

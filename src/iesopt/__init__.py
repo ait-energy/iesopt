@@ -1,4 +1,5 @@
 import importlib.metadata
+import logging
 import os
 import sys
 from pathlib import Path
@@ -15,6 +16,8 @@ from .julia import jl_isa as jl_isa
 from .julia.util import jl_docs
 from .julia.util import jl_symbol as jl_symbol
 from .util import get_iesopt_module_attr as _get_iesopt_module_attr
+
+logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 # Set version.
 __version__ = importlib.metadata.version("iesopt")

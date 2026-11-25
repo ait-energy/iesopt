@@ -1,10 +1,13 @@
+import logging
 from enum import Enum
 from pathlib import Path
 from warnings import warn
 
 from .julia.util import jl_safe_seval, jl_symbol, recursive_convert_py2jl
 from .results import Results
-from .util import get_iesopt_module_attr, logger
+from .util import get_iesopt_module_attr
+
+logger = logging.getLogger(__name__)
 
 
 class ModelStatus(Enum):

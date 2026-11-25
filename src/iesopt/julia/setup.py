@@ -1,11 +1,13 @@
+import logging
 import os
 import ssl
 import sys
 from pathlib import Path
 
 from ..config import Config
-from ..util import logger
 from .util import jl_import
+
+logger = logging.getLogger(__name__)
 
 
 def lookup_package(name: str):

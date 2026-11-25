@@ -1,6 +1,10 @@
+import logging
+
 import pandas as pd
 
-from ..util import get_iesopt_module_attr, logger
+from ..util import get_iesopt_module_attr
+
+logger = logging.getLogger(__name__)
 
 
 def jl_safe_seval(code: str):

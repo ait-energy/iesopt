@@ -1,7 +1,10 @@
+import logging
 from pathlib import Path
 
 from .model import Model, ModelStatus
-from .util import get_iesopt_module_attr, logger
+from .util import get_iesopt_module_attr
+
+logger = logging.getLogger(__name__)
 
 
 def run(filename: str | Path, **kwargs) -> Model:

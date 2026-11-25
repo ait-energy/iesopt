@@ -1,9 +1,12 @@
 import importlib.metadata
+import logging
 import os
 from pathlib import Path
 
-from ..util import logger, set_iesopt_module_attr
+from ..util import set_iesopt_module_attr
 from .setup import import_modules, setup_julia, use_existing_julia_environment
+
+logger = logging.getLogger(__name__)
 
 
 def initialize(target: Path, sysimage: Path, *, reuse_julia_env: bool = False):
